@@ -1,0 +1,7 @@
+2019-09-03 11:51:42  [ main:2 ] - [ ERROR ]  源文件路径（/04javaemp/01dsev/05code/emp_branches/emp_7.2.0.452m_linux/）不存在
+2019-09-03 11:52:16  [ main:3 ] - [ ERROR ]  源文件路径不存在(/04javaemp/01dsev/05code/emp_branches/emp_7.2.0.452m_linux/)
+2019-09-03 13:42:17  [ main:2 ] - [ ERROR ]  源文件路径不存在(?C:\UsersZHANG\Desktop1.txt)
+2019-09-03 13:43:14  [ main:2 ] - [ ERROR ]  源文件路径不存在(?C:/Users/ZHANG\Desktop/1.txt)
+2019-09-03 13:43:28  [ main:3962 ] - [ ERROR ]  源文件路径不存在(?C:/Users/ZHANG\Desktop/1.txt)
+2019-09-03 13:44:31  [ main:48242 ] - [ ERROR ]  源文件路径不存在(?C:/Users/ZHANG\Desktop/1.txt)
+2019-09-03 14:52:57  [ main:0 ] - [ ERROR ]  路径E:\mw_zhangyj\项目\20180816-富信通\基本信息.txt不是文件夹路径
