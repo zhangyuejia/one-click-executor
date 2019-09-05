@@ -50,15 +50,17 @@ public class Main {
             File copylist = new File(CONFIG.getTargetFilePath());
             writer = new BufferedWriter(new FileWriter(copylist));
             String line;
-            // 内部类路径
+            // 写入路径数据
             List<String> datas = new ArrayList<String>();
             while ((line = reader.readLine()) != null){
                 String fileName = line.substring(line.lastIndexOf("/") + 1);
+                // 删除前缀
                 String data = line.substring(CONFIG.getSourceFilePrefix().length() + 1);
                 // 过滤非法文件路径、文件夹和SystemGlobals.properties
                 if(!line.startsWith(CONFIG.getSourceFilePrefix()) || !fileName.contains(".") || data.endsWith(Constant.SYSTEM_GLOBALS_FILE_NAME)){
                     continue;
                 }
+                // 如果修改了webapp部分，则认为需要重新打dist
                 if(data.startsWith(Constant.RMS_WEBAPP_PREFIX)){
                     isWriteDist = true;
                     continue;
@@ -69,6 +71,7 @@ public class Main {
                 }
                 datas.clear();
                 datas.add(replactor.replace(data));
+                // 检测是否有内部类
                 if(replactor instanceof JavaPathReplactor){
                     datas.addAll(getInnerClassPaths(datas.get(0)));
                 }
@@ -92,7 +95,7 @@ public class Main {
     }
 
     /**
-     * 生成内部类路径
+     * 获取内部类路径
      * @param javaClassPath 主类路径
      * @return 内部类路径
      */
