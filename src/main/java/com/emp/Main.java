@@ -104,7 +104,7 @@ public class Main {
         for (String fileName : fileNames) {
             if(fileName.startsWith(javaClassName + "$")){
                 logger.info("发现内部类{}，自动写入路径", fileName);
-                String innnerClassPath = javaClassPath.substring(0, javaClassPath.lastIndexOf("\\") - 1) + fileName;
+                String innnerClassPath = javaClassPath.substring(0, javaClassPath.lastIndexOf("\\") + 1) + fileName;
                 innerClassPaths.add(innnerClassPath);
             }
         }
