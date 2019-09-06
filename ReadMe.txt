@@ -5,4 +5,3 @@ make-copylistV1.1工具说明:
 功能说明：
 1、生成copylist，添加内部类校验
 2、支持copylist去重
-3、修复生成内部类名称错误bug
