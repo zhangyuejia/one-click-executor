@@ -10,9 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * jar包入口
@@ -42,6 +40,8 @@ public class Main {
             logger.error("源文件路径不存在:{}", CONFIG.getSourceFilePath());
             return false;
         }
+        // 写入数据，使用Set进行过滤
+        Set<String> datas = new TreeSet<>();
         BufferedReader reader = null;
         BufferedWriter writer = null;
         try {
@@ -50,41 +50,38 @@ public class Main {
             File copylist = new File(CONFIG.getTargetFilePath());
             writer = new BufferedWriter(new FileWriter(copylist));
             String line;
-            // 写入路径数据
-            List<String> datas = new ArrayList<String>();
+
             while ((line = reader.readLine()) != null){
                 String fileName = line.substring(line.lastIndexOf("/") + 1);
                 // 删除前缀
-                String data = line.substring(CONFIG.getSourceFilePrefix().length() + 1);
+                String pathData = line.substring(CONFIG.getSourceFilePrefix().length() + 1);
                 // 过滤非法文件路径、文件夹和SystemGlobals.properties
-                if(!line.startsWith(CONFIG.getSourceFilePrefix()) || !fileName.contains(".") || data.endsWith(Constant.SYSTEM_GLOBALS_FILE_NAME)){
+                if(!line.startsWith(CONFIG.getSourceFilePrefix()) || !fileName.contains(".") || pathData.endsWith(Constant.SYSTEM_GLOBALS_FILE_NAME)){
                     continue;
                 }
                 // 如果修改了webapp部分，则认为需要重新打dist
-                if(data.startsWith(Constant.RMS_WEBAPP_PREFIX)){
+                if(pathData.startsWith(Constant.RMS_WEBAPP_PREFIX)){
                     isWriteDist = true;
                     continue;
                 }
-                PathReplactor replactor = PathReplactorFactory.getInstance(data);
+                PathReplactor replactor = PathReplactorFactory.getInstance(pathData);
                 if(replactor == null){
                     continue;
                 }
-                datas.clear();
-                datas.add(replactor.replace(data));
+                String data = replactor.replace(pathData);
+                datas.add(data);
                 // 检测是否有内部类
                 if(replactor instanceof JavaPathReplactor){
-                    datas.addAll(getInnerClassPaths(datas.get(0)));
+                    datas.addAll(getInnerClassPaths(data));
                 }
-                writeDatas(writer, datas);
             }
             if(isWriteDist){
                 logger.info("检测到路径{}下有文件修改，加入dist路径，请勿忘记打包dist", Constant.RMS_WEBAPP_PREFIX);
-                writeDatas(writer, Collections.singletonList(CONFIG.getTargetFilePrefix() + "\\rms\\webapp\\dist\\*.*"));
+                datas.add(CONFIG.getTargetFilePrefix() + "\\rms\\webapp\\dist\\*.*");
             }
+            writeDatas(writer, datas);
             logger.info("copylist路径为：{}", copylist.getCanonicalPath());
-        } catch (FileNotFoundException e) {
-            logger.error( "文件找不到异常", e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error( "文件IO异常", e);
         }finally {
             FileUtils.close(reader);
@@ -99,11 +96,11 @@ public class Main {
      * @param javaClassPath 主类路径
      * @return 内部类路径
      */
-    private static List<String> getInnerClassPaths(String javaClassPath) {
-        ArrayList<String> innerClassPaths = new ArrayList<>();
+    private static Set<String> getInnerClassPaths(String javaClassPath) {
+        Set<String> innerClassPaths = new TreeSet<>();
         String dirPath = CONFIG.getEmpWebOutputPath() + javaClassPath.substring(CONFIG.getTargetFilePrefix().length(), javaClassPath.lastIndexOf("\\"));
         String javaClassName = javaClassPath.substring(javaClassPath.lastIndexOf("\\") + 1, javaClassPath.lastIndexOf("."));
-        List<String> fileNames = FileUtils.getFileNames(dirPath);
+        Set<String> fileNames = FileUtils.getFileNames(dirPath);
         for (String fileName : fileNames) {
             if(fileName.startsWith(javaClassName + "$")){
                 logger.info("发现内部类{}，自动写入路径", fileName);
@@ -120,7 +117,7 @@ public class Main {
      * @param datas 数据
      * @throws IOException 异常
      */
-    private static void writeDatas(BufferedWriter writer, List<String> datas) throws IOException {
+    private static void writeDatas(BufferedWriter writer, Set<String> datas) throws IOException {
         for (String data : datas) {
             writer.write(data, 0, data.length());
             writer.newLine();

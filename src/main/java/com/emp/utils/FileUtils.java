@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 文件操作工具类
@@ -70,8 +72,8 @@ public class FileUtils {
      * @param dir 路径
      * @return 文件名集合
      */
-    public static List<String> getFileNames(String dir){
-        final List<String> fileNames = new ArrayList<>();
+    public static Set<String> getFileNames(String dir){
+        final Set<String> fileNames = new HashSet<>();
         new File(dir).listFiles((File pathname) ->{
             if(pathname.isFile()){
                 fileNames.add(pathname.getName());
