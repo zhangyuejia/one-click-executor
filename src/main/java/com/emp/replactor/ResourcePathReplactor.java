@@ -3,7 +3,7 @@ package com.emp.replactor;
 import com.emp.bean.Config;
 
 /**
- * 资源文件替换器
+ * 资源文件路径替换器
  * @author ZHANG
  */
 public class ResourcePathReplactor implements PathReplactor {

@@ -100,7 +100,7 @@ public class Main {
      * @return 内部类路径
      */
     private static List<String> getInnerClassPaths(String javaClassPath) {
-        ArrayList<String> innerClassPaths = new ArrayList<String>();
+        ArrayList<String> innerClassPaths = new ArrayList<>();
         String dirPath = CONFIG.getEmpWebOutputPath() + javaClassPath.substring(CONFIG.getTargetFilePrefix().length(), javaClassPath.lastIndexOf("\\"));
         String javaClassName = javaClassPath.substring(javaClassPath.lastIndexOf("\\") + 1, javaClassPath.lastIndexOf("."));
         List<String> fileNames = FileUtils.getFileNames(dirPath);

@@ -71,16 +71,13 @@ public class FileUtils {
      * @return 文件名集合
      */
     public static List<String> getFileNames(String dir){
-        final List<String> fileNames = new ArrayList<String>();
-        new File(dir).listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                if(pathname.isFile()){
-                    fileNames.add(pathname.getName());
-                    return true;
-                }
-                return false;
+        final List<String> fileNames = new ArrayList<>();
+        new File(dir).listFiles((File pathname) ->{
+            if(pathname.isFile()){
+                fileNames.add(pathname.getName());
+                return true;
             }
+            return false;
         });
         return fileNames;
     }

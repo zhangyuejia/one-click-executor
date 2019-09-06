@@ -3,6 +3,7 @@ package com.emp.replactor;
 import com.emp.bean.Config;
 
 /**
+ * WebRoot路径替换器
  * @author ZHANG
  */
 public class WebRootPathReplactor implements PathReplactor {
