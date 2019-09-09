@@ -1,6 +1,8 @@
 package com.emp.bean;
 
 import lombok.Data;
+import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +47,25 @@ public class Config {
     }
 
     /**
+     * 校验配置参数
+     */
+    public boolean validateField() {
+        boolean result = false;
+        if(StringUtils.isBlank(this.sourceFilePrefix)){
+            logger.error("配置项sourceFilePrefix(源文件前缀)不能为空！");
+        }else if(StringUtils.isBlank(this.sourceFilePath)){
+            logger.error("配置项sourceFilePath(源文件绝对路径)不能为空！");
+        }else if(StringUtils.isBlank(this.sourceCodePath)){
+            logger.error("配置项sourceCodePath(源码路径)不能为空！");
+        }else if(StringUtils.isBlank(this.empWebOutputPath)){
+            logger.error("配置项empWebOutputPath(emp web项目编译路径)不能为空！");
+        }else {
+            result = true;
+        }
+        return result;
+    }
+
+    /**
      *  初始化成员对象
      */
     private void loadField() {
@@ -53,6 +74,7 @@ public class Config {
         this.targetFilePath = getPropertiesValue("targetFilePath", Constant.DEFAULT_COPYLIST_PATH);
         this.targetFilePrefix = getPropertiesValue("targetFilePrefix", Constant.DEFAULT_COPYLIST_PREFIX);
         this.empWebOutputPath = getPropertiesValue("empWebOutputPath", "");
+        this.sourceCodePath = getPropertiesValue("sourceCodePath", "");
     }
 
     /**
@@ -109,4 +131,8 @@ public class Config {
      * emp web输出路径
      */
     private String empWebOutputPath;
+    /**
+     * 源码路径
+     */
+    private String sourceCodePath;
 }

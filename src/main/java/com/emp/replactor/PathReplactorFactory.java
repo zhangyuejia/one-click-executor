@@ -3,11 +3,17 @@ package com.emp.replactor;
 import com.emp.bean.Constant;
 
 /**
+ * 路径替换器工厂
  * @author ZHANG
  */
 public class PathReplactorFactory {
 
-    public static PathReplactor getInstance(String data){
+    /**
+     * 获取路径替换器
+     * @param data 文件路径
+     * @return 文件路径替换器
+     */
+    public static PathReplactor getReplator(String data){
         PathReplactor replactor = null;
         if(data.startsWith(Constant.REPLACTOR_WEB_ROOT_PREFIX)){
             replactor = new WebRootPathReplactor();
