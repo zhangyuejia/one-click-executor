@@ -39,4 +39,12 @@ public class Constant {
      * 默认copylist路径
      */
     public static final String DEFAULT_COPYLIST_PATH="copylist_new.txt";
+    /**
+     * svn修改记录前缀
+     */
+    public static final String SVN_MODIFY_RECORD_PREFIX= "M       ";
+    /**
+     * svn新增记录前缀
+     */
+    public static final String SVN_ADD_RECORD_PREFIX= "A       ";
 }

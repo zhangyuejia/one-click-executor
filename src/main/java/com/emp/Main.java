@@ -6,11 +6,11 @@ import com.emp.replactor.JavaPathReplactor;
 import com.emp.replactor.PathReplactor;
 import com.emp.replactor.PathReplactorFactory;
 import com.emp.utils.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -26,8 +26,7 @@ public class Main {
 
     public static void main(String[] args) {
         if(CONFIG.validateField()){
-            logger.info("开始生成copylist，源文件路径：{}，源文件前缀：{}，目标文件路径：{}，目标文件前缀：{}",
-                    CONFIG.getSourceFilePath(), CONFIG.getSourceFilePrefix(), CONFIG.getTargetFilePath(), CONFIG.getTargetFilePrefix());
+            logger.info("开始生成copylist，svn路径：{}，目标文件路径：{}，目标文件前缀：{}", CONFIG.getSvnPath(), CONFIG.getTargetFilePath(), CONFIG.getTargetFilePrefix());
             final boolean success = makeCopyList();
             logger.info("生成copylist" + (success ? "成功" :"失败"));
         }
@@ -38,39 +37,33 @@ public class Main {
      * @return 生成结果
      */
     private static boolean makeCopyList() {
-        final File file = FileUtils.isExisted(CONFIG.getSourceFilePath());
-        if(file == null){
-            logger.error("源文件路径不存在:{}", CONFIG.getSourceFilePath());
-            return false;
-        }
-        // 写入数据，使用Set进行去重
-        Set<String> datas = new TreeSet<>();
         BufferedReader reader = null;
         BufferedWriter writer = null;
         try {
+            // 写入数据，使用Set进行去重
+            Set<String> datas = new TreeSet<>();
+            // 初始化字符输入输出流
+            reader = getBufferedReader();
+            writer = getBufferedWriter();
             // 是否需要写入copylist
             boolean isWriteDist = false;
-            reader = new BufferedReader(new FileReader(file));
-            File copylist = new File(CONFIG.getTargetFilePath());
-            writer = new BufferedWriter(new FileWriter(copylist));
             String line;
-
             while ((line = reader.readLine()) != null){
+                line = URLDecoder.decode(line, "utf-8");
                 String fileName = line.substring(line.lastIndexOf("/") + 1);
-                // 获取相对路径
-                String relativePath = line.substring(CONFIG.getSourceFilePrefix().length() + 1);
+                // 只处理修改和新增的记录
+                if(!(line.startsWith(Constant.SVN_ADD_RECORD_PREFIX) || line.startsWith(Constant.SVN_MODIFY_RECORD_PREFIX))){
+                    continue;
+                }
+                // 获取相对路径（svn命令返回的行前8个字符是修改类型）
+                String relativePath = line.substring(8 + CONFIG.getSvnPath().length() + 1);
                 // 过滤非法文件路径、文件夹和SystemGlobals.properties
-                if(!line.startsWith(CONFIG.getSourceFilePrefix()) || !fileName.contains(".") || relativePath.endsWith(Constant.SYSTEM_GLOBALS_FILE_NAME)){
+                if(!fileName.contains(".") || relativePath.endsWith(Constant.SYSTEM_GLOBALS_FILE_NAME)){
                     continue;
                 }
                 // 如果修改了webapp部分，则认为需要重新打dist
                 if(relativePath.startsWith(Constant.RMS_WEBAPP_PREFIX)){
                     isWriteDist = true;
-                    continue;
-                }
-                // 过滤svn删除记录(如果在源码中不存在，认为该记录为删除记录)
-                if(isNotExistedInSourceCode(relativePath)){
-                    logger.info("检测到路径svn删除记录:{}", line);
                     continue;
                 }
                 PathReplactor replactor = PathReplactorFactory.getReplator(relativePath);
@@ -90,26 +83,35 @@ public class Main {
                 datas.add(CONFIG.getTargetFilePrefix() + "\\rms\\webapp\\dist\\*.*");
             }
             writeDatas(writer, datas);
-            logger.info("copylist路径为：{}", copylist.getCanonicalPath());
+            logger.info("copylist路径为：{}", new File(CONFIG.getTargetFilePath()).getCanonicalPath());
         } catch (Exception e) {
-            logger.error( "文件IO异常", e);
+            logger.error( "生成copylist出现异常", e);
         }finally {
             FileUtils.close(reader);
             FileUtils.close(writer);
         }
         return true;
-
     }
 
     /**
-     * 过滤svn删除记录
-     * @param pathData 相对路径
-     * @return 是否存在
+     * 获取字符输出流
+     * @return 字符输出流
+     * @throws IOException IO异常
      */
-    private static boolean isNotExistedInSourceCode(String pathData) {
-        // 绝对路径
-        String absolutePath = CONFIG.getSourceCodePath() + "\\" + pathData;
-        return FileUtils.isExisted(absolutePath) == null;
+    private static BufferedWriter getBufferedWriter() throws IOException {
+        File copylist = new File(CONFIG.getTargetFilePath());
+        return new BufferedWriter(new FileWriter(copylist));
+    }
+
+    /**
+     * 获取字符输入流
+     * @return 字符输入流
+     * @throws IOException IO异常
+     */
+    private static BufferedReader getBufferedReader() throws IOException {
+        String command = String.format("svn diff -r %s:%s  --summarize %s", CONFIG.getSvnRevisionNumberStart(), CONFIG.getSvnRevisionNumberEnd(), CONFIG.getSvnPath());
+        Process process = Runtime.getRuntime().exec(command);
+        return new BufferedReader(new InputStreamReader(process.getInputStream()));
     }
 
     /**

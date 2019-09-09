@@ -51,12 +51,12 @@ public class Config {
      */
     public boolean validateField() {
         boolean result = false;
-        if(StringUtils.isBlank(this.sourceFilePrefix)){
-            logger.error("配置项sourceFilePrefix(源文件前缀)不能为空！");
-        }else if(StringUtils.isBlank(this.sourceFilePath)){
-            logger.error("配置项sourceFilePath(源文件绝对路径)不能为空！");
-        }else if(StringUtils.isBlank(this.sourceCodePath)){
-            logger.error("配置项sourceCodePath(源码路径)不能为空！");
+        if(StringUtils.isBlank(this.svnPath)){
+            logger.error("配置项svnPath(项目svn路径)不能为空！");
+        }else if(StringUtils.isBlank(this.svnRevisionNumberStart)){
+            logger.error("配置项svnRevisionNumberStart(项目svn起始版本号)不能为空！");
+        }else if(StringUtils.isBlank(this.svnRevisionNumberEnd)){
+            logger.error("配置项svnRevisionNumberEnd(项目svn终止版本号)不能为空！");
         }else if(StringUtils.isBlank(this.empWebOutputPath)){
             logger.error("配置项empWebOutputPath(emp web项目编译路径)不能为空！");
         }else {
@@ -69,12 +69,12 @@ public class Config {
      *  初始化成员对象
      */
     private void loadField() {
-        this.sourceFilePath = getPropertiesValue("sourceFilePath", "");
-        this.sourceFilePrefix = getPropertiesValue("sourceFilePrefix", "");
         this.targetFilePath = getPropertiesValue("targetFilePath", Constant.DEFAULT_COPYLIST_PATH);
         this.targetFilePrefix = getPropertiesValue("targetFilePrefix", Constant.DEFAULT_COPYLIST_PREFIX);
         this.empWebOutputPath = getPropertiesValue("empWebOutputPath", "");
-        this.sourceCodePath = getPropertiesValue("sourceCodePath", "");
+        this.svnPath = getPropertiesValue("svnPath", "");
+        this.svnRevisionNumberStart = getPropertiesValue("svnRevisionNumberStart", "");
+        this.svnRevisionNumberEnd = getPropertiesValue("svnRevisionNumberEnd", "");
     }
 
     /**
@@ -112,13 +112,17 @@ public class Config {
     }
 
     /**
-     * 源文件前缀
+     * 项目svn路径
      */
-    private String sourceFilePrefix;
+    private String svnPath;
     /**
-     * 源文件路径
+     * 项目svn起始版本号
      */
-    private String sourceFilePath;
+    private String svnRevisionNumberStart;
+    /**
+     * 项目svn终止版本号
+     */
+    private String svnRevisionNumberEnd;
     /**
      * 目标文件路径
      */
@@ -131,8 +135,4 @@ public class Config {
      * emp web输出路径
      */
     private String empWebOutputPath;
-    /**
-     * 源码路径
-     */
-    private String sourceCodePath;
 }
