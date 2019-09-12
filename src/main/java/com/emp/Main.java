@@ -109,7 +109,7 @@ public class Main {
      * @throws IOException IO异常
      */
     private static BufferedReader getBufferedReader() throws IOException {
-        String command = String.format("svn diff -r %s:%s  --summarize %s", CONFIG.getSvnRevisionNumberStart(), CONFIG.getSvnRevisionNumberEnd(), CONFIG.getSvnPath());
+        String command = String.format("svn diff -r %s:%s  --summarize %s", String.valueOf(Integer.parseInt(CONFIG.getSvnRevisionNumberStart()) - 1), CONFIG.getSvnRevisionNumberEnd(), CONFIG.getSvnPath());
         Process process = Runtime.getRuntime().exec(command);
         return new BufferedReader(new InputStreamReader(process.getInputStream()));
     }
