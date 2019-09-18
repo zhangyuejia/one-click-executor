@@ -85,7 +85,7 @@ public class Config {
      */
     private String getPropertiesValue(String key, String defaultValue) {
         Object value = this.properties.get(key);
-        return value != null? String.valueOf(this.properties.get(key)).trim() : defaultValue;
+        return value != null && String.valueOf(value).length()>0? String.valueOf(this.properties.get(key)).trim() : defaultValue;
     }
 
     /**
