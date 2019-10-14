@@ -1,4 +1,4 @@
-# Copylist生成工具 make-copylist V2.0.2
+# Copylist生成工具 make-copylist V2.0.3
 ## 运行环境
 + JDK 1.8及以上
 + EMP项目源码
