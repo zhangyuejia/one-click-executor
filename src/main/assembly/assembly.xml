@@ -46,7 +46,7 @@
         <fileSet>
             <directory>/</directory>
             <includes>
-                <include>ReadMe.txt</include>
+                <include>ReadMe.md</include>
             </includes>
             <outputDirectory>/</outputDirectory>
         </fileSet>
