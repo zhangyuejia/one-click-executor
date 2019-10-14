@@ -95,7 +95,6 @@ public class Config {
 
     /**
      * 获取配置参数
-     * @return 配置参数
      */
     private void loadProperties() {
         properties = new Properties();

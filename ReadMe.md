@@ -4,6 +4,7 @@
 + EMP项目源码
 ## 功能说明
 + 支持直接读取svn修改记录
++ config.properties添加是否显示svn原始记录项
 ## 使用说明
 + 修改 config/config.properties 配置项
 + 双击运行startup.bat
