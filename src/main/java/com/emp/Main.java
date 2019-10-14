@@ -25,8 +25,9 @@ public class Main {
     private static final Config CONFIG = Config.getInstance();
 
     public static void main(String[] args) {
-        if(CONFIG.validateField()){
-            logger.info("开始生成copylist，svn路径：{}，目标文件路径：{}，目标文件前缀：{}", CONFIG.getSvnPath(), CONFIG.getTargetFilePath(), CONFIG.getTargetFilePrefix());
+        if(CONFIG.isValid()){
+            logger.info("开始生成copylist，svn路径：{}，目标文件路径：{}，目标文件前缀：{}，svn区间：[{}, {}]",
+                    CONFIG.getSvnPath(), CONFIG.getTargetFilePath(), CONFIG.getTargetFilePrefix(), CONFIG.getSvnRevisionNumberStart(), CONFIG.getSvnRevisionNumberEnd());
             final boolean success = makeCopyList();
             logger.info("生成copylist" + (success ? "成功" :"失败"));
         }
@@ -99,8 +100,14 @@ public class Main {
      * @throws IOException IO异常
      */
     private static BufferedWriter getBufferedWriter() throws IOException {
-        File copylist = new File(CONFIG.getTargetFilePath());
-        return new BufferedWriter(new FileWriter(copylist));
+        File f = new File(CONFIG.getTargetFilePath());
+        if(f.exists()){
+            final boolean delete = f.delete();
+            if(!delete){
+                throw new RuntimeException("删除已存在copylist文件（"+f.getCanonicalPath()+"）失败，请手动删除再运行程序！");
+            }
+        }
+        return new BufferedWriter(new FileWriter(f));
     }
 
     /**

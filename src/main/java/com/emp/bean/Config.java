@@ -1,7 +1,6 @@
 package com.emp.bean;
 
 import lombok.Data;
-import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +48,7 @@ public class Config {
     /**
      * 校验配置参数
      */
-    public boolean validateField() {
+    public boolean isValid() {
         boolean result = false;
         if(StringUtils.isBlank(this.svnPath)){
             logger.error("配置项svnPath(项目svn路径)不能为空！");
