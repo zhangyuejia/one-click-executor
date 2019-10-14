@@ -72,6 +72,10 @@ public class Config {
         this.targetFilePrefix = getPropertiesValue("targetFilePrefix", Constant.DEFAULT_COPYLIST_PREFIX);
         this.empWebOutputPath = getPropertiesValue("empWebOutputPath", "");
         this.svnPath = getPropertiesValue("svnPath", "");
+        // svn路径去掉结尾处的正斜杠或者反斜杠
+        if(this.svnPath.endsWith(Constant.SLASH) || this.svnPath.endsWith(Constant.BACK_SLASH)){
+            this.svnPath = this.svnPath.substring(0, this.svnPath.length() - 1);
+        }
         this.svnRevisionNumberStart = getPropertiesValue("svnRevisionNumberStart", "");
         this.svnRevisionNumberEnd = getPropertiesValue("svnRevisionNumberEnd", "");
     }

@@ -47,4 +47,12 @@ public interface Constant {
      * svn新增记录前缀
      */
     String SVN_ADD_RECORD_PREFIX= "A       ";
+    /**
+     * 反斜杠
+     */
+    String BACK_SLASH = "\\";
+    /**
+     * 斜杠
+     */
+    String SLASH = "/";
 }
