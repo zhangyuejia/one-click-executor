@@ -55,4 +55,8 @@ public interface Constant {
      * 斜杠
      */
     String SLASH = "/";
+    /**
+     * 1
+     */
+    String ONE = "1";
 }

@@ -20,6 +20,7 @@ public class Config {
     private static final String CONFIG_FILE_URL = "config.properties";
 
 
+
     /**
      * 单例实例化
      */
@@ -78,6 +79,7 @@ public class Config {
         }
         this.svnRevisionNumberStart = getPropertiesValue("svnRevisionNumberStart", "");
         this.svnRevisionNumberEnd = getPropertiesValue("svnRevisionNumberEnd", "");
+        this.showSvnRecord = Constant.ONE.equals(getPropertiesValue("showSvnRecord", "0"));
     }
 
     /**
@@ -138,4 +140,8 @@ public class Config {
      * emp web输出路径
      */
     private String empWebOutputPath;
+    /**
+     * 是否打印svn原始修改记录（1：打印 0：不打印）
+     */
+    private Boolean showSvnRecord;
 }

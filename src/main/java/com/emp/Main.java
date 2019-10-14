@@ -51,6 +51,9 @@ public class Main {
             String line;
             while ((line = reader.readLine()) != null){
                 line = URLDecoder.decode(line, "utf-8");
+                if(CONFIG.getShowSvnRecord()){
+                    logger.info("SVN记录：{}", line);
+                }
                 String fileName = line.substring(line.lastIndexOf("/") + 1);
                 // 只处理修改和新增的记录
                 if(!(line.startsWith(Constant.SVN_ADD_RECORD_PREFIX) || line.startsWith(Constant.SVN_MODIFY_RECORD_PREFIX))){
