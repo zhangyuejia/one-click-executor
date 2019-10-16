@@ -2,9 +2,9 @@ package com.emp;
 
 import com.emp.bean.Config;
 import com.emp.bean.Constant;
-import com.emp.replactor.JavaPathReplactor;
-import com.emp.replactor.PathReplactor;
-import com.emp.replactor.PathReplactorFactory;
+import com.emp.replactor.JavaReplacer;
+import com.emp.replactor.Replacer;
+import com.emp.replactor.ReplacerFactory;
 import com.emp.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,21 +70,21 @@ public class Main {
                     isWriteDist = true;
                     continue;
                 }
-                PathReplactor replactor = PathReplactorFactory.getReplator(relativePath);
-                if(replactor == null){
+                Replacer replacer = ReplacerFactory.getReplacer(relativePath);
+                if(replacer == null){
                     continue;
                 }
-                String data = replactor.replace(relativePath);
+                String data = replacer.replace(relativePath);
                 datas.add(data);
                 // 检测是否有内部类
-                if(replactor instanceof JavaPathReplactor){
+                if(replacer instanceof JavaReplacer){
                     datas.addAll(getInnerClassPaths(data));
                 }
             }
 
             if(isWriteDist){
                 logger.info("检测到路径{}下有文件修改，加入dist路径，请勿忘记打包dist", Constant.RMS_WEBAPP_PREFIX);
-                datas.add(CONFIG.getTargetFilePrefix() + "\\rms\\webapp\\dist\\*.*");
+                datas.add(CONFIG.getTargetFilePrefix() + Constant.DIST_PATH);
             }
             writeDatas(writer, datas);
             logger.info("copylist路径为：{}", new File(CONFIG.getTargetFilePath()).getCanonicalPath());
@@ -104,11 +104,8 @@ public class Main {
      */
     private static BufferedWriter getBufferedWriter() throws IOException {
         File f = new File(CONFIG.getTargetFilePath());
-        if(f.exists()){
-            final boolean delete = f.delete();
-            if(!delete){
-                throw new RuntimeException("删除已存在copylist文件（"+f.getCanonicalPath()+"）失败，请手动删除再运行程序！");
-            }
+        if(f.exists() && !f.delete()){
+            throw new RuntimeException("删除已存在copylist文件（"+f.getCanonicalPath()+"）失败，请手动删除再运行程序！");
         }
         return new BufferedWriter(new FileWriter(f));
     }

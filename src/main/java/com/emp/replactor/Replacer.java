@@ -4,7 +4,8 @@ package com.emp.replactor;
  * 规则替换接口
  * @author ZHANG
  */
-public interface PathReplactor {
+public interface Replacer {
+
     /**
      * 替换内容
      * @param data 数据

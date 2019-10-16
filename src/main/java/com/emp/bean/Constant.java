@@ -59,4 +59,8 @@ public interface Constant {
      * 1
      */
     String ONE = "1";
+    /**
+     * dist路径
+     */
+    String DIST_PATH = "\\rms\\webapp\\dist\\*.*";
 }
