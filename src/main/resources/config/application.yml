@@ -1,0 +1,19 @@
+# 项目svn配置
+svn:
+    # svn起始版本号
+    revStart: 306274
+    # svn截止版本号（不填默认最新）
+    revEnd: 306434
+    # svn路径
+    path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/emp_branches/emp_7.3_windows/emp
+# emp配置
+emp:
+    # 编译输出路径
+    outPutPath: E:\mw_out\emp73win\web
+# copyList配置
+copy-list:
+    # 生成路径（默认jar同级目录下）
+    path:
+    # 前缀（默认为emp_sta）
+    prefix: emp_sta
+

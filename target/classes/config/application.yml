@@ -1,0 +1,19 @@
+# ��Ŀsvn����
+svn:
+    # svn��ʼ�汾��
+    revStart: 306274
+    # svn��ֹ�汾�ţ�����Ĭ�����£�
+    revEnd: 306434
+    # svn·��
+    path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/emp_branches/emp_7.3_windows/emp
+# emp����
+emp:
+    # �������·��
+    outPutPath: E:\mw_out\emp73win\web
+# copyList����
+copy-list:
+    # ����·����Ĭ��jarͬ��Ŀ¼�£�
+    path:
+    # ǰ׺��Ĭ��Ϊemp_sta��
+    prefix: emp_sta
+
