@@ -12,5 +12,5 @@ public interface Maker<T extends Product> {
      * 制造
      * @return 成品
      */
-    T make();
+    T make() throws Exception;
 }

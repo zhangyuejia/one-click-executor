@@ -20,7 +20,6 @@ public class FileUtils {
      * @return 文件对象
      */
     public static File isExisted(String path){
-        Set
         File file = new File(path);
         return file.exists()? file: null;
     }

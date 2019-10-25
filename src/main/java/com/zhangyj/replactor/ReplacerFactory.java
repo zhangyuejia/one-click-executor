@@ -15,13 +15,13 @@ public class ReplacerFactory {
      */
     public static Replacer getReplacer(String data){
         Replacer replactor = null;
-        if(data.startsWith(Constant.REPLACTOR_WEB_ROOT_PREFIX)){
-            replactor = new WebRootReplacer();
-        }else if(data.endsWith(Constant.REPLACTOR_JAVA_SUFFIX)) {
-            replactor = new JavaReplacer();
-        }else if(data.startsWith(Constant.REPLACTOR_PRESOURCE_REFIX)){
-            replactor = new ResourceReplacer();
-        }
+//        if(data.startsWith(Constant.REPLACTOR_WEB_ROOT_PREFIX)){
+//            replactor = new WebRootReplacer();
+//        }else if(data.endsWith(Constant.REPLACTOR_JAVA_SUFFIX)) {
+//            replactor = new JavaReplacer();
+//        }else if(data.startsWith(Constant.REPLACTOR_PRESOURCE_REFIX)){
+//            replactor = new ResourceReplacer();
+//        }
         return replactor;
     }
 }
