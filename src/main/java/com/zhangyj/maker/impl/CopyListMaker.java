@@ -2,20 +2,23 @@ package com.zhangyj.maker.impl;
 
 import com.google.common.collect.Sets;
 import com.zhangyj.config.CopyListConfig;
+import com.zhangyj.config.EmpConfig;
 import com.zhangyj.config.SvnConfig;
-import com.zhangyj.constant.Constant;
-import com.zhangyj.finder.impl.InnerClassFinder;
 import com.zhangyj.maker.Maker;
+import com.zhangyj.pojo.JavaFilePath;
 import com.zhangyj.product.impl.CopyList;
-import com.zhangyj.replactor.JavaReplacer;
-import com.zhangyj.replactor.Replacer;
-import com.zhangyj.replactor.ReplacerFactory;
+import com.zhangyj.replactor.BaseCopyListConverter;
+import com.zhangyj.replactor.ConverterFactory;
+import com.zhangyj.replactor.impl.JavaCopyListConverter;
+import com.zhangyj.utils.SvnUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.BufferedReader;
 import java.net.URLDecoder;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author ZHANG
@@ -28,73 +31,61 @@ public class CopyListMaker implements Maker<CopyList> {
 
     private final SvnConfig svnConfig;
 
-    private final InnerClassFinder innerClassFinder;
+    private final EmpConfig empConfig;
 
-    public CopyListMaker(CopyListConfig copyListConfig, SvnConfig svnConfig, InnerClassFinder innerClassFinder) {
+    private final ConverterFactory converterFactory;
+
+    public CopyListMaker(CopyListConfig copyListConfig, SvnConfig svnConfig, EmpConfig empConfig, ConverterFactory converterFactory) {
         this.copyListConfig = copyListConfig;
         this.svnConfig = svnConfig;
-        this.innerClassFinder = innerClassFinder;
+        this.empConfig = empConfig;
+        this.converterFactory = converterFactory;
     }
-
 
     @Override
     public CopyList make() throws Exception {
-        Set<String> datas = Sets.newHashSet();
-        try (BufferedReader reader = getBufferedReader()){
-            // 是否需要写入copylist
-            boolean isWriteDist = false;
-            String line;
-            while ((line = reader.readLine()) != null){
-                line = URLDecoder.decode(line, "utf-8");
-                String fileName = line.substring(line.lastIndexOf("/") + 1);
-                // 只处理修改和新增的记录
-                if(!(line.startsWith(Constant.SVN_ADD_RECORD_PREFIX) || line.startsWith(Constant.SVN_MODIFY_RECORD_PREFIX))){
-                    continue;
-                }
-                // 获取相对路径（svn命令返回的行前8个字符是修改类型）
-                String relativePath = line.substring(8 + svnConfig.getPath().length() + 1);
-                // 过滤非法文件路径、文件夹和SystemGlobals.properties
-                if(!fileName.contains(".") || relativePath.endsWith(Constant.SYSTEM_GLOBALS_FILE_NAME)){
-                    continue;
-                }
-                // 如果修改了webapp部分，则认为需要重新打dist
-                if(relativePath.startsWith(Constant.RMS_WEBAPP_PREFIX)){
-                    isWriteDist = true;
-                    continue;
-                }
-                Replacer replactor = ReplacerFactory.getReplacer(relativePath);
-                if(replactor == null){
-                    continue;
-                }
-                String data = replactor.replace(relativePath);
-                datas.add(data);
-                // 检测是否有内部类
-                if(replactor instanceof JavaReplacer){
-                    datas.addAll(innerClassFinder.find(data));
-                }
-            }
-
-            if(isWriteDist){
-                log.info("检测到路径{}下有文件修改，加入dist路径，请勿忘记打包dist", Constant.RMS_WEBAPP_PREFIX);
-                datas.add(copyListConfig.getPrefix() + "\\rms\\webapp\\dist\\*.*");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        try (BufferedReader reader = SvnUtil.getDiffRecordReader(svnConfig.getPath(), svnConfig.getRevStart(), svnConfig.getRevEnd())){
+            Set<String> data = Sets.newTreeSet();
+            reader.lines()
+                    .filter(svnRecord ->
+                            SvnUtil.notAddOrModifyRecord(svnRecord) || SvnUtil.isSystemGlobalsDiffRecord(svnRecord))
+                    .map(svnRecord -> {
+                        try {
+                            String relativePath = svnRecord.substring(8 + svnConfig.getPath().length() + 1);
+                            return URLDecoder.decode(relativePath, "utf-8");
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .forEach(relativePath -> data.addAll(toCopyListLines(relativePath)));
+            return new CopyList(data, copyListConfig.getPath());
         }
-        return new CopyList(datas, "");
     }
-
-
 
     /**
-     * 获取字符输入流
-     * @return 字符输入流
-     * @throws IOException IO异常
+     * 将svn修改记录转化为copyList行
+     * @param relativePath 文件相对路径
+     * @return copyList行
      */
-    private BufferedReader getBufferedReader() throws IOException {
-        String command = String.format("svn diff -r %d:%d  --summarize %s", svnConfig.getRevStart() - 1, svnConfig.getRevEnd(), svnConfig.getPath());
-        Process process = Runtime.getRuntime().exec(command);
-        return new BufferedReader(new InputStreamReader(process.getInputStream()));
+    private Set<String> toCopyListLines(String relativePath) {
+        try {
+            BaseCopyListConverter converter = converterFactory.getConverter(relativePath);
+            if(converter == null){
+                return null;
+            }
+            Set<String> data = Stream.of(converter.convert(relativePath)).collect(Collectors.toSet());
+            if(converter instanceof JavaCopyListConverter){
+                String positivePath = empConfig.getOutPutPath() + relativePath;
+                Set<String> innerClassPaths = new JavaFilePath(positivePath).innerClassPaths();
+                data.addAll(innerClassPaths.stream().map(path -> path.substring(empConfig.getOutPutPath().length())).collect(Collectors.toSet()));
+            }
+            return data.stream().map(d -> copyListConfig.getPrefix() + d).collect(Collectors.toSet());
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("将svn修改记录(%s)转化为copyList行报错!", relativePath), e);
+        }
     }
+
+
+
 
 }

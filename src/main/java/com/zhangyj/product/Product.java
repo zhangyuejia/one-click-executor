@@ -8,6 +8,7 @@ public interface Product {
 
     /**
      * 构建产品
+     * @throws Exception 异常
      */
-    void build();
+    void build() throws Exception;
 }

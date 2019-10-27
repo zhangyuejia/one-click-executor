@@ -1,7 +1,7 @@
 package com.zhangyj.product.impl;
 
 import com.zhangyj.product.Product;
-import com.zhangyj.utils.FileHelper;
+import com.zhangyj.utils.FileUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,8 +25,8 @@ public class CopyList implements Product {
     }
 
     @Override
-    public void build() {
-        FileHelper.save(path, data);
+    public void build() throws Exception {
+        FileUtil.save(path, data);
     }
 
 

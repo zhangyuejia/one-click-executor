@@ -1,6 +1,5 @@
 package com.zhangyj;
 
-import com.zhangyj.config.CopyListConfig;
 import com.zhangyj.maker.Maker;
 import com.zhangyj.maker.impl.CopyListMaker;
 import org.springframework.boot.SpringApplication;
@@ -13,9 +12,13 @@ import org.springframework.context.ApplicationContext;
 @SpringBootApplication
 public class Application {
 
-    public static void main(String[] args) throws Exception {
-        ApplicationContext context = SpringApplication.run(Application.class, args);
-        Maker maker = context.getBean(CopyListMaker.class);
-        maker.make().build();
+    public static void main(String[] args){
+        try {
+            ApplicationContext context = SpringApplication.run(Application.class, args);
+            Maker maker = context.getBean(CopyListMaker.class);
+            maker.make().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
