@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.zhangyj.config.CopyListConfig;
 import com.zhangyj.config.EmpConfig;
 import com.zhangyj.config.SvnConfig;
+import com.zhangyj.constant.CharSetConst;
 import com.zhangyj.maker.Maker;
 import com.zhangyj.pojo.JavaFilePath;
 import com.zhangyj.product.impl.CopyList;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.net.URLDecoder;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -52,7 +54,7 @@ public class CopyListMaker implements Maker<CopyList> {
                     .map(svnRecord -> {
                         try {
                             String relativePath = svnRecord.substring(8 + svnConfig.getPath().length() + 1);
-                            return URLDecoder.decode(relativePath, "utf-8");
+                            return URLDecoder.decode(relativePath, CharSetConst.UTF8);
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
@@ -63,7 +65,7 @@ public class CopyListMaker implements Maker<CopyList> {
     }
 
     /**
-     * 将svn修改记录转化为copyList行
+     * 将文件相对路径转化为copyList行
      * @param relativePath 文件相对路径
      * @return copyList行
      */
@@ -71,7 +73,7 @@ public class CopyListMaker implements Maker<CopyList> {
         try {
             BaseCopyListConverter converter = converterFactory.getConverter(relativePath);
             if(converter == null){
-                return null;
+                return Collections.emptySet();
             }
             Set<String> data = Stream.of(converter.convert(relativePath)).collect(Collectors.toSet());
             if(converter instanceof JavaCopyListConverter){

@@ -1,6 +1,6 @@
 package com.zhangyj.replactor;
 
-import com.zhangyj.constant.Constant;
+import com.zhangyj.constant.Const;
 import com.zhangyj.replactor.impl.JavaCopyListConverter;
 import com.zhangyj.replactor.impl.ResourceCopyListConverter;
 import com.zhangyj.replactor.impl.WebRootCopyListConverter;
@@ -31,11 +31,11 @@ public class ConverterFactory {
      * @return 文件路径替换器
      */
     public BaseCopyListConverter getConverter(String relativePath){
-        if(relativePath.startsWith(Constant.REPLACTOR_WEB_ROOT_PREFIX)){
+        if(relativePath.startsWith(Const.WEB_ROOT)){
             return webRootReplacer;
-        }else if(relativePath.endsWith(Constant.REPLACTOR_JAVA_SUFFIX)) {
+        }else if(relativePath.endsWith(Const.JAVA)) {
             return javaReplacer;
-        }else if(relativePath.startsWith(Constant.REPLACTOR_PRESOURCE_REFIX)){
+        }else if(relativePath.startsWith(Const.PROPERTIES)){
             return resourceReplacer;
         }
         return null;
