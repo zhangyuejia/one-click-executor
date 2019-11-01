@@ -1,7 +1,8 @@
 package com.zhangyj.replactor;
 
-import com.zhangyj.config.CopyListConfig;
-import com.zhangyj.config.SvnConfig;
+import com.zhangyj.config.Config;
+
+import java.util.Set;
 
 /**
  * 规则替换接口
@@ -9,19 +10,16 @@ import com.zhangyj.config.SvnConfig;
  */
 public abstract class BaseCopyListConverter {
 
-    protected final CopyListConfig copyListConfig;
+    protected final Config config;
 
-    protected final SvnConfig svnConfig;
-
-    public BaseCopyListConverter(CopyListConfig copyListConfig, SvnConfig svnConfig) {
-        this.copyListConfig = copyListConfig;
-        this.svnConfig = svnConfig;
+    public BaseCopyListConverter(Config config) {
+        this.config = config;
     }
 
     /**
      * 替换内容
-     * @param data 数据
+     * @param relativePath 相对路径
      * @return 替换后内容
      */
-    public abstract String convert(String data);
+    public abstract Set<String> toCopyListLines(String relativePath) throws Exception;
 }

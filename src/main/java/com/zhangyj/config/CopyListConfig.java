@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 public class CopyListConfig {
 
     /**
-     * svn起始版本号
+     * copyList路径
      */
     private String path;
 
     /**
-     * svn终止版本号
+     * copyList内容前缀
      */
     private String prefix;
 

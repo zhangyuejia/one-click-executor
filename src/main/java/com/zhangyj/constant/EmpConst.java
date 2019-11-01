@@ -4,13 +4,13 @@ package com.zhangyj.constant;
  * Emp常量
  * @author ZHANG-YJ
  */
-public class EmpConst {
+public interface EmpConst {
 
     /**
      * dist路径
      */
     String DIST_PATH = "\\rms\\webapp\\dist\\*.*";
-    String RMS_WEBAPP_PREFIX = "WebRoot/rms/webapp";
+
     /**
      * 默认copylist前缀
      */

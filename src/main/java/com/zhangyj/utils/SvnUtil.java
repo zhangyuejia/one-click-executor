@@ -18,9 +18,9 @@ public class SvnUtil {
      * @param svnRecord
      * @return
      */
-    public static boolean notAddOrModifyRecord(String svnRecord){
+    public static boolean isAddOrModifyRecord(String svnRecord){
         final String addPrefix ="A", modifyPrefix ="M";
-        return !svnRecord.startsWith(addPrefix) && !svnRecord.startsWith(modifyPrefix);
+        return svnRecord.startsWith(addPrefix) || svnRecord.startsWith(modifyPrefix);
     }
 
     /**
@@ -40,8 +40,8 @@ public class SvnUtil {
     /**
      * 为EMP配置文件SystemGlobals的修改记录
      */
-    public static boolean isSystemGlobalsDiffRecord(String svnRecord){
+    public static boolean notSystemGlobalsDiffRecord(String svnRecord){
         final String systemGlobalsSuffix ="SystemGlobals.properties";
-        return svnRecord.endsWith(systemGlobalsSuffix);
+        return !svnRecord.endsWith(systemGlobalsSuffix);
     }
 }

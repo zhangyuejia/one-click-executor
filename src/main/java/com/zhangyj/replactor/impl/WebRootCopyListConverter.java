@@ -1,9 +1,12 @@
 package com.zhangyj.replactor.impl;
 
-import com.zhangyj.config.CopyListConfig;
-import com.zhangyj.config.SvnConfig;
+import com.zhangyj.config.Config;
+import com.zhangyj.constant.Const;
 import com.zhangyj.replactor.BaseCopyListConverter;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * WebRoot路径替换器
@@ -12,12 +15,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class WebRootCopyListConverter extends BaseCopyListConverter {
 
-    public WebRootCopyListConverter(CopyListConfig copyListConfig, SvnConfig svnConfig) {
-        super(copyListConfig, svnConfig);
+    public WebRootCopyListConverter(Config config) {
+        super(config);
     }
 
     @Override
-    public String convert(String svnRecord) {
-        return svnRecord.replaceFirst("WebRoot", copyListConfig.getPrefix()).replaceAll("/", "\\\\");
+    public Set<String> toCopyListLines(String relativePath) {
+        return Collections.singleton(
+                relativePath.replaceFirst(Const.WEB_ROOT, config.getCopyList().getPrefix()));
     }
 }

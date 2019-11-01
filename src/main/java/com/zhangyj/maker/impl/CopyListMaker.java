@@ -1,13 +1,11 @@
 package com.zhangyj.maker.impl;
 
-import com.google.common.collect.Sets;
 import com.zhangyj.config.CopyListConfig;
 import com.zhangyj.config.EmpConfig;
 import com.zhangyj.config.SvnConfig;
 import com.zhangyj.constant.CharSetConst;
 import com.zhangyj.maker.Maker;
 import com.zhangyj.pojo.JavaFilePath;
-import com.zhangyj.product.impl.CopyList;
 import com.zhangyj.replactor.BaseCopyListConverter;
 import com.zhangyj.replactor.ConverterFactory;
 import com.zhangyj.replactor.impl.JavaCopyListConverter;
@@ -16,7 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,41 +30,53 @@ import java.util.stream.Stream;
  */
 @Component
 @Slf4j
-public class CopyListMaker implements Maker<CopyList> {
+public class CopyListMaker implements Maker<String> {
 
     private final CopyListConfig copyListConfig;
 
     private final SvnConfig svnConfig;
 
-    private final EmpConfig empConfig;
-
     private final ConverterFactory converterFactory;
 
-    public CopyListMaker(CopyListConfig copyListConfig, SvnConfig svnConfig, EmpConfig empConfig, ConverterFactory converterFactory) {
+    public CopyListMaker(CopyListConfig copyListConfig, SvnConfig svnConfig, ConverterFactory converterFactory) {
         this.copyListConfig = copyListConfig;
         this.svnConfig = svnConfig;
-        this.empConfig = empConfig;
         this.converterFactory = converterFactory;
     }
 
     @Override
-    public CopyList make() throws Exception {
-        try (BufferedReader reader = SvnUtil.getDiffRecordReader(svnConfig.getPath(), svnConfig.getRevStart(), svnConfig.getRevEnd())){
-            Set<String> data = Sets.newTreeSet();
+    public String make() throws Exception {
+
+        try (BufferedReader reader =
+                     SvnUtil.getDiffRecordReader(svnConfig.getPath(), svnConfig.getRevStart(), svnConfig.getRevEnd());
+             BufferedWriter writer = Files.newBufferedWriter(Paths.get(copyListConfig.getPath()))){
             reader.lines()
-                    .filter(svnRecord ->
-                            SvnUtil.notAddOrModifyRecord(svnRecord) || SvnUtil.isSystemGlobalsDiffRecord(svnRecord))
-                    .map(svnRecord -> {
-                        try {
-                            String relativePath = svnRecord.substring(8 + svnConfig.getPath().length() + 1);
-                            return URLDecoder.decode(relativePath, CharSetConst.UTF8);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    })
-                    .forEach(relativePath -> data.addAll(toCopyListLines(relativePath)));
-            return new CopyList(data, copyListConfig.getPath());
+                    .filter(svnRecord -> SvnUtil.isAddOrModifyRecord(svnRecord) || SvnUtil.notSystemGlobalsDiffRecord(svnRecord))
+                    .map(this::toRelativePath)
+                    .forEach(relativePath -> writeData(writer, toCopyListLines(relativePath)));
+
+            return copyListConfig.getPath();
         }
+    }
+
+    private String toRelativePath(String svnRecord) {
+        try {
+            String relativePath = svnRecord.substring(8 + svnConfig.getPath().length() + 1);
+            return URLDecoder.decode(relativePath, CharSetConst.UTF8);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void writeData(BufferedWriter writer, Collection<String> copyListLines) {
+        copyListLines.forEach((line) ->{
+            try {
+                writer.write(line);
+                writer.newLine();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     /**
@@ -75,13 +90,7 @@ public class CopyListMaker implements Maker<CopyList> {
             if(converter == null){
                 return Collections.emptySet();
             }
-            Set<String> data = Stream.of(converter.convert(relativePath)).collect(Collectors.toSet());
-            if(converter instanceof JavaCopyListConverter){
-                String positivePath = empConfig.getOutPutPath() + relativePath;
-                Set<String> innerClassPaths = new JavaFilePath(positivePath).innerClassPaths();
-                data.addAll(innerClassPaths.stream().map(path -> path.substring(empConfig.getOutPutPath().length())).collect(Collectors.toSet()));
-            }
-            return data.stream().map(d -> copyListConfig.getPrefix() + d).collect(Collectors.toSet());
+            return converter.toCopyListLines(relativePath);
         } catch (Exception e) {
             throw new RuntimeException(String.format("将svn修改记录(%s)转化为copyList行报错!", relativePath), e);
         }

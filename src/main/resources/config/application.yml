@@ -1,19 +1,18 @@
-# ÏîÄ¿svnÅäÖÃ
+# é¡¹ç›®svné…ç½®
 svn:
-    # svnÆğÊ¼°æ±¾ºÅ
-    revStart: 306274
-    # svn½ØÖ¹°æ±¾ºÅ£¨²»ÌîÄ¬ÈÏ×îĞÂ£©
-    revEnd: 306434
-    # svnÂ·¾¶
-    path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/emp_branches/emp_7.3_windows/emp
-# empÅäÖÃ
+    # svnèµ·å§‹ç‰ˆæœ¬å·
+    revStart: 305113
+    # svnæˆªæ­¢ç‰ˆæœ¬å·ï¼ˆä¸å¡«é»˜è®¤æœ€æ–°ï¼‰
+    revEnd: 309439
+    # svnè·¯å¾„
+    path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/emp_branches/emp_7.2.0.452m_linux
+# empé…ç½®
 emp:
-    # ±àÒëÊä³öÂ·¾¶
-    outPutPath: E:\mw_out\emp73win\web
-# copyListÅäÖÃ
+    # ç¼–è¯‘è¾“å‡ºè·¯å¾„
+    outPutPath:
+# copyListé…ç½®
 copy-list:
-    # Éú³ÉÂ·¾¶£¨Ä¬ÈÏjarÍ¬¼¶Ä¿Â¼ÏÂ£©
-    path:
-    # Ç°×º£¨Ä¬ÈÏÎªemp_sta£©
+    # ç”Ÿæˆè·¯å¾„ï¼ˆé»˜è®¤jaråŒçº§ç›®å½•ä¸‹ï¼‰
+    path: C:\Users\ZHANG\Desktop\copylist.txt
+    # å‰ç¼€ï¼ˆé»˜è®¤ä¸ºemp_staï¼‰
     prefix: emp_sta
-
