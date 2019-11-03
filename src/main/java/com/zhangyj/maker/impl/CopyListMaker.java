@@ -1,14 +1,12 @@
 package com.zhangyj.maker.impl;
 
+import com.zhangyj.config.Config;
 import com.zhangyj.config.CopyListConfig;
-import com.zhangyj.config.EmpConfig;
 import com.zhangyj.config.SvnConfig;
 import com.zhangyj.constant.CharSetConst;
 import com.zhangyj.maker.Maker;
-import com.zhangyj.pojo.JavaFilePath;
 import com.zhangyj.replactor.BaseCopyListConverter;
 import com.zhangyj.replactor.ConverterFactory;
-import com.zhangyj.replactor.impl.JavaCopyListConverter;
 import com.zhangyj.utils.SvnUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,8 +20,6 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author ZHANG
@@ -32,36 +28,33 @@ import java.util.stream.Stream;
 @Slf4j
 public class CopyListMaker implements Maker<String> {
 
-    private final CopyListConfig copyListConfig;
 
-    private final SvnConfig svnConfig;
+    private final Config config;
 
     private final ConverterFactory converterFactory;
 
-    public CopyListMaker(CopyListConfig copyListConfig, SvnConfig svnConfig, ConverterFactory converterFactory) {
-        this.copyListConfig = copyListConfig;
-        this.svnConfig = svnConfig;
+    public CopyListMaker(Config config, ConverterFactory converterFactory) {
+        this.config = config;
         this.converterFactory = converterFactory;
     }
 
     @Override
     public String make() throws Exception {
-
         try (BufferedReader reader =
-                     SvnUtil.getDiffRecordReader(svnConfig.getPath(), svnConfig.getRevStart(), svnConfig.getRevEnd());
-             BufferedWriter writer = Files.newBufferedWriter(Paths.get(copyListConfig.getPath()))){
+                     SvnUtil.getDiffRecordReader(config.getSvn().getPath(), config.getSvn().getRevStart(), config.getSvn().getRevEnd());
+             BufferedWriter writer = Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()))){
             reader.lines()
                     .filter(svnRecord -> SvnUtil.isAddOrModifyRecord(svnRecord) || SvnUtil.notSystemGlobalsDiffRecord(svnRecord))
                     .map(this::toRelativePath)
                     .forEach(relativePath -> writeData(writer, toCopyListLines(relativePath)));
 
-            return copyListConfig.getPath();
+            return config.getCopyList().getPath();
         }
     }
 
     private String toRelativePath(String svnRecord) {
         try {
-            String relativePath = svnRecord.substring(8 + svnConfig.getPath().length() + 1);
+            String relativePath = svnRecord.substring(8 + config.getSvn().getPath().length() + 1);
             return URLDecoder.decode(relativePath, CharSetConst.UTF8);
         } catch (Exception e) {
             throw new RuntimeException(e);
