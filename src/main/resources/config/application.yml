@@ -9,10 +9,10 @@ svn:
 # emp配置
 emp:
     # 编译输出路径
-    outPutPath:
+    outPutPath: E:\mw_out\emp_tg_72\web
 # copyList配置
 copy-list:
     # 生成路径（默认jar同级目录下）
-    path: C:\Users\ZHANG\Desktop\copylist.txt
+    path:
     # 前缀（默认为emp_sta）
-    prefix: emp_sta
+    prefix:

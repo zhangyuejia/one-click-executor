@@ -35,7 +35,7 @@ public class ConverterFactory {
      * @return 文件路径替换器
      */
     public BaseCopyListConverter getConverter(String relativePath){
-        if(relativePath.startsWith(Const.WEB_ROOT_RMS_WEBAPP)){
+        if(relativePath.startsWith(Const.RMS_WEBAPP)){
             return rmsCopyListConverter;
         }else if(relativePath.startsWith(Const.WEB_ROOT)){
             return webRootReplacer;

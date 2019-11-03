@@ -1,5 +1,6 @@
 package com.zhangyj.replactor.impl;
 
+import com.google.common.collect.Sets;
 import com.zhangyj.config.Config;
 import com.zhangyj.constant.Const;
 import com.zhangyj.pojo.JavaFilePath;
@@ -7,8 +8,6 @@ import com.zhangyj.replactor.BaseCopyListConverter;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * java文件路径替换器
@@ -22,14 +21,20 @@ public class JavaCopyListConverter extends BaseCopyListConverter {
     }
 
     @Override
-    public Set<String> toCopyListLines(String relativePath) throws Exception {
-        String classFileRelativePath = "WEB-INF\\classes" + relativePath.substring(relativePath.indexOf("/"), relativePath.length() - Const.javaFileSuffix.length()) + Const.classFileSuffix;
-        String classFilePositivePath = config.getEmp().getOutPutPath() + classFileRelativePath;
+    protected Set<String> toCopyListRelativePath(String relativePath) throws Exception {
+        Set<String> data = Sets.newTreeSet();
+        // class文件相对路径
+        String classFileRelativePath = "/WEB-INF/classes"
+                + relativePath.substring(relativePath.indexOf("/"), relativePath.length() - Const.JAVA.length())
+                + Const.CLASS;
+        // 加入主类copyList
+        data.add(classFileRelativePath);
+        // class文件绝对路径
+        String classFilePositivePath = config.getEmp().getOutPutPath() + "/" + classFileRelativePath;
+        // 内部类绝对路径
         Set<String> innerClassPaths = new JavaFilePath(classFilePositivePath).innerClassPaths();
-        Set<String> data = Stream.of(config.getCopyList().getPrefix() + classFileRelativePath).collect(Collectors.toSet());
-        if(innerClassPaths.size() > 0){
-            data.addAll(innerClassPaths.stream().map(path -> path.substring(config.getEmp().getOutPutPath().length())).collect(Collectors.toSet()));
-        }
+        innerClassPaths.forEach(path ->
+                data.add(path.substring(config.getEmp().getOutPutPath().length())));
         return data;
     }
 

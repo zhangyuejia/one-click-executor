@@ -20,8 +20,7 @@ public class WebRootCopyListConverter extends BaseCopyListConverter {
     }
 
     @Override
-    public Set<String> toCopyListLines(String relativePath) {
-        return Collections.singleton(
-                relativePath.replaceFirst(Const.WEB_ROOT, config.getCopyList().getPrefix()));
+    protected Set<String> toCopyListRelativePath(String relativePath) {
+        return Collections.singleton(relativePath.substring(Const.WEB_ROOT.length()));
     }
 }

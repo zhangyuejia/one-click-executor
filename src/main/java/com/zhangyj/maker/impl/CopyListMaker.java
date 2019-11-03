@@ -1,8 +1,7 @@
 package com.zhangyj.maker.impl;
 
+import com.google.common.collect.Sets;
 import com.zhangyj.config.Config;
-import com.zhangyj.config.CopyListConfig;
-import com.zhangyj.config.SvnConfig;
 import com.zhangyj.constant.CharSetConst;
 import com.zhangyj.maker.Maker;
 import com.zhangyj.replactor.BaseCopyListConverter;
@@ -43,11 +42,12 @@ public class CopyListMaker implements Maker<String> {
         try (BufferedReader reader =
                      SvnUtil.getDiffRecordReader(config.getSvn().getPath(), config.getSvn().getRevStart(), config.getSvn().getRevEnd());
              BufferedWriter writer = Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()))){
+            Set<String> copyListLines = Sets.newTreeSet();
             reader.lines()
                     .filter(svnRecord -> SvnUtil.isAddOrModifyRecord(svnRecord) || SvnUtil.notSystemGlobalsDiffRecord(svnRecord))
                     .map(this::toRelativePath)
-                    .forEach(relativePath -> writeData(writer, toCopyListLines(relativePath)));
-
+                    .forEach(relativePath -> copyListLines.addAll(toCopyListLines(relativePath)));
+            writeData(writer, copyListLines);
             return config.getCopyList().getPath();
         }
     }

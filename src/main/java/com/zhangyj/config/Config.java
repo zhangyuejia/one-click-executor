@@ -1,6 +1,7 @@
 package com.zhangyj.config;
 
 import com.zhangyj.constant.ConstDefault;
+import com.zhangyj.utils.StringUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -103,28 +104,15 @@ public class Config {
     }
 
     /**
-     * 替换反斜杠为斜杠
-     * @param msg 内容
-     * @return 替换后内容
-     */
-    private static String replaceBackslash(String msg){
-        return msg.replaceAll("\\\\", "/");
-    }
-
-    private static boolean endWithsSlash(String msg){
-        return msg.endsWith("/");
-    }
-
-    /**
      * 处理路径（替换反斜杠为斜杠， 最后一个字符如果为斜杠，将其去除）
      * @param path 路径
      * @return 处理后路径
      */
     private static String processPath(String path){
         // 替换反斜杠为斜杠
-        String result = replaceBackslash(path);
+        String result = StringUtil.replaceBackslash(path);
         // 最后一个字符如果为斜杠，将其去除
-        if(endWithsSlash(result)){
+        if(StringUtil.endWithsSlash(result)){
             result = result.substring(0, result.length() - 1);
         }
         return result;

@@ -1,5 +1,7 @@
 package com.zhangyj.utils;
 
+import com.zhangyj.constant.Const;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,12 +13,9 @@ import java.io.InputStreamReader;
 public class SvnUtil {
 
     /**
-     * 不是svn修改记录
-     */
-    /**
-     *
-     * @param svnRecord
-     * @return
+     * 是否为新增或者修改记录
+     * @param svnRecord svn路径
+     * @return 判断结果
      */
     public static boolean isAddOrModifyRecord(String svnRecord){
         final String addPrefix ="A", modifyPrefix ="M";
@@ -41,7 +40,6 @@ public class SvnUtil {
      * 为EMP配置文件SystemGlobals的修改记录
      */
     public static boolean notSystemGlobalsDiffRecord(String svnRecord){
-        final String systemGlobalsSuffix ="SystemGlobals.properties";
-        return !svnRecord.endsWith(systemGlobalsSuffix);
+        return !svnRecord.endsWith(Const.SYSTEM_GLOBALS);
     }
 }

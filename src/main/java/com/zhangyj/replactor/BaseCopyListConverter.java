@@ -1,8 +1,10 @@
 package com.zhangyj.replactor;
 
 import com.zhangyj.config.Config;
+import com.zhangyj.utils.StringUtil;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 规则替换接口
@@ -20,6 +22,21 @@ public abstract class BaseCopyListConverter {
      * 替换内容
      * @param relativePath 相对路径
      * @return 替换后内容
+     * @throws Exception 异常
      */
-    public abstract Set<String> toCopyListLines(String relativePath) throws Exception;
+    public final Set<String> toCopyListLines(String relativePath) throws Exception{
+        return toCopyListRelativePath(relativePath)
+                .stream()
+                // 加上copyList前缀和替换斜杠为反斜杠
+                .map(d -> StringUtil.replaceSlash(config.getCopyList().getPrefix() + d))
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * 获取copyList相对路径
+     * @param relativePath 相对路径
+     * @return copyList相对路径
+     * @throws Exception 异常
+     */
+    protected abstract Set<String> toCopyListRelativePath(String relativePath) throws Exception;
 }
