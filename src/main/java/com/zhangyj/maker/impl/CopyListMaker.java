@@ -3,6 +3,7 @@ package com.zhangyj.maker.impl;
 import com.google.common.collect.Sets;
 import com.zhangyj.config.Config;
 import com.zhangyj.constant.CharSetConst;
+import com.zhangyj.constant.Const;
 import com.zhangyj.maker.Maker;
 import com.zhangyj.replactor.BaseCopyListConverter;
 import com.zhangyj.replactor.ConverterFactory;
@@ -27,7 +28,6 @@ import java.util.Set;
 @Slf4j
 public class CopyListMaker implements Maker<String> {
 
-
     private final Config config;
 
     private final ConverterFactory converterFactory;
@@ -44,7 +44,7 @@ public class CopyListMaker implements Maker<String> {
              BufferedWriter writer = Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()))){
             Set<String> copyListLines = Sets.newTreeSet();
             reader.lines()
-                    .filter(svnRecord -> SvnUtil.isAddOrModifyRecord(svnRecord) || SvnUtil.notSystemGlobalsDiffRecord(svnRecord))
+                    .filter(svnRecord -> SvnUtil.isAddOrModifyRecord(svnRecord) && notSystemGlobals(svnRecord) && isFile(svnRecord))
                     .map(this::toRelativePath)
                     .forEach(relativePath -> copyListLines.addAll(toCopyListLines(relativePath)));
             writeData(writer, copyListLines);
@@ -52,12 +52,37 @@ public class CopyListMaker implements Maker<String> {
         }
     }
 
+    /**
+     * 为EMP配置文件SystemGlobals的修改记录
+     */
+    private boolean notSystemGlobals(String svnRecord){
+        return !svnRecord.endsWith(Const.SYSTEM_GLOBALS);
+    }
+
+    /**
+     * 为EMP配置文件SystemGlobals的修改记录
+     */
+    private boolean isFile(String svnRecord){
+        // svn记录前8个字符是修改类型
+        int basPathLength = 8 + config.getSvn().getPath().length();
+        if(svnRecord.length() > basPathLength ){
+            String fileName = svnRecord.substring(svnRecord.lastIndexOf("/"));
+            return fileName.contains(".");
+        }
+        return false;
+    }
+
     private String toRelativePath(String svnRecord) {
         try {
-            String relativePath = svnRecord.substring(8 + config.getSvn().getPath().length() + 1);
+            // svn记录前8个字符是修改类型
+            int basPathLength = 8 + config.getSvn().getPath().length();
+            if(svnRecord.length() <= basPathLength){
+                return null;
+            }
+            String relativePath = svnRecord.substring(basPathLength + 1);
             return URLDecoder.decode(relativePath, CharSetConst.UTF8);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("svn记录:" + svnRecord, e);
         }
     }
 

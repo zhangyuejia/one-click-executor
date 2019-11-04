@@ -1,5 +1,6 @@
 package com.zhangyj.pojo;
 
+import com.zhangyj.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Files;
@@ -25,11 +26,14 @@ public class JavaFilePath extends FilePath {
      * @throws Exception 异常
      */
     public Set<String> innerClassPaths() throws Exception {
-        String innerClassPathPrefix = getDir() + getFileName() + "$";
-        return Files.list(Paths.get(getDir()))
+        String dir = getDir();
+        String innerClassNamePrefix = getFileName() + "$";
+        return Files.list(Paths.get(dir))
                 .filter(Files::isRegularFile)
-                .filter((path -> path.toString().startsWith(innerClassPathPrefix)))
-                .map(Path::toString).collect(Collectors.toSet());
+                .filter((path -> {
+                    String classFileName = path.toString().substring(dir.length());
+                    return classFileName.startsWith(innerClassNamePrefix);
+                })).map(Path::toString).collect(Collectors.toSet());
     }
 
 

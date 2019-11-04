@@ -42,7 +42,6 @@ public class Config {
      * 处理配置信息
      */
     private void processConfig() throws IOException {
-        log.info("************************** 处理配置信息 **************************");
         // 处理svn配置信息
         processSvnConfig();
         // 处理copyList配置信息

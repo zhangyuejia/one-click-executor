@@ -36,10 +36,5 @@ public class SvnUtil {
         return new BufferedReader(new InputStreamReader(process.getInputStream()));
     }
 
-    /**
-     * 为EMP配置文件SystemGlobals的修改记录
-     */
-    public static boolean notSystemGlobalsDiffRecord(String svnRecord){
-        return !svnRecord.endsWith(Const.SYSTEM_GLOBALS);
-    }
+
 }

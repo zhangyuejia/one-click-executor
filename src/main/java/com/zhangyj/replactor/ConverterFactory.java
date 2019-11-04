@@ -6,6 +6,7 @@ import com.zhangyj.replactor.impl.ResourceCopyListConverter;
 import com.zhangyj.replactor.impl.RmsCopyListConverter;
 import com.zhangyj.replactor.impl.WebRootCopyListConverter;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
  * 路径替换器工厂
@@ -35,6 +36,9 @@ public class ConverterFactory {
      * @return 文件路径替换器
      */
     public BaseCopyListConverter getConverter(String relativePath){
+        if(StringUtils.isEmpty(relativePath)){
+            return null;
+        }
         if(relativePath.startsWith(Const.RMS_WEBAPP)){
             return rmsCopyListConverter;
         }else if(relativePath.startsWith(Const.WEB_ROOT)){

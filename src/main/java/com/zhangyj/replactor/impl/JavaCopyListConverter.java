@@ -24,7 +24,7 @@ public class JavaCopyListConverter extends BaseCopyListConverter {
     protected Set<String> toCopyListRelativePath(String relativePath) throws Exception {
         Set<String> data = Sets.newTreeSet();
         // class文件相对路径
-        String classFileRelativePath = "/WEB-INF/classes"
+        String classFileRelativePath = Const.WEB_INF_CLASSES
                 + relativePath.substring(relativePath.indexOf("/"), relativePath.length() - Const.JAVA.length())
                 + Const.CLASS;
         // 加入主类copyList

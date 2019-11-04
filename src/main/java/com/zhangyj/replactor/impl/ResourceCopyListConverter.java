@@ -1,6 +1,7 @@
 package com.zhangyj.replactor.impl;
 
 import com.zhangyj.config.Config;
+import com.zhangyj.constant.Const;
 import com.zhangyj.replactor.BaseCopyListConverter;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,6 @@ public class ResourceCopyListConverter extends BaseCopyListConverter {
 
     @Override
     protected Set<String> toCopyListRelativePath(String relativePath) {
-        return Collections.singleton("\\WEB-INF\\classes" + relativePath.substring(relativePath.indexOf("/")));
+        return Collections.singleton(Const.WEB_INF_CLASSES + relativePath.substring(relativePath.indexOf("/")));
     }
 }

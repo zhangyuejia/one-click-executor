@@ -15,7 +15,6 @@ public class Application {
 
     public static void main(String[] args){
         try {
-            log.info("开始生成copyList");
             ApplicationContext context = SpringApplication.run(Application.class, args);
             CopyListMaker maker = context.getBean(CopyListMaker.class);
             log.info("生成copyList路径：{}", maker.make());

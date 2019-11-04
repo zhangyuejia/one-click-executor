@@ -1,9 +1,9 @@
 # 项目svn配置
 svn:
     # svn起始版本号
-    revStart: 305113
+    revStart: 273630
     # svn截止版本号（不填默认最新）
-    revEnd: 309439
+    revEnd: 311054
     # svn路径
     path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/emp_branches/emp_7.2.0.452m_linux
 # emp配置
