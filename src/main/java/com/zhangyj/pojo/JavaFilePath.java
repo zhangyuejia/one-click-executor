@@ -32,7 +32,11 @@ public class JavaFilePath extends FilePath {
                 .filter(Files::isRegularFile)
                 .filter((path -> {
                     String classFileName = path.toString().substring(dir.length());
-                    return classFileName.startsWith(innerClassNamePrefix);
+                    boolean isInnerClass = classFileName.startsWith(innerClassNamePrefix);
+                    if(isInnerClass){
+                        log.info("发现内部类，自动写入：{}", classFileName);
+                    }
+                    return isInnerClass;
                 })).map(Path::toString).collect(Collectors.toSet());
     }
 

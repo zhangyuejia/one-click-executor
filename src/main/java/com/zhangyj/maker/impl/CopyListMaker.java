@@ -44,7 +44,12 @@ public class CopyListMaker implements Maker<String> {
              BufferedWriter writer = Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()))){
             Set<String> copyListLines = Sets.newTreeSet();
             reader.lines()
-                    .filter(svnRecord -> SvnUtil.isAddOrModifyRecord(svnRecord) && notSystemGlobals(svnRecord) && isFile(svnRecord))
+                    .filter(svnRecord -> {
+                        if(config.getSvn().getShowRecord()){
+                            log.info("svn记录：{}", svnRecord);
+                        }
+                        return SvnUtil.isAddOrModifyRecord(svnRecord) && notSystemGlobals(svnRecord) && isFile(svnRecord);
+                    })
                     .map(this::toRelativePath)
                     .forEach(relativePath -> copyListLines.addAll(toCopyListLines(relativePath)));
             writeData(writer, copyListLines);

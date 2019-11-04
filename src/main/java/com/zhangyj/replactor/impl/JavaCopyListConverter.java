@@ -5,6 +5,7 @@ import com.zhangyj.config.Config;
 import com.zhangyj.constant.Const;
 import com.zhangyj.pojo.JavaFilePath;
 import com.zhangyj.replactor.BaseCopyListConverter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.Set;
  * java文件路径替换器
  * @author ZHANG
  */
+@Slf4j
 @Component
 public class JavaCopyListConverter extends BaseCopyListConverter {
 
@@ -33,8 +35,7 @@ public class JavaCopyListConverter extends BaseCopyListConverter {
         String classFilePositivePath = config.getEmp().getOutPutPath() + "/" + classFileRelativePath;
         // 内部类绝对路径
         Set<String> innerClassPaths = new JavaFilePath(classFilePositivePath).innerClassPaths();
-        innerClassPaths.forEach(path ->
-                data.add(path.substring(config.getEmp().getOutPutPath().length())));
+        innerClassPaths.forEach(path -> data.add(path.substring(config.getEmp().getOutPutPath().length())));
         return data;
     }
 

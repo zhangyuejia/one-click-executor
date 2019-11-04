@@ -89,6 +89,9 @@ public class Config {
         if(svn.getRevStart() > svn.getRevEnd()){
             throw new RuntimeException("配置项[svn->revStart]不能大于[svn->revEnd");
         }
+        if(svn.getShowRecord() == null){
+            svn.setShowRecord(false);
+        }
     }
 
     /**
