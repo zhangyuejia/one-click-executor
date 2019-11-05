@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
@@ -70,9 +71,10 @@ public class CopyListMaker implements Maker<String> {
     private boolean isFile(String svnRecord){
         // svn记录前8个字符是修改类型
         int basPathLength = 8 + config.getSvn().getPath().length();
+        String filePath;
         if(svnRecord.length() > basPathLength ){
-            String fileName = svnRecord.substring(svnRecord.lastIndexOf("/"));
-            return fileName.contains(".");
+            filePath = config.getEmp().getSourcePath() + svnRecord.substring(basPathLength);
+            return new File(filePath).isFile();
         }
         return false;
     }

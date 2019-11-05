@@ -1,9 +1,7 @@
 package com.zhangyj.config;
 
-import lombok.Builder;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 

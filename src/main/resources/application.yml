@@ -1,15 +1,17 @@
 # 项目svn配置
 svn:
     # svn起始版本号
-    revStart: 273630
+    revStart: 310719
     # svn截止版本号（不填默认最新）
-    revEnd: 311054
+    revEnd: 311329
     # svn路径
     path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/emp_branches/emp_7.2.0.452m_linux
     # 显示原始svn记录
     showRecord: false
 # emp配置
 emp:
+    # 源码路径
+    sourcePath: E:\mw_projects\20190801-emp_7.2.0.452m_linux
     # 编译输出路径
     outPutPath: E:\mw_out\emp_tg_72\web
 # copyList配置
@@ -18,3 +20,6 @@ copy-list:
     path:
     # 前缀（默认为emp_sta）
     prefix:
+# slf4j配置
+logging:
+    file: "./logs/log.log"

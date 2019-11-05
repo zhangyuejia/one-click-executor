@@ -22,4 +22,10 @@ public class EmpConfig {
     @NotBlank(message = "配置项[emp->outPutPath]不能为空")
     private String outPutPath;
 
+    /**
+     * emp源码路径
+     */
+    @NotBlank(message = "配置项[emp->sourcePath]不能为空")
+    private String sourcePath;
+
 }
