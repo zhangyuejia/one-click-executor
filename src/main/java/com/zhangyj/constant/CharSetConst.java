@@ -7,4 +7,6 @@ package com.zhangyj.constant;
 public interface CharSetConst {
 
     String UTF8 = "utf-8";
+
+    String GBK = "GBK";
 }

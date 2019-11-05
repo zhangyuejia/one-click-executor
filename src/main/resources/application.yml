@@ -10,9 +10,9 @@ svn:
     showRecord: false
 # emp配置
 emp:
-    # 源码路径
+    # 源码路径（用于过滤文件夹）
     sourcePath: E:\mw_projects\20190801-emp_7.2.0.452m_linux
-    # 编译输出路径
+    # 编译输出路径（用于获取内部类）
     outPutPath: E:\mw_out\emp_tg_72\web
 # copyList配置
 copy-list:

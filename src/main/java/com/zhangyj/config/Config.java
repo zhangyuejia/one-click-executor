@@ -2,6 +2,7 @@ package com.zhangyj.config;
 
 import com.zhangyj.constant.ConstDefault;
 import com.zhangyj.utils.StringUtil;
+import com.zhangyj.utils.SvnUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -99,9 +100,16 @@ public class Config {
      */
     private void printConfig() {
         log.info("************************** 打印配置信息-开始 **************************");
-        log.info("svn配置信息：{}", this.svn);
-        log.info("copyList配置信息：{}", this.copyList);
-        log.info("emp配置信息：{}", this.emp);
+        log.info("**************************** svn配置信息 ******************************");
+        log.info("【svn】：path:{}", this.svn.getPath());
+        log.info("【svn】：revStart:{}，备注信息↓↓↓", this.svn.getRevStart());
+        SvnUtil.showLog(this.svn.getPath(), this.svn.getRevStart());
+        log.info("【svn】：revEnd:{}，备注信息↓↓↓", this.svn.getRevEnd());
+        SvnUtil.showLog(this.svn.getPath(), this.svn.getRevEnd());
+        log.info("*************************** copyList配置信息 ***************************");
+        log.info("【copyList】：{}", this.copyList);
+        log.info("***************************** emp配置信息 ******************************");
+        log.info("【emp】：{}", this.emp);
         log.info("************************** 打印配置信息-结束 **************************");
     }
 
