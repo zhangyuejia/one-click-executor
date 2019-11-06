@@ -19,6 +19,8 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * @author ZHANG
@@ -43,24 +45,43 @@ public class CopyListMaker implements Maker<String> {
              BufferedWriter writer = Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()), Charset.forName(CharSetConst.GBK))){
             Set<String> copyListLines = Sets.newTreeSet();
             reader.lines()
-                    .map(svnRecord -> {
-                        try {
-                            return URLDecoder.decode(svnRecord, CharSetConst.UTF8);
-                        } catch (UnsupportedEncodingException e) {
-                            throw new RuntimeException(e);
-                        }
-                    })
-                    .filter(svnRecord -> {
-                        if(config.getSvn().getShowRecord()){
-                            log.info("svn记录：{}", svnRecord);
-                        }
-                        return SvnUtil.isAddOrModifyRecord(svnRecord) && notSystemGlobals(svnRecord) && isFile(svnRecord);
-                    })
+                    // utf-8转码，支持中文显示
+                    .map(decodeUtf8())
+                    // 过滤无效svn记录
+                    .filter(validSvnRecord())
+                    // 转化为相对路径
                     .map(this::toRelativePath)
                     .forEach(relativePath -> copyListLines.addAll(toCopyListLines(relativePath)));
             writeData(writer, copyListLines);
             return config.getCopyList().getPath();
         }
+    }
+
+    /**
+     * 过滤无效svn记录
+     * @return 过滤条件
+     */
+    private Predicate<String> validSvnRecord() {
+        return svnRecord -> {
+            if(config.getSvn().getShowRecord()){
+                log.info("svn记录：{}", svnRecord);
+            }
+            return SvnUtil.isAddOrModifyRecord(svnRecord) && notSystemGlobals(svnRecord) && isFile(svnRecord);
+        };
+    }
+
+    /**
+     * utf-8转码，支持中文显示
+     * @return 函数
+     */
+    private Function<String, String> decodeUtf8() {
+        return svnRecord -> {
+            try {
+                return URLDecoder.decode(svnRecord, CharSetConst.UTF8);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        };
     }
 
     /**
