@@ -2,6 +2,7 @@ package com.zhangyj.utils;
 
 import com.zhangyj.constant.CharSetConst;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -68,7 +69,7 @@ public class SvnUtil {
      */
     public static void showLog(String svnPath, Integer rev){
         try (BufferedReader reader = getLogReader(svnPath, rev)){
-            reader.lines().forEach(log::info);
+            reader.lines().filter(StringUtil::isNotEmpty).forEach(log::info);
         } catch (IOException e) {
             e.printStackTrace();
         }

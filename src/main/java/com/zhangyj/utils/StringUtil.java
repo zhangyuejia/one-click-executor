@@ -2,6 +2,9 @@ package com.zhangyj.utils;
 
 import org.springframework.util.StringUtils;
 
+/**
+ * @author ZHANG
+ */
 public class StringUtil extends StringUtils {
 
     /**
@@ -29,5 +32,14 @@ public class StringUtil extends StringUtils {
      */
     public static String replaceSlash(String msg){
         return msg.replaceAll("/", "\\\\");
+    }
+
+    /**
+     * 是否不为空
+     * @param msg 内容
+     * @return 判断结果
+     */
+    public static boolean isNotEmpty(String msg){
+        return !isEmpty(msg);
     }
 }
