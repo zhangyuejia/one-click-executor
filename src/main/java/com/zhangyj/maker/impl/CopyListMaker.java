@@ -40,9 +40,12 @@ public class CopyListMaker implements Maker<String> {
 
     @Override
     public String make() throws Exception {
+        // 获取输入输出流
         try (BufferedReader reader =
                      SvnUtil.getDiffRecordReader(config.getSvn().getPath(), config.getSvn().getRevStart(), config.getSvn().getRevEnd());
-             BufferedWriter writer = Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()), Charset.forName(CharSetConst.GBK))){
+             BufferedWriter writer =
+                     Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()), Charset.forName(CharSetConst.GBK))){
+            // copyList数据
             Set<String> copyListLines = Sets.newTreeSet();
             reader.lines()
                     // utf-8转码，支持中文显示
@@ -51,8 +54,11 @@ public class CopyListMaker implements Maker<String> {
                     .filter(validSvnRecord())
                     // 转化为相对路径
                     .map(this::toRelativePath)
+                    // 将相对路径转化为copyList行
                     .forEach(relativePath -> copyListLines.addAll(toCopyListLines(relativePath)));
+            // 将copyList数据写入文件
             writeData(writer, copyListLines);
+            // 返回copyList.txt绝对路径
             return config.getCopyList().getPath();
         }
     }
@@ -119,8 +125,13 @@ public class CopyListMaker implements Maker<String> {
         return svnRecord.substring(basPathLength + 1);
     }
 
-    private void writeData(BufferedWriter writer, Collection<String> copyListLines) {
-        copyListLines.forEach((line) ->{
+    /**
+     * 将数据写入文件
+     * @param writer 输出流
+     * @param lines 数据
+     */
+    private void writeData(BufferedWriter writer, Collection<String> lines) {
+        lines.forEach((line) ->{
             try {
                 writer.write(line);
                 writer.newLine();
