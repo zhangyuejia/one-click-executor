@@ -23,6 +23,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
+ * copyList生成器类
  * @author ZHANG
  */
 @Component
@@ -157,8 +158,4 @@ public class CopyListMaker implements Maker<String> {
             throw new RuntimeException(String.format("将svn修改记录(%s)转化为copyList行报错!", relativePath), e);
         }
     }
-
-
-
-
 }
