@@ -32,6 +32,7 @@ public class SvnConfig {
     /**
      * svn终止版本号
      */
+    @NotNull(message = "配置项[svn->revEnd]不能为空")
     private Integer revEnd;
 
     /**

@@ -11,11 +11,9 @@ import com.zhangyj.utils.SvnUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -42,9 +40,16 @@ public class CopyListMaker implements Maker<String> {
     public String make() throws Exception {
         try (BufferedReader reader =
                      SvnUtil.getDiffRecordReader(config.getSvn().getPath(), config.getSvn().getRevStart(), config.getSvn().getRevEnd());
-             BufferedWriter writer = Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()))){
+             BufferedWriter writer = Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()), Charset.forName(CharSetConst.GBK))){
             Set<String> copyListLines = Sets.newTreeSet();
             reader.lines()
+                    .map(svnRecord -> {
+                        try {
+                            return URLDecoder.decode(svnRecord, CharSetConst.UTF8);
+                        } catch (UnsupportedEncodingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
                     .filter(svnRecord -> {
                         if(config.getSvn().getShowRecord()){
                             log.info("svn记录：{}", svnRecord);
@@ -79,18 +84,18 @@ public class CopyListMaker implements Maker<String> {
         return false;
     }
 
+    /**
+     * 将svn修改记录转为svn相对路径
+     * @param svnRecord svn修改记录
+     * @return svn相对路径
+     */
     private String toRelativePath(String svnRecord) {
-        try {
-            // svn记录前8个字符是修改类型
-            int basPathLength = 8 + config.getSvn().getPath().length();
-            if(svnRecord.length() <= basPathLength){
-                return null;
-            }
-            String relativePath = svnRecord.substring(basPathLength + 1);
-            return URLDecoder.decode(relativePath, CharSetConst.UTF8);
-        } catch (Exception e) {
-            throw new RuntimeException("svn记录:" + svnRecord, e);
+        // svn记录前8个字符是修改类型
+        int basPathLength = 8 + config.getSvn().getPath().length();
+        if(svnRecord.length() <= basPathLength){
+            return null;
         }
+        return svnRecord.substring(basPathLength + 1);
     }
 
     private void writeData(BufferedWriter writer, Collection<String> copyListLines) {

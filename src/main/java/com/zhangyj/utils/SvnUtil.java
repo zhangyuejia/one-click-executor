@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 
 /**
  * svn记录
@@ -34,7 +35,7 @@ public class SvnUtil {
      */
     public static BufferedReader getDiffRecordReader(String svnPath, Integer revStart, Integer revEnd) throws IOException {
         String command = String.format("svn diff -r %d:%d  --summarize %s", revStart - 1, revEnd, svnPath);
-        return getCommandReader(command);
+        return getCommandReader(command, Charset.forName(CharSetConst.GBK));
     }
 
     /**
@@ -43,8 +44,8 @@ public class SvnUtil {
      * @return 命令读取流
      * @throws IOException 异常
      */
-    private static BufferedReader getCommandReader(String command) throws IOException {
-        return new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream(), CharSetConst.GBK));
+    private static BufferedReader getCommandReader(String command, Charset charset) throws IOException {
+        return new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream(), charset));
     }
 
     /**
@@ -56,7 +57,7 @@ public class SvnUtil {
      */
     private static BufferedReader getLogReader(String svnPath, Integer rev) throws IOException {
         String command = String.format("svn log %s -r %d", svnPath, rev);
-        return getCommandReader(command);
+        return getCommandReader(command, Charset.forName(CharSetConst.GBK));
     }
 
     /**
@@ -67,7 +68,6 @@ public class SvnUtil {
      */
     public static void showLog(String svnPath, Integer rev){
         try (BufferedReader reader = getLogReader(svnPath, rev)){
-
             reader.lines().forEach(log::info);
         } catch (IOException e) {
             e.printStackTrace();

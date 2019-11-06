@@ -7,7 +7,7 @@ svn:
     # svn路径
     path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/emp_branches/emp_7.2.0.452m_linux
     # 显示原始svn记录
-    showRecord: false
+    showRecord: true
 # emp配置
 emp:
     # 源码路径（用于过滤文件夹）
