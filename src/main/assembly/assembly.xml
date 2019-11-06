@@ -1,0 +1,49 @@
+<assembly>
+    <id>bin</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <!-- 使用assembly拷贝依赖包 -->
+<!--    <dependencySets>-->
+<!--    <dependencySet>-->
+<!--    &lt;!&ndash; 是否包含自己（将项目生成的jar包也输出到lib目录） &ndash;&gt;-->
+<!--    <useProjectArtifact>false</useProjectArtifact>-->
+<!--    <outputDirectory>lib</outputDirectory>-->
+<!--    </dependencySet>-->
+<!--    </dependencySets>-->
+    <fileSets>
+        <!-- 把项目自己编译出来的jar文件，打包进zip文件的根目录 -->
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>target/classes</directory>
+            <includes>
+                <include>application.yml</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+
+        <!-- 从源目录拷贝文件去压缩 -->
+        <fileSet>
+            <directory>src/main/run</directory>
+            <includes>
+                <include>*.sh</include>
+                <include>*.cmd</include>
+                <include>*.bat</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>/</directory>
+            <includes>
+                <include>ReadMe.md</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>
