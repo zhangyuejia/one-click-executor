@@ -1,4 +1,4 @@
-# 项目svn配置
+# 项目svn配置【配置项冒号后面要有个空格，不然会报错！！！eg:必须为revStart: 310719，不能为revStart:310719】
 svn:
     # svn起始版本号
     revStart: 310719
