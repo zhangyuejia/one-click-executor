@@ -2,7 +2,6 @@ package com.zhangyj.utils;
 
 import com.zhangyj.constant.CharSetConst;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -65,12 +64,11 @@ public class SvnUtil {
      * 打印版本号备注信息
      * @param svnPath svn路径
      * @param rev svn版本号
-     * @throws IOException 异常
      */
     public static void showLog(String svnPath, Integer rev){
         try (BufferedReader reader = getLogReader(svnPath, rev)){
             reader.lines().filter(StringUtil::isNotEmpty).forEach(log::info);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

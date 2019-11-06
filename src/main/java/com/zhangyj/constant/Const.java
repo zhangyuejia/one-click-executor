@@ -36,8 +36,14 @@ public interface Const {
      * emp总配置文件
      */
     String SYSTEM_GLOBALS= "SystemGlobals.properties";
+
     /**
      * classes编译路径
      */
     String WEB_INF_CLASSES = "/WEB-INF/classes";
+
+    /**
+     * dist路径
+     */
+    String DIST_PATH = "\\rms\\webapp\\dist\\*.*";
 }

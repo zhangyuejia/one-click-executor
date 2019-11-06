@@ -1,6 +1,6 @@
 package com.zhangyj.config;
 
-import com.zhangyj.constant.ConstDefault;
+import com.zhangyj.constant.DefaultConst;
 import com.zhangyj.utils.StringUtil;
 import com.zhangyj.utils.SvnUtil;
 import lombok.Data;
@@ -73,12 +73,12 @@ public class Config {
         // 设置为绝对路径
         String path = copyList.getPath();
         if(StringUtils.isEmpty(path)){
-            path = ConstDefault.COPY_LIST_PATH;
+            path = DefaultConst.COPY_LIST_PATH;
         }
         copyList.setPath(new File(path).getCanonicalPath());
 
         if(StringUtils.isEmpty(copyList.getPrefix())){
-            copyList.setPrefix(ConstDefault.COPY_LIST_PREFIX);
+            copyList.setPrefix(DefaultConst.COPY_LIST_PREFIX);
         }
     }
 

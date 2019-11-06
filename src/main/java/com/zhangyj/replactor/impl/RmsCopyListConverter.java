@@ -1,7 +1,7 @@
 package com.zhangyj.replactor.impl;
 
 import com.zhangyj.config.Config;
-import com.zhangyj.constant.EmpConst;
+import com.zhangyj.constant.Const;
 import com.zhangyj.replactor.BaseCopyListConverter;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +20,6 @@ public class RmsCopyListConverter extends BaseCopyListConverter {
 
     @Override
     protected Set<String> toCopyListRelativePath(String relativePath) {
-        return Collections.singleton(EmpConst.DIST_PATH);
+        return Collections.singleton(Const.DIST_PATH);
     }
 }

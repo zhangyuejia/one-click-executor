@@ -4,7 +4,7 @@ package com.zhangyj.constant;
  * 默认值
  * @author ZHANG-YJ
  */
-public interface ConstDefault {
+public interface DefaultConst {
 
     /**
      * 配置项[copy-list -> path]默认值

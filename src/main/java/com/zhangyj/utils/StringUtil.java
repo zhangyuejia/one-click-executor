@@ -39,7 +39,7 @@ public class StringUtil extends StringUtils {
      * @param msg 内容
      * @return 判断结果
      */
-    public static boolean isNotEmpty(String msg){
+    static boolean isNotEmpty(String msg){
         return !isEmpty(msg);
     }
 }
