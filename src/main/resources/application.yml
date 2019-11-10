@@ -22,6 +22,7 @@ copy-list:
     prefix:
 # slf4j配置
 logging:
-    file: "./logs/log.log"
     pattern:
         console: '%d{MM-dd HH:mm:ss} %-5level [%thread] %logger{15} - %msg%n'
+    file:
+        name: "./logs/log.log"
