@@ -1,19 +1,21 @@
 # 项目svn配置【配置项冒号后面要有个空格，不然会报错！！！eg:必须为revStart: 310719，不能为revStart:310719】
 svn:
-    # svn起始版本号
+    # 【必填】svn起始版本号
     revStart: 310719
     # svn截止版本号（不填默认最新）
-    revEnd: 311329
-    # svn路径
+    revEnd:
+    # 【必填】svn路径
     path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/emp_branches/emp_7.2.0.452m_linux
     # 显示原始svn记录
     showRecord: false
 # emp配置
 emp:
-    # 源码路径（用于过滤文件夹）
+    # 【必填】源码路径（用于过滤文件夹）
     sourcePath: E:\mw_projects\20190801-emp_7.2.0.452m_linux
-    # 编译输出路径（用于获取内部类）
+    # 【必填】编译输出路径（用于获取内部类）
     outPutPath: E:\mw_out\emp_tg_72\web
+    # 版本标识文件
+    versionFile: WebRoot\init.txt
 # copyList配置
 copy-list:
     # 生成路径（默认jar同级目录下）

@@ -28,4 +28,8 @@ public class EmpConfig {
     @NotBlank(message = "配置项[emp->sourcePath]不能为空")
     private String sourcePath;
 
+    /**
+     * 版本标识文件
+     */
+    private String versionFile;
 }

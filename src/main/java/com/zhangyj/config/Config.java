@@ -1,5 +1,6 @@
 package com.zhangyj.config;
 
+import com.zhangyj.constant.CharSetConst;
 import com.zhangyj.constant.DefaultConst;
 import com.zhangyj.utils.StringUtil;
 import com.zhangyj.utils.SvnUtil;
@@ -8,8 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.stream.Collectors;
 
 /**
  * @author zhagnyj
@@ -25,14 +29,14 @@ public class Config {
 
     private final EmpConfig emp;
 
-    public Config(SvnConfig svn, CopyListConfig copyList, EmpConfig emp) throws IOException {
+    public Config(SvnConfig svn, CopyListConfig copyList, EmpConfig emp) throws Exception {
         this.svn = svn;
         this.copyList = copyList;
         this.emp = emp;
         init();
     }
 
-    private void init() throws IOException {
+    private void init() throws Exception {
         // 处理配置信息
         processConfig();
         // 打印配置信息
@@ -42,7 +46,7 @@ public class Config {
     /**
      * 处理配置信息
      */
-    private void processConfig() throws IOException {
+    private void processConfig() throws Exception {
         // 处理svn配置信息
         processSvnConfig();
         // 处理copyList配置信息
@@ -64,6 +68,7 @@ public class Config {
         if(!outPutDir.isDirectory()){
             throw new RuntimeException("配置项[emp->outPutPath]不是文件夹");
         }
+
     }
 
     /**
@@ -85,14 +90,41 @@ public class Config {
     /**
      * 处理svn配置信息
      */
-    private void processSvnConfig() {
+    private void processSvnConfig() throws IOException {
+        if(svn.getRevEnd() == null){
+            if(StringUtil.isEmpty(emp.getVersionFile())){
+                throw new RuntimeException("配置项[svn->revEnd]和[emp->versionFile]不能同时为空！！！");
+            }
+            // 获取版本文件最新版本号
+            Integer revEnd = getLatestVersionFileRev();
+            log.info("配置项[svn->revEnd]为空，默认版本文件{}最新的版本号{}", emp.getVersionFile(), revEnd);
+            svn.setRevEnd(revEnd);
+
+        }
         svn.setPath(processPath(svn.getPath()));
         if(svn.getRevStart() > svn.getRevEnd()){
-            throw new RuntimeException("配置项[svn->revStart]不能大于[svn->revEnd");
+            throw new RuntimeException("配置项[svn->revStart]不能大于[svn->revEnd]");
         }
         if(svn.getShowRecord() == null){
             svn.setShowRecord(false);
         }
+    }
+
+    /**
+     * 获取版本文件最新版本号
+     * @return 版本文件最新版本号
+     * @throws IOException 异常
+     */
+    private Integer getLatestVersionFileRev() throws IOException {
+        // svn用户名
+        String userName = SvnUtil.getSvnUserName(svn.getPath());
+        // 版本文件svn路径
+        String versionFileSvnPath = StringUtil.replaceBackslash(svn.getPath() + File.separator + emp.getVersionFile());
+        // 命令
+        String command = String.format("svn log %s --search %s -l 50", versionFileSvnPath, userName);
+        BufferedReader reader = SvnUtil.getCommandReader(command, Charset.forName("GBK"));
+        String s = reader.lines().filter(line -> line.contains(userName)).collect(Collectors.toList()).get(0);
+        return Integer.parseInt(s.substring(1, s.indexOf("|")-1));
     }
 
     /**
@@ -126,5 +158,10 @@ public class Config {
             result = result.substring(0, result.length() - 1);
         }
         return result;
+    }
+
+    public static void main(String[] args) {
+        String s = "https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/emp_branches/emp_7.2.0.452m_linux --search zhanglj001 -l 3|findS";
+        System.out.println(s.substring(0, s.indexOf("svn")-1));
     }
 }
