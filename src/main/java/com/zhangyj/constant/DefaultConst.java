@@ -15,4 +15,9 @@ public interface DefaultConst {
      * 配置项[copy-list -> prefix]默认值
      */
     String COPY_LIST_PREFIX = "emp_sta";
+
+    /**
+     * 版本标识文件
+     */
+    String VERSION_FILE = "WebRoot\\init.txt";
 }

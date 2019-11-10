@@ -38,9 +38,9 @@ public class SvnConfig {
      * 显示原始svn记录
      */
     private Boolean showRecord;
+
     /**
      * 版本标识文件
      */
-    @NotBlank(message = "配置项[svn->versionFile]不能为空")
     private String versionFile;
 }

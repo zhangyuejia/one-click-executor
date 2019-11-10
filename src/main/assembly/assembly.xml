@@ -24,6 +24,7 @@
             <directory>target/classes</directory>
             <includes>
                 <include>application.yml</include>
+                <include>application.yml.all</include>
             </includes>
             <outputDirectory>/</outputDirectory>
         </fileSet>

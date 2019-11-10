@@ -46,12 +46,14 @@ public class Config {
      * 处理配置信息
      */
     private void processConfig() throws Exception {
+        log.info("************************** 处理配置信息-开始 **************************");
         // 处理svn配置信息
         processSvnConfig();
         // 处理copyList配置信息
         processCopyListConfig();
         // 处理emp配置信息
         processEmpConfig();
+        log.info("************************** 处理配置信息-结束 **************************");
     }
 
     /**
@@ -92,7 +94,8 @@ public class Config {
     private void processSvnConfig() throws IOException {
         if(svn.getRevEnd() == null){
             if(StringUtil.isEmpty(svn.getVersionFile())){
-                throw new RuntimeException("配置项[svn->revEnd]和[emp->versionFile]不能同时为空！！！");
+                svn.setVersionFile(DefaultConst.VERSION_FILE);
+                log.info("配置项[svn->versionFile]为空，使用默认值{}", svn.getVersionFile());
             }
             // 获取版本文件最新版本号
             Integer revEnd = getLatestVersionFileRev();
