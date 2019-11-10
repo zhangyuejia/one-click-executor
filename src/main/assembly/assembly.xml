@@ -15,7 +15,7 @@
         <!-- 把项目自己编译出来的jar文件，打包进zip文件的根目录 -->
         <fileSet>
             <directory>${project.build.directory}</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>/app</outputDirectory>
             <includes>
                 <include>*.jar</include>
             </includes>
@@ -23,12 +23,18 @@
         <fileSet>
             <directory>target/classes</directory>
             <includes>
-                <include>application.yml</include>
                 <include>application.yml.all</include>
+            </includes>
+            <outputDirectory>/app</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>target/classes</directory>
+            <includes>
+                <include>application.yml</include>
             </includes>
             <outputDirectory>/</outputDirectory>
         </fileSet>
-
         <!-- 从源目录拷贝文件去压缩 -->
         <fileSet>
             <directory>src/main/run</directory>
@@ -44,7 +50,7 @@
             <includes>
                 <include>ReadMe.md</include>
             </includes>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>/app</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>
