@@ -1,6 +1,5 @@
 package com.zhangyj.config;
 
-import com.zhangyj.constant.CharSetConst;
 import com.zhangyj.constant.DefaultConst;
 import com.zhangyj.utils.StringUtil;
 import com.zhangyj.utils.SvnUtil;
@@ -92,12 +91,12 @@ public class Config {
      */
     private void processSvnConfig() throws IOException {
         if(svn.getRevEnd() == null){
-            if(StringUtil.isEmpty(emp.getVersionFile())){
+            if(StringUtil.isEmpty(svn.getVersionFile())){
                 throw new RuntimeException("配置项[svn->revEnd]和[emp->versionFile]不能同时为空！！！");
             }
             // 获取版本文件最新版本号
             Integer revEnd = getLatestVersionFileRev();
-            log.info("配置项[svn->revEnd]为空，默认版本文件{}最新的版本号{}", emp.getVersionFile(), revEnd);
+            log.info("配置项[svn->revEnd]为空，默认版本文件{}最新的版本号{}", svn.getVersionFile(), revEnd);
             svn.setRevEnd(revEnd);
 
         }
@@ -119,7 +118,7 @@ public class Config {
         // svn用户名
         String userName = SvnUtil.getSvnUserName(svn.getPath());
         // 版本文件svn路径
-        String versionFileSvnPath = StringUtil.replaceBackslash(svn.getPath() + File.separator + emp.getVersionFile());
+        String versionFileSvnPath = StringUtil.replaceBackslash(svn.getPath() + File.separator + svn.getVersionFile());
         // 命令
         String command = String.format("svn log %s --search %s -l 50", versionFileSvnPath, userName);
         BufferedReader reader = SvnUtil.getCommandReader(command, Charset.forName("GBK"));
