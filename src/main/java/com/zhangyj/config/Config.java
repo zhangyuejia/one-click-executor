@@ -15,6 +15,8 @@ import java.nio.charset.Charset;
 import java.util.stream.Collectors;
 
 /**
+ * 配置文件类
+ * 用于处理配置项和打印配置信息
  * @author zhagnyj
  */
 @Data
@@ -91,7 +93,7 @@ public class Config {
     /**
      * 处理svn配置信息
      */
-    private void processSvnConfig() throws IOException {
+    private void processSvnConfig() {
         if(svn.getRevEnd() == null){
             if(StringUtil.isEmpty(svn.getVersionFile())){
                 svn.setVersionFile(DefaultConst.VERSION_FILE);
@@ -162,10 +164,5 @@ public class Config {
             result = result.substring(0, result.length() - 1);
         }
         return result;
-    }
-
-    public static void main(String[] args) {
-        String s = "https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/emp_branches/emp_7.2.0.452m_linux --search zhanglj001 -l 3|findS";
-        System.out.println(s.substring(0, s.indexOf("svn")-1));
     }
 }

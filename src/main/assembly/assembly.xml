@@ -48,7 +48,8 @@
         <fileSet>
             <directory>/</directory>
             <includes>
-                <include>ReadMe.md</include>
+                <include>README.md</include>
+                <include>version.txt</include>
             </includes>
             <outputDirectory>/app</outputDirectory>
         </fileSet>
