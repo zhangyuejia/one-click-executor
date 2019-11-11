@@ -78,13 +78,15 @@ public class SvnUtil {
      * 获取svn用户
      * @param svnPath svn路径
      * @return svn用户名
-     * @throws IOException 异常
      */
-    public static String getSvnUserName(String svnPath) throws IOException {
+    public static String getSvnUserName(String svnPath) {
         String command = String.format("svn auth %s", svnPath.substring(0, svnPath.indexOf("svn")-1));
-        BufferedReader reader = SvnUtil.getCommandReader(command, Charset.forName(CharSetConst.GBK));
-        String userNameLine = reader.lines().filter(line -> line.contains("Username")).collect(Collectors.toList()).get(0);
-        return userNameLine.substring(userNameLine.indexOf(": ") + 1);
+        try (BufferedReader reader = SvnUtil.getCommandReader(command, Charset.forName(CharSetConst.GBK));){
+            String userNameLine = reader.lines().filter(line -> line.contains("Username")).collect(Collectors.toList()).get(0);
+            return userNameLine.substring(userNameLine.indexOf(": ") + 1);
+        }catch (Exception e){
+            throw new RuntimeException( "获取当前svn用户名失败，执行命令：" + command, e);
+        }
     }
 
 }

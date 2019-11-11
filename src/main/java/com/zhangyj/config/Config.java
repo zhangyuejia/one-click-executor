@@ -101,7 +101,6 @@ public class Config {
             Integer revEnd = getLatestVersionFileRev();
             log.info("配置项[svn->revEnd]为空，默认版本文件{}最新的版本号{}", svn.getVersionFile(), revEnd);
             svn.setRevEnd(revEnd);
-
         }
         svn.setPath(processPath(svn.getPath()));
         if(svn.getRevStart() > svn.getRevEnd()){
@@ -115,18 +114,21 @@ public class Config {
     /**
      * 获取版本文件最新版本号
      * @return 版本文件最新版本号
-     * @throws IOException 异常
      */
-    private Integer getLatestVersionFileRev() throws IOException {
-        // svn用户名
+    private Integer getLatestVersionFileRev() {
+        // 本机svn用户名
         String userName = SvnUtil.getSvnUserName(svn.getPath());
         // 版本文件svn路径
         String versionFileSvnPath = StringUtil.replaceBackslash(svn.getPath() + File.separator + svn.getVersionFile());
-        // 命令
+        // 命令-获取最新50条记录中为当前用户提交的记录
         String command = String.format("svn log %s --search %s -l 50", versionFileSvnPath, userName);
-        BufferedReader reader = SvnUtil.getCommandReader(command, Charset.forName("GBK"));
-        String s = reader.lines().filter(line -> line.contains(userName)).collect(Collectors.toList()).get(0);
-        return Integer.parseInt(s.substring(1, s.indexOf("|")-1));
+        try (BufferedReader reader = SvnUtil.getCommandReader(command, Charset.forName("GBK"));){
+            String s = reader.lines().filter(line -> line.contains(userName)).collect(Collectors.toList()).get(0);
+            return Integer.parseInt(s.substring(1, s.indexOf("|")-1));
+        }catch (Exception e){
+            throw new RuntimeException("获取版本标识文件最新版本号出错，执行命令：" + command, e);
+        }
+
     }
 
     /**
