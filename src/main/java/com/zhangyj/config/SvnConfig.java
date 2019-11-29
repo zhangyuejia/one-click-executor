@@ -33,14 +33,4 @@ public class SvnConfig {
      * svn终止版本号
      */
     private Integer revEnd;
-
-    /**
-     * 显示原始svn记录
-     */
-    private Boolean showRecord;
-
-    /**
-     * 版本标识文件
-     */
-    private String versionFile;
 }

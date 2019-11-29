@@ -11,12 +11,14 @@ import com.zhangyj.utils.SvnUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Function;
@@ -34,6 +36,8 @@ public class CopyListMaker implements Maker<String> {
 
     private final ConverterFactory converterFactory;
 
+    private final Set<String> copyListLines = Sets.newTreeSet();
+
     public CopyListMaker(Config config, ConverterFactory converterFactory) {
         this.config = config;
         this.converterFactory = converterFactory;
@@ -41,13 +45,17 @@ public class CopyListMaker implements Maker<String> {
 
     @Override
     public String make() throws Exception {
+        // 读取copyList数据
+        readCopyList();
+        // 将copyList数据写入文件
+        writeCopyList();
+        return config.getCopyList().getPath();
+
+    }
+
+    private void readCopyList() throws IOException {
         // 获取输入输出流
-        try (BufferedReader reader =
-                     SvnUtil.getDiffRecordReader(config.getSvn().getPath(), config.getSvn().getRevStart(), config.getSvn().getRevEnd());
-             BufferedWriter writer =
-                     Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()), Charset.forName(CharSetConst.GBK))){
-            // copyList数据
-            Set<String> copyListLines = Sets.newTreeSet();
+        try (BufferedReader reader = SvnUtil.getDiffRecordReader(config.getSvn().getPath(), config.getSvn().getRevStart(), config.getSvn().getRevEnd())){
             reader.lines()
                     // utf-8转码，支持中文显示
                     .map(decodeUtf8())
@@ -57,10 +65,22 @@ public class CopyListMaker implements Maker<String> {
                     .map(this::toRelativePath)
                     // 将相对路径转化为copyList行
                     .forEach(relativePath -> copyListLines.addAll(toCopyListLines(relativePath)));
+        }
+    }
+
+    private void writeCopyList() throws IOException {
+        // 获取输入输出流
+        try (BufferedWriter writer =
+                     Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()), Charset.forName(CharSetConst.GBK))){
             // 将copyList数据写入文件
-            writeData(writer, copyListLines);
-            // 返回copyList.txt绝对路径
-            return config.getCopyList().getPath();
+            copyListLines.forEach((line) ->{
+                try {
+                    writer.write(line);
+                    writer.newLine();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 
@@ -70,10 +90,11 @@ public class CopyListMaker implements Maker<String> {
      */
     private Predicate<String> validSvnRecord() {
         return svnRecord -> {
-            if(config.getSvn().getShowRecord()){
-                log.info("svn记录：{}", svnRecord);
+            try {
+                return SvnUtil.isAddOrModifyRecord(svnRecord) && notSystemGlobals(svnRecord) && isFile(svnRecord);
+            } catch (Exception e) {
+               throw new RuntimeException("过滤无效svn记录异常");
             }
-            return SvnUtil.isAddOrModifyRecord(svnRecord) && notSystemGlobals(svnRecord) && isFile(svnRecord);
         };
     }
 
@@ -99,15 +120,16 @@ public class CopyListMaker implements Maker<String> {
     }
 
     /**
-     * 为EMP配置文件SystemGlobals的修改记录
+     * 判断是不是文件
+     * @param svnRecord svn记录
+     * @return 判断结果
      */
     private boolean isFile(String svnRecord){
         // svn记录前8个字符是修改类型
-        int basPathLength = 8 + config.getSvn().getPath().length();
-        String filePath;
-        if(svnRecord.length() > basPathLength ){
-            filePath = config.getEmp().getSourcePath() + svnRecord.substring(basPathLength);
-            return new File(filePath).isFile();
+        int basePathLength = 8 + config.getSvn().getPath().length();
+        if(svnRecord.length() > basePathLength ){
+            String fileName = svnRecord.substring(svnRecord.lastIndexOf("/"));
+            return fileName.contains(".");
         }
         return false;
     }
@@ -124,22 +146,6 @@ public class CopyListMaker implements Maker<String> {
             return null;
         }
         return svnRecord.substring(basPathLength + 1);
-    }
-
-    /**
-     * 将数据写入文件
-     * @param writer 输出流
-     * @param lines 数据
-     */
-    private void writeData(BufferedWriter writer, Collection<String> lines) {
-        lines.forEach((line) ->{
-            try {
-                writer.write(line);
-                writer.newLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
     }
 
     /**

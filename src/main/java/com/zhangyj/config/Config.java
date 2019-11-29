@@ -95,21 +95,14 @@ public class Config {
      */
     private void processSvnConfig() {
         if(svn.getRevEnd() == null){
-            if(StringUtil.isEmpty(svn.getVersionFile())){
-                svn.setVersionFile(DefaultConst.VERSION_FILE);
-                log.info("配置项[svn->versionFile]为空，使用默认值{}", svn.getVersionFile());
-            }
             // 获取版本文件最新版本号
-            Integer revEnd = getLatestVersionFileRev();
-            log.info("配置项[svn->revEnd]为空，默认版本文件{}最新的版本号{}", svn.getVersionFile(), revEnd);
+            Integer revEnd = getLatestVersion();
+            log.info("配置项[svn->revEnd]为空，默认最新的版本号{}", revEnd);
             svn.setRevEnd(revEnd);
         }
         svn.setPath(processPath(svn.getPath()));
         if(svn.getRevStart() > svn.getRevEnd()){
             throw new RuntimeException("配置项[svn->revStart]不能大于[svn->revEnd]");
-        }
-        if(svn.getShowRecord() == null){
-            svn.setShowRecord(false);
         }
     }
 
@@ -117,20 +110,10 @@ public class Config {
      * 获取版本文件最新版本号
      * @return 版本文件最新版本号
      */
-    private Integer getLatestVersionFileRev() {
-        // 本机svn用户名
-        String userName = SvnUtil.getSvnUserName(svn.getPath());
-        // 版本文件svn路径
-        String versionFileSvnPath = StringUtil.replaceBackslash(svn.getPath() + File.separator + svn.getVersionFile());
-        // 命令-获取最新50条记录中为当前用户提交的记录
-        String command = String.format("svn log %s --search %s -l 50", versionFileSvnPath, userName);
-        try (BufferedReader reader = SvnUtil.getCommandReader(command, Charset.forName("GBK"));){
-            String s = reader.lines().filter(line -> line.contains(userName)).collect(Collectors.toList()).get(0);
-            return Integer.parseInt(s.substring(1, s.indexOf("|")-1));
-        }catch (Exception e){
-            throw new RuntimeException("获取版本标识文件最新版本号出错，执行命令：" + command, e);
-        }
-
+    private Integer getLatestVersion() {
+        String latestVerPrefix = "Last Changed Rev:";
+        String lastChangeInfo = SvnUtil.getSvnInfo(svn.getPath(), line -> line.startsWith(latestVerPrefix)).get(0);
+        return Integer.parseInt(lastChangeInfo.substring(latestVerPrefix.length()).trim());
     }
 
     /**
