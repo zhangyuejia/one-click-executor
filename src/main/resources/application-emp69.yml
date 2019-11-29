@@ -8,6 +8,6 @@ svn:
     path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/02branches/stable-6.9(m)/emp
 # emp配置
 emp:
-    # 【必填】编译输出路径（用于获取内部类）
+    # 【必填】emp web项目编译路径（用于内部类检测，idea中Project Structure -> Artifacts中Output directory值）
     outPutPath: E:\mw_out\emp_tg_win69\web
 
