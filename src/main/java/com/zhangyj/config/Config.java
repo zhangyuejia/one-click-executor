@@ -1,6 +1,7 @@
 package com.zhangyj.config;
 
 import com.zhangyj.constant.DefaultConst;
+import com.zhangyj.utils.SpringContextUtil;
 import com.zhangyj.utils.StringUtil;
 import com.zhangyj.utils.SvnUtil;
 import lombok.Data;

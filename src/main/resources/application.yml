@@ -1,19 +1,11 @@
-# 项目svn配置【配置项冒号后面要有个空格！！！】
-svn:
-    # 【必填】svn起始版本号
-    revStart: 310719
-    # svn截止版本号（不填默认最新版本号）
-    revEnd:
-    # 【必填】svn路径
-    path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/emp_branches/emp_7.2.0.452m_linux
-# emp配置
-emp:
-    # 【必填】编译输出路径（用于获取内部类）
-    outPutPath: E:\mw_out\emp_tg_72\web
+# 配置文件配置
+spring:
+  profiles:
+    active: emp72
 
 # slf4j配置
 logging:
   pattern:
     console: '%d{MM-dd HH:mm:ss} %-5level%msg%n'
   file:
-    name: "./logs/log.log"
+    name: "./app/log.log"

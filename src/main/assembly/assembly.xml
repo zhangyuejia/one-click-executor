@@ -4,13 +4,6 @@
     <formats>
         <format>zip</format>
     </formats>
-    <files>
-        <file>
-            <source>target/classes/application.yml</source>
-            <outputDirectory>/app</outputDirectory>
-            <destName>application.bak.yml</destName>
-        </file>
-    </files>
     <fileSets>
         <!-- 把项目自己编译出来的jar文件，打包进zip文件的根目录 -->
         <fileSet>
@@ -23,15 +16,7 @@
         <fileSet>
             <directory>target/classes</directory>
             <includes>
-                <include>application.yml.all</include>
-            </includes>
-            <outputDirectory>/app</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>target/classes</directory>
-            <includes>
-                <include>application.yml</include>
+                <include>application*.yml</include>
             </includes>
             <outputDirectory>/</outputDirectory>
         </fileSet>
