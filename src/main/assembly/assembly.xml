@@ -1,16 +1,16 @@
+<!--assembly语法：http://maven.apache.org/components/plugins/maven-assembly-plugin/assembly.html-->
 <assembly>
     <id>bin</id>
     <formats>
         <format>zip</format>
     </formats>
-    <!-- 使用assembly拷贝依赖包 -->
-<!--    <dependencySets>-->
-<!--    <dependencySet>-->
-<!--    &lt;!&ndash; 是否包含自己（将项目生成的jar包也输出到lib目录） &ndash;&gt;-->
-<!--    <useProjectArtifact>false</useProjectArtifact>-->
-<!--    <outputDirectory>lib</outputDirectory>-->
-<!--    </dependencySet>-->
-<!--    </dependencySets>-->
+    <files>
+        <file>
+            <source>target/classes/application.yml</source>
+            <outputDirectory>/app</outputDirectory>
+            <destName>application.bak.yml</destName>
+        </file>
+    </files>
     <fileSets>
         <!-- 把项目自己编译出来的jar文件，打包进zip文件的根目录 -->
         <fileSet>
