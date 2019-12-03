@@ -49,14 +49,12 @@ public class Config {
      * 处理配置信息
      */
     private void processConfig() throws Exception {
-        log.info("************************** 处理配置信息-开始 **************************");
         // 处理svn配置信息
         processSvnConfig();
         // 处理copyList配置信息
         processCopyListConfig();
         // 处理emp配置信息
         processEmpConfig();
-        log.info("************************** 处理配置信息-结束 **************************");
     }
 
     /**
