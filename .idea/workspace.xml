@@ -4,9 +4,13 @@
     <option name="GROUP_BY_SEVERITY" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38aeb19a-9ecd-48d9-9012-32487e8a225f" name="Default Changelist" comment="copyListMakerV3.0.2正式打包">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/banner.txt" afterDir="false" />
+    <list default="true" id="38aeb19a-9ecd-48d9-9012-32487e8a225f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhangyj/config/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhangyj/config/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/run/startup.bat" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/run/startup.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/version.txt" beforeDir="false" afterPath="$PROJECT_DIR$/version.txt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -36,19 +40,25 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/banner.txt">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/zhangyj/config/Config.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="3" column="37" selection-start-line="3" selection-start-column="37" selection-end-line="3" selection-end-column="37" />
+            <state relative-caret-position="354">
+              <caret line="126" column="36" selection-start-line="126" selection-start-column="36" selection-end-line="126" selection-end-column="36" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot/2.2.0.RELEASE/spring-boot-2.2.0.RELEASE-sources.jar!/org/springframework/boot/ansi/AnsiColor.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/zhangyj/utils/SvnUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="808">
-              <caret line="59" column="16" selection-start-line="59" selection-start-column="4" selection-end-line="59" selection-end-column="16" />
+            <state relative-caret-position="268">
+              <caret line="70" column="23" selection-start-line="70" selection-start-column="23" selection-end-line="70" selection-end-column="23" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -75,7 +85,13 @@
       <find>3.0.2</find>
       <find>bak</find>
       <find>banner</find>
+      <find>处理配置信息</find>
+      <find>copyListMaker</find>
+      <find>3.0.3</find>
     </findStrings>
+    <dirStrings>
+      <dir>E:\mw_projects\make-copylist3</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -123,17 +139,17 @@
         <option value="$PROJECT_DIR$/src/main/java/com/zhangyj/maker/impl/CopyListMaker.java" />
         <option value="$PROJECT_DIR$/src/main/resources/application-7.2.yml" />
         <option value="$PROJECT_DIR$/src/main/java/com/zhangyj/utils/SpringContextUtil.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/zhangyj/config/Config.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/zhangyj/Application.java" />
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/version.txt" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/run/startup.bat" />
         <option value="$PROJECT_DIR$/src/main/assembly/assembly.xml" />
         <option value="$PROJECT_DIR$/src/main/resources/application-emp69.yml" />
         <option value="$PROJECT_DIR$/src/main/resources/application-emp72.yml" />
         <option value="$PROJECT_DIR$/src/main/resources/application.yml" />
         <option value="$PROJECT_DIR$/src/main/resources/banner.txt" />
+        <option value="$PROJECT_DIR$/src/main/java/com/zhangyj/config/Config.java" />
+        <option value="$PROJECT_DIR$/src/main/run/startup.bat" />
+        <option value="$PROJECT_DIR$/version.txt" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -375,7 +391,7 @@
       <workItem from="1574927648556" duration="7878000" />
       <workItem from="1574987940830" duration="5197000" />
       <workItem from="1575010546553" duration="2111000" />
-      <workItem from="1575355364394" duration="2380000" />
+      <workItem from="1575355364394" duration="3144000" />
     </task>
     <task id="LOCAL-00001" summary="3.0初始版本">
       <created>1572148301952</created>
@@ -461,18 +477,39 @@
       <option name="project" value="LOCAL" />
       <updated>1574994695436</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="修改banner">
+      <created>1575357816072</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1575357816072</updated>
+    </task>
+    <task id="LOCAL-00014" summary="删除代码">
+      <created>1575358010211</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1575358010211</updated>
+    </task>
+    <task id="LOCAL-00015" summary="删除代码">
+      <created>1575358215816</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1575358215816</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="92839000" />
+    <option name="totallyTimeSpent" value="93603000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="JRebel" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.49716714" visible="true" weight="0.1433902" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.49716714" visible="true" weight="0.1433902" />
       <window_info id="Structure" order="2" sideWeight="0.5028329" side_tool="true" weight="0.19571045" />
       <window_info id="Designer" order="3" />
       <window_info id="Image Layers" order="4" />
@@ -485,7 +522,7 @@
       <window_info anchor="bottom" id="Message" order="2" />
       <window_info anchor="bottom" id="Find" order="3" />
       <window_info anchor="bottom" id="Run" order="4" weight="0.52819955" />
-      <window_info active="true" anchor="bottom" id="Debug" order="5" visible="true" weight="0.686551" />
+      <window_info anchor="bottom" id="Debug" order="5" weight="0.09978308" />
       <window_info anchor="bottom" id="Cvs" order="6" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="7" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="8" />
@@ -524,7 +561,7 @@
       <window_info anchor="bottom" id="Message" order="2" />
       <window_info anchor="bottom" id="Find" order="3" />
       <window_info anchor="bottom" id="Run" order="4" weight="0.52819955" />
-      <window_info active="true" anchor="bottom" id="Debug" order="5" visible="true" weight="0.686551" />
+      <window_info active="true" anchor="bottom" id="Debug" order="5" visible="true" weight="0.09978308" />
       <window_info anchor="bottom" id="Cvs" order="6" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="7" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="8" />
@@ -572,7 +609,9 @@
     <MESSAGE value="打包调整" />
     <MESSAGE value="修改bat" />
     <MESSAGE value="copyListMakerV3.0.2正式打包" />
-    <option name="LAST_COMMIT_MESSAGE" value="copyListMakerV3.0.2正式打包" />
+    <MESSAGE value="修改banner" />
+    <MESSAGE value="删除代码" />
+    <option name="LAST_COMMIT_MESSAGE" value="删除代码" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -859,16 +898,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/run/t.bat" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/zhangyj/utils/SvnUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="40" column="22" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/run/startup.bat">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -880,16 +909,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/zhangyj/config/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
-          <caret line="40" column="42" selection-start-line="40" selection-start-column="42" selection-end-line="40" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -960,8 +979,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/banner.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="3" column="37" selection-start-line="3" selection-start-column="37" selection-end-line="3" selection-end-column="37" />
+        <state relative-caret-position="150">
+          <caret line="5" column="50" lean-forward="true" selection-start-line="5" selection-start-column="50" selection-end-line="5" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/zhangyj/utils/SvnUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="70" column="23" selection-start-line="70" selection-start-column="23" selection-end-line="70" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/zhangyj/config/Config.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="354">
+          <caret line="126" column="36" selection-start-line="126" selection-start-column="36" selection-end-line="126" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

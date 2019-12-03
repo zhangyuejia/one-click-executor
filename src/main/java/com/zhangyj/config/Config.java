@@ -120,13 +120,11 @@ public class Config {
      */
     private void printConfig() {
         log.info("************************** 打印配置信息-开始 **************************");
-        log.info("【svn】：path:{}", this.svn.getPath());
-        log.info("【svn】：revStart:{}，备注信息↓↓↓", this.svn.getRevStart());
+        log.info("【svn路径】:{}", this.svn.getPath());
+        log.info("【svn开始版本号】：{}，备注信息如下：", this.svn.getRevStart());
         SvnUtil.showLog(this.svn.getPath(), this.svn.getRevStart());
-        log.info("【svn】：revEnd:{}，备注信息↓↓↓", this.svn.getRevEnd());
+        log.info("【svn结束版本号】：{}，备注信息如下：", this.svn.getRevEnd());
         SvnUtil.showLog(this.svn.getPath(), this.svn.getRevEnd());
-        log.info("【copyList】：{}", this.copyList);
-        log.info("【emp】：{}", this.emp);
         log.info("************************** 打印配置信息-结束 **************************");
     }
 
