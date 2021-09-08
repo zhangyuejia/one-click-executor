@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 @ConditionalOnBean(SplicerConfig.class)
 public class DoSplice extends BaseSplicer implements CommandLineRunner {
 
-    private Pattern pattern;
+    private Pattern[] whitePattern;
 
-    private Pattern blackPattern;
+    private Pattern[] blackPattern;
 
     private final SplicerConfig splicerConfig;
 
@@ -53,13 +53,10 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
         if(StringUtil.isEmpty(splicerConfig.getGenFileName())){
             throw new IllegalArgumentException(getLog("生成文件名不能为空！"));
         }
-        if(StringUtil.isNotEmpty(splicerConfig.getPattern())){
-            this.pattern = Pattern.compile(splicerConfig.getPattern());
-        }
-        if(StringUtil.isNotEmpty(splicerConfig.getBlackPattern())){
-            this.blackPattern = Pattern.compile(splicerConfig.getBlackPattern());
-        }
+        this.whitePattern = getPatterns(splicerConfig.getWhitePattern());
+        this.blackPattern = getPatterns(splicerConfig.getBlackPattern());
     }
+
 
     private void writeFile() throws IOException {
         String genFileName = splicerConfig.getGenFileName();
@@ -91,10 +88,12 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
         List<Path> paths = Files.list(Paths.get(splicerConfig.getPath())).collect(Collectors.toList());
         for (Path path : paths) {
             String fileName = path.getFileName().toString();
-            if(blackPattern != null && blackPattern.matcher(fileName).matches()){
+            // 黑名单只要有一个匹配就跳过
+            if(this.blackPattern != null && matchAnyPattern(fileName, this.blackPattern)){
                 continue;
             }
-            if(pattern != null && !pattern.matcher(fileName).matches()){
+            // 白名单只要有一个匹配就不跳过
+            if(this.whitePattern != null && !matchAnyPattern(fileName, this.whitePattern)){
                 continue;
             }
             logInfo("读取文件：" + path.toString());
@@ -102,8 +101,23 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
         }
     }
 
-    public static void main(String[] args) {
-        boolean result = Pattern.matches(".*sql", "（乙方）:xxx科技股份有限公司     （乙方）:xxx有限公司     （乙方）:xxx技术股份有限公司sql");
-        System.out.println(result);
+    private boolean matchAnyPattern(String fileName, Pattern[] patterns) {
+        for (Pattern p : patterns) {
+            if (p.matcher(fileName).matches()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Pattern[] getPatterns(String[] patternArr) {
+        if(patternArr == null || patternArr.length == 0){
+            return null;
+        }
+        Pattern[] patterns = new Pattern[patternArr.length];
+        for (int i = 0; i < patterns.length; i++) {
+            patterns[i] = Pattern.compile(patternArr[i]);
+        }
+        return patterns;
     }
 }

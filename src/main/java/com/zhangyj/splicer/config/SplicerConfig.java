@@ -30,12 +30,12 @@ public class SplicerConfig {
     /**
      * 文件名前缀
      */
-    private String pattern;
+    private String[] whitePattern;
 
     /**
      * 文件名后缀
      */
-    private String blackPattern;
+    private String[] blackPattern;
 
     /**
      * 文件名样式（正则表达式）

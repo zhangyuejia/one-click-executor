@@ -1,4 +1,4 @@
-# CopyList生成工具 CopyListMaker V3.0.4
+# CopyList生成工具 CopyListMaker V4.0.0
 + 基于SpringBoot 2.2.0开发
 ## 运行环境
 + JDK 1.8及以上
