@@ -1,10 +1,12 @@
-package com.zhangyj.replactor;
+package com.zhangyj.copyListMaker.replactor;
 
 import com.zhangyj.constant.Const;
-import com.zhangyj.replactor.impl.JavaCopyListConverter;
-import com.zhangyj.replactor.impl.ResourceCopyListConverter;
-import com.zhangyj.replactor.impl.RmsCopyListConverter;
-import com.zhangyj.replactor.impl.WebRootCopyListConverter;
+import com.zhangyj.copyListMaker.config.Config;
+import com.zhangyj.copyListMaker.replactor.impl.JavaCopyListConverter;
+import com.zhangyj.copyListMaker.replactor.impl.ResourceCopyListConverter;
+import com.zhangyj.copyListMaker.replactor.impl.RmsCopyListConverter;
+import com.zhangyj.copyListMaker.replactor.impl.WebRootCopyListConverter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -13,6 +15,7 @@ import org.springframework.util.StringUtils;
  * @author ZHANG
  */
 @Component
+@ConditionalOnBean(Config.class)
 public class ConverterFactory {
 
     private final WebRootCopyListConverter webRootReplacer;

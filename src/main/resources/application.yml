@@ -1,7 +1,7 @@
 # 配置文件配置
 spring:
   profiles:
-    active: emp72
+    active: dev
 
 # slf4j配置
 logging:

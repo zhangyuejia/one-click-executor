@@ -1,4 +1,4 @@
-package com.zhangyj.maker;
+package com.zhangyj.copyListMaker.maker;
 
 /**
  * 制造者

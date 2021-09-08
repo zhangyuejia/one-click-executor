@@ -1,4 +1,4 @@
-package com.zhangyj.config;
+package com.zhangyj.copyListMaker.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 @Component
-@ConfigurationProperties(prefix = "emp")
+@ConfigurationProperties(prefix = "copy-list-maker.emp")
 @Validated
 public class EmpConfig {
 
@@ -20,5 +20,5 @@ public class EmpConfig {
      * emp项目编译输出路径
      */
     @NotBlank(message = "配置项[emp->outPutPath]不能为空")
-    private String outPutPath;
+    private String outputPath;
 }

@@ -1,4 +1,4 @@
-package com.zhangyj.config;
+package com.zhangyj.copyListMaker.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Validated
 @Component
-@ConfigurationProperties(prefix = "svn")
+@ConfigurationProperties(prefix = "copy-list-maker.svn")
 public class SvnConfig {
 
     /**

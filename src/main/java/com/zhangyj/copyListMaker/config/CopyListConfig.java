@@ -1,4 +1,4 @@
-package com.zhangyj.config;
+package com.zhangyj.copyListMaker.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -9,8 +9,13 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@ConfigurationProperties(prefix = "copy-list")
+@ConfigurationProperties(prefix = "copy-list-maker")
 public class CopyListConfig {
+
+    /**
+     * 是否启用copyList功能
+     */
+    private Boolean enable;
 
     /**
      * copyList路径

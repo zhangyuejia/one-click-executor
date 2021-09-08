@@ -1,4 +1,4 @@
-package com.zhangyj.pojo;
+package com.zhangyj.copyListMaker.pojo;
 
 import lombok.extern.slf4j.Slf4j;
 

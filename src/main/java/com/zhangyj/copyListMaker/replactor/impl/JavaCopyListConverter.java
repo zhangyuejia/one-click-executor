@@ -1,11 +1,12 @@
-package com.zhangyj.replactor.impl;
+package com.zhangyj.copyListMaker.replactor.impl;
 
 import com.google.common.collect.Sets;
-import com.zhangyj.config.Config;
+import com.zhangyj.copyListMaker.config.Config;
 import com.zhangyj.constant.Const;
-import com.zhangyj.pojo.JavaFilePath;
-import com.zhangyj.replactor.BaseCopyListConverter;
+import com.zhangyj.copyListMaker.pojo.JavaFilePath;
+import com.zhangyj.copyListMaker.replactor.BaseCopyListConverter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -16,6 +17,7 @@ import java.util.Set;
  */
 @Slf4j
 @Component
+@ConditionalOnBean(Config.class)
 public class JavaCopyListConverter extends BaseCopyListConverter {
 
     public JavaCopyListConverter(Config config) {
@@ -32,10 +34,10 @@ public class JavaCopyListConverter extends BaseCopyListConverter {
         // 加入主类copyList
         data.add(classFileRelativePath);
         // class文件绝对路径
-        String classFilePositivePath = config.getEmp().getOutPutPath() + "/" + classFileRelativePath;
+        String classFilePositivePath = config.getEmp().getOutputPath() + "/" + classFileRelativePath;
         // 内部类绝对路径
         Set<String> innerClassPaths = new JavaFilePath(classFilePositivePath).innerClassPaths();
-        innerClassPaths.forEach(path -> data.add(path.substring(config.getEmp().getOutPutPath().length())));
+        innerClassPaths.forEach(path -> data.add(path.substring(config.getEmp().getOutputPath().length())));
         return data;
     }
 

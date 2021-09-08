@@ -1,8 +1,9 @@
-package com.zhangyj.replactor.impl;
+package com.zhangyj.copyListMaker.replactor.impl;
 
-import com.zhangyj.config.Config;
+import com.zhangyj.copyListMaker.config.Config;
 import com.zhangyj.constant.Const;
-import com.zhangyj.replactor.BaseCopyListConverter;
+import com.zhangyj.copyListMaker.replactor.BaseCopyListConverter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -13,6 +14,7 @@ import java.util.Set;
  * @author ZHANG
  */
 @Component
+@ConditionalOnBean(Config.class)
 public class ResourceCopyListConverter extends BaseCopyListConverter {
 
     public ResourceCopyListConverter(Config config) {

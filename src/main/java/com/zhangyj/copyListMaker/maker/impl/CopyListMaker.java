@@ -1,14 +1,15 @@
-package com.zhangyj.maker.impl;
+package com.zhangyj.copyListMaker.maker.impl;
 
 import com.google.common.collect.Sets;
-import com.zhangyj.config.Config;
+import com.zhangyj.copyListMaker.config.Config;
 import com.zhangyj.constant.CharSetConst;
 import com.zhangyj.constant.Const;
-import com.zhangyj.maker.Maker;
-import com.zhangyj.replactor.BaseCopyListConverter;
-import com.zhangyj.replactor.ConverterFactory;
+import com.zhangyj.copyListMaker.maker.Maker;
+import com.zhangyj.copyListMaker.replactor.BaseCopyListConverter;
+import com.zhangyj.copyListMaker.replactor.ConverterFactory;
 import com.zhangyj.utils.SvnUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -30,6 +31,7 @@ import java.util.function.Predicate;
  */
 @Component
 @Slf4j
+@ConditionalOnBean(Config.class)
 public class CopyListMaker implements Maker<String> {
 
     private final Config config;
@@ -50,7 +52,6 @@ public class CopyListMaker implements Maker<String> {
         // 将copyList数据写入文件
         writeCopyList();
         return config.getCopyList().getPath();
-
     }
 
     private void readCopyList() throws IOException {

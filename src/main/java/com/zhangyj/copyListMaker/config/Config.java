@@ -1,19 +1,16 @@
-package com.zhangyj.config;
+package com.zhangyj.copyListMaker.config;
 
 import com.zhangyj.constant.DefaultConst;
-import com.zhangyj.utils.SpringContextUtil;
 import com.zhangyj.utils.StringUtil;
 import com.zhangyj.utils.SvnUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.stream.Collectors;
 
 /**
  * 配置文件类
@@ -23,6 +20,7 @@ import java.util.stream.Collectors;
 @Data
 @Slf4j
 @Component
+@ConditionalOnProperty(prefix = "copy-list-maker", name = "enable", havingValue = "true")
 public class Config {
 
     private final SvnConfig svn;
@@ -61,14 +59,14 @@ public class Config {
      * 处理emp配置信息
      */
     private void processEmpConfig() {
-        emp.setOutPutPath(processPath(emp.getOutPutPath()));
+        emp.setOutputPath(processPath(emp.getOutputPath()));
         // 如果编译路径不存在或者不是文件夹则报错
-        File outPutDir = new File(emp.getOutPutPath());
+        File outPutDir = new File(emp.getOutputPath());
         if(!outPutDir.exists()){
-            throw new RuntimeException("配置项[emp->outPutPath]路径不存在");
+            throw new RuntimeException("配置项[emp->outputPath]路径不存在");
         }
         if(!outPutDir.isDirectory()){
-            throw new RuntimeException("配置项[emp->outPutPath]不是文件夹");
+            throw new RuntimeException("配置项[emp->outputPath]不是文件夹");
         }
 
     }

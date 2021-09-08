@@ -1,4 +1,4 @@
-package com.zhangyj.pojo;
+package com.zhangyj.copyListMaker.pojo;
 
 /** 路径基类
  * @author zhangyj
