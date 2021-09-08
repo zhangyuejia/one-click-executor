@@ -28,9 +28,14 @@ public class SplicerConfig {
     private String path;
 
     /**
+     * 文件名前缀
+     */
+    private String pattern;
+
+    /**
      * 文件名后缀
      */
-    private String suffix;
+    private String blackPattern;
 
     /**
      * 文件名样式（正则表达式）

@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +28,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @ConditionalOnBean(SplicerConfig.class)
 public class DoSplice extends BaseSplicer implements CommandLineRunner {
+
+    private Pattern pattern;
+
+    private Pattern blackPattern;
 
     private final SplicerConfig splicerConfig;
 
@@ -47,6 +52,12 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
     private void checkParam() {
         if(StringUtil.isEmpty(splicerConfig.getGenFileName())){
             throw new IllegalArgumentException(getLog("生成文件名不能为空！"));
+        }
+        if(StringUtil.isNotEmpty(splicerConfig.getPattern())){
+            this.pattern = Pattern.compile(splicerConfig.getPattern());
+        }
+        if(StringUtil.isNotEmpty(splicerConfig.getBlackPattern())){
+            this.blackPattern = Pattern.compile(splicerConfig.getBlackPattern());
         }
     }
 
@@ -79,11 +90,20 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
     private void readFile() throws IOException {
         List<Path> paths = Files.list(Paths.get(splicerConfig.getPath())).collect(Collectors.toList());
         for (Path path : paths) {
-            if(!StringUtil.isEmpty(splicerConfig.getSuffix()) && !path.getFileName().toString().endsWith(splicerConfig.getSuffix())){
+            String fileName = path.getFileName().toString();
+            if(blackPattern != null && blackPattern.matcher(fileName).matches()){
+                continue;
+            }
+            if(pattern != null && !pattern.matcher(fileName).matches()){
                 continue;
             }
             logInfo("读取文件：" + path.toString());
             Files.lines(path).forEach(data::add);
         }
+    }
+
+    public static void main(String[] args) {
+        boolean result = Pattern.matches(".*sql", "（乙方）:xxx科技股份有限公司     （乙方）:xxx有限公司     （乙方）:xxx技术股份有限公司sql");
+        System.out.println(result);
     }
 }

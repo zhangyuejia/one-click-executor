@@ -5,8 +5,10 @@ splicer:
     enable: true
     # 【必填】文件夹路径
     path: E:\mw_project_new\20210602-umc_sql\UMC_V3.6\mysql\全新脚本
-    # 文件名后缀，用于过滤不读取的文件
-    suffix: sql
+    # 文件名白名单模式
+    pattern: .*sql
+    # 文件名黑名单模式
+    blackPattern: 000.*
     # 生成文件名称
     gen-file-name: test.sql
 
