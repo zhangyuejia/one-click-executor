@@ -1,6 +1,5 @@
 package com.zhangyj.splicer;
 
-import com.google.common.collect.Lists;
 import com.zhangyj.splicer.config.SplicerConfig;
 import com.zhangyj.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -35,40 +34,27 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
 
     private final SplicerConfig splicerConfig;
 
-    private final List<String> data = Lists.newArrayList();
-
     @Override
     public void run(String... args) throws Exception {
         // 参数校验
         checkParam();
+        // 初始化
+        init();
         // 删除上一次生成的文件
         deleteGenFile();
-        // 读取数据文件
-        readFile();
-        // 写入文件
-        writeFile();
+        // 拼接数据文件
+        spliceFile();
     }
 
     private void checkParam() {
         if(StringUtil.isEmpty(splicerConfig.getGenFileName())){
             throw new IllegalArgumentException(getLog("生成文件名不能为空！"));
         }
-        this.whitePattern = getPatterns(splicerConfig.getWhitePattern());
-        this.blackPattern = getPatterns(splicerConfig.getBlackPattern());
     }
 
-
-    private void writeFile() throws IOException {
-        String genFileName = splicerConfig.getGenFileName();
-        Path path = Paths.get(genFileName);
-        logInfo("写入文件：" + path.toAbsolutePath());
-        // 获取输入输出流
-        try (BufferedWriter writer = Files.newBufferedWriter(path)){
-            for (String line : data) {
-                writer.write(line);
-                writer.newLine();
-            }
-        }
+    private void init() {
+        this.whitePattern = getPatterns(splicerConfig.getWhitePattern());
+        this.blackPattern = getPatterns(splicerConfig.getBlackPattern());
     }
 
     private void deleteGenFile() throws IOException {
@@ -84,21 +70,37 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
         }
     }
 
-    private void readFile() throws IOException {
-        List<Path> paths = Files.list(Paths.get(splicerConfig.getPath())).collect(Collectors.toList());
-        for (Path path : paths) {
-            String fileName = path.getFileName().toString();
-            // 黑名单只要有一个匹配就跳过
-            if(this.blackPattern != null && matchAnyPattern(fileName, this.blackPattern)){
-                continue;
+    private void spliceFile() throws IOException {
+        List<Path> readFilePaths = Files.list(Paths.get(splicerConfig.getPath()))
+                .filter(this::filterReadFile).collect(Collectors.toList());
+        // 获取输入输出流
+        Path genFilePath = Paths.get(splicerConfig.getGenFileName());
+        try (BufferedWriter writer = Files.newBufferedWriter(genFilePath)){
+            for (Path readFilePath : readFilePaths) {
+                logInfo("读取文件：" + readFilePath.toString());
+                List<String> lines = Files.readAllLines(readFilePath);
+                for (String line : lines) {
+                    writer.write(line);
+                    writer.newLine();
+                }
             }
-            // 白名单只要有一个匹配就不跳过
-            if(this.whitePattern != null && !matchAnyPattern(fileName, this.whitePattern)){
-                continue;
-            }
-            logInfo("读取文件：" + path.toString());
-            Files.lines(path).forEach(data::add);
         }
+        logInfo("写入文件：" + genFilePath.toAbsolutePath());
+
+    }
+
+    private boolean filterReadFile(Path readFilePath) {
+        String fileName = readFilePath.getFileName().toString();
+        // 过滤文件夹
+        if(readFilePath.toFile().isDirectory()){
+            return false;
+        }
+        // 黑名单只要有一个匹配就跳过
+        if(this.blackPattern != null && matchAnyPattern(fileName, this.blackPattern)){
+            return false;
+        }
+        // 白名单只要有一个匹配就不跳过
+        return this.whitePattern == null || matchAnyPattern(fileName, this.whitePattern);
     }
 
     private boolean matchAnyPattern(String fileName, Pattern[] patterns) {
