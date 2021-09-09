@@ -10,7 +10,7 @@ splicer:
     # 文件名黑名单模式，多个以逗号分隔
     blackPattern: 000.*
     # 【必填】生成文件名称或路径
-    gen-file-name: G:\Users\ZYJ\Desktop\umc-mysql36.sql
+    gen-file-name: umc-mysql36.sql
 
 #【生成copyList功能】
 copy-list-maker:
