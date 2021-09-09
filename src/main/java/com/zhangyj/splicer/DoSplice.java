@@ -66,7 +66,7 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
         if(file.delete()){
             logInfo("删除文件：" + file.getCanonicalPath());
         }else {
-            logError("删除文件失败：" + file.getCanonicalPath());
+            throw new RuntimeException(getLog("删除文件失败：" + file.getCanonicalPath()));
         }
     }
 
