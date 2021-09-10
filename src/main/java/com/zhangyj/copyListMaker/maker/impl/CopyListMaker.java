@@ -1,9 +1,10 @@
 package com.zhangyj.copyListMaker.maker.impl;
 
 import com.google.common.collect.Sets;
-import com.zhangyj.copyListMaker.config.Config;
 import com.zhangyj.constant.CharSetConst;
+import com.zhangyj.constant.CharSets;
 import com.zhangyj.constant.Const;
+import com.zhangyj.copyListMaker.config.Config;
 import com.zhangyj.copyListMaker.maker.Maker;
 import com.zhangyj.copyListMaker.replactor.BaseCopyListConverter;
 import com.zhangyj.copyListMaker.replactor.ConverterFactory;
@@ -17,7 +18,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -72,7 +72,7 @@ public class CopyListMaker implements Maker<String> {
     private void writeCopyList() throws IOException {
         // 获取输入输出流
         try (BufferedWriter writer =
-                     Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()), Charset.forName(CharSetConst.GBK))){
+                     Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()), CharSets.CHARSET_GBK)){
             // 将copyList数据写入文件
             copyListLines.forEach((line) ->{
                 try {

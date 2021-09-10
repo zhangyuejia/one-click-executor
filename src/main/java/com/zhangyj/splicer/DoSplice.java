@@ -1,6 +1,7 @@
 package com.zhangyj.splicer;
 
 import com.zhangyj.splicer.config.SplicerConfig;
+import com.zhangyj.utils.CommandUtil;
 import com.zhangyj.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,9 +9,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,7 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnBean(SplicerConfig.class)
-public class DoSplice extends BaseSplicer implements CommandLineRunner {
+public class DoSplice implements CommandLineRunner {
 
     private Pattern[] whitePattern;
 
@@ -48,13 +51,28 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
 
     private void checkParam() {
         if(StringUtil.isEmpty(splicerConfig.getGenFileName())){
-            throw new IllegalArgumentException(getLog("生成文件名不能为空！"));
+            throw new IllegalArgumentException("生成文件名不能为空！");
         }
     }
 
     private void init() {
         this.whitePattern = getPatterns(splicerConfig.getWhitePattern());
         this.blackPattern = getPatterns(splicerConfig.getBlackPattern());
+        execCommand();
+    }
+
+    private void execCommand() {
+        String command = splicerConfig.getCommand();
+        if(StringUtil.isEmpty(command)){
+            return;
+        }
+        log.info("执行命令：{} 执行路径：{}", command, splicerConfig.getPath());
+        String[] commands = {"cmd", "/c",  command};
+        try (BufferedReader reader = CommandUtil.getCommandReader(StandardCharsets.UTF_8, commands, splicerConfig.getPath())){
+            reader.lines().filter(StringUtil::isNotEmpty).forEach(log::info);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void deleteGenFile() throws IOException {
@@ -64,9 +82,9 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
             return;
         }
         if(file.delete()){
-            logInfo("删除文件：" + file.getCanonicalPath());
+            log.info("删除文件：" + file.getCanonicalPath());
         }else {
-            throw new RuntimeException(getLog("删除文件失败：" + file.getCanonicalPath()));
+            throw new RuntimeException("删除文件失败：" + file.getCanonicalPath());
         }
     }
 
@@ -77,7 +95,7 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
         Path genFilePath = Paths.get(splicerConfig.getGenFileName());
         try (BufferedWriter writer = Files.newBufferedWriter(genFilePath)){
             for (Path readFilePath : readFilePaths) {
-                logInfo("读取文件：" + readFilePath.toString());
+                log.info("读取文件：" + readFilePath.toString());
                 List<String> lines = Files.readAllLines(readFilePath);
                 for (String line : lines) {
                     writer.write(line);
@@ -85,7 +103,7 @@ public class DoSplice extends BaseSplicer implements CommandLineRunner {
                 }
             }
         }
-        logInfo("写入文件：" + genFilePath.toAbsolutePath());
+        log.info("写入文件：" + genFilePath.toAbsolutePath());
 
     }
 

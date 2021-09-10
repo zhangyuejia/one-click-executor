@@ -41,4 +41,9 @@ public class SplicerConfig {
      * 文件名样式（正则表达式）
      */
     private String genFileName;
+
+    /**
+     * 生成文件之前，在path文件夹路径执行的cmd命令（如更新git或者svn）
+     */
+    private String command;
 }
