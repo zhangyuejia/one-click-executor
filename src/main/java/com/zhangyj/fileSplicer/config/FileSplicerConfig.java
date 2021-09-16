@@ -1,4 +1,4 @@
-package com.zhangyj.splicer.config;
+package com.zhangyj.fileSplicer.config;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 @Data
 @Slf4j
 @Component
-@ConditionalOnProperty(prefix = "splicer", name = "enable", havingValue = "true")
-@ConfigurationProperties(prefix = "splicer")
-public class SplicerConfig {
+@ConditionalOnProperty(prefix = "file-splicer", name = "enable", havingValue = "true")
+@ConfigurationProperties(prefix = "file-splicer")
+public class FileSplicerConfig {
 
     /**
      * 是否启用该功能
