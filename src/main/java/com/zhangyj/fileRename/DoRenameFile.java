@@ -21,44 +21,64 @@ import java.nio.file.Files;
 @ConditionalOnBean(FileRenameConfig.class)
 public class DoRenameFile implements CommandLineRunner {
 
-    private String dirPath;
-
     private final FileRenameConfig fileRenameConfig;
 
     @Override
     public void run(String... args) throws IOException {
-        renameFiles(getDirFile());
-    }
-
-    private File getDirFile() {
-        File dirFile = new File(fileRenameConfig.getPath());
-        if(dirFile.isFile()){
+        log.info("执行文件重命名功能");
+        File sourceDir = new File(fileRenameConfig.getPath());
+        File targetDir = new File(fileRenameConfig.getTargetPath());
+        if(sourceDir.isFile() || targetDir.isFile()) {
             throw new RuntimeException("文件" + fileRenameConfig.getPath() + "不是文件夹，中止执行");
         }
-        this.dirPath = dirFile.getPath();
-        return dirFile;
+        if(sourceDir.getPath().equals(targetDir.getPath())){
+            throw new RuntimeException("源路径不能和目标路径一致！");
+        }
+        // 删除目标文件夹
+        deleteDir(targetDir);
+        // 复制并重命名源文件夹
+        renameFiles(sourceDir, sourceDir, targetDir);
     }
 
-    public void renameFiles(File file) throws IOException {
-        if(file.isFile()){
-            renameFile(file);
+    private void deleteDir(File dirFile) {
+        File[] files = dirFile.listFiles();
+        if(!dirFile.exists() || files == null){
             return;
         }
-        File[] files = file.listFiles();
+        for (File item : files) {
+            if(item.isFile()){
+                if(!item.delete()){
+                    throw new RuntimeException("删除文件失败！" + item.getPath());
+                }
+            }else {
+                deleteDir(item);
+            }
+        }
+        if(!dirFile.delete()){
+            throw new RuntimeException("删除文件夹失败！" + dirFile.getPath());
+        }
+    }
+
+    public void renameFiles(File currentFile, File sourceDir, File targetDir) throws IOException {
+        if(currentFile.isFile()){
+            renameFile(currentFile, sourceDir, targetDir);
+            return;
+        }
+        File[] files = currentFile.listFiles();
         if(files == null){
             return;
         }
         for (File item : files) {
-            renameFiles(item);
+            renameFiles(item, sourceDir, targetDir);
         }
     }
 
-    private void renameFile(File file) throws IOException {
-        String newUri = file.getPath().substring(dirPath.length());
+    private void renameFile(File file, File sourceDir, File targetDir) throws IOException {
+        String newUri = file.getPath().substring(sourceDir.getPath().length());
         for (ReplaceWord replaceWord : fileRenameConfig.getReplaceWords()) {
             newUri = newUri.replaceAll(replaceWord.getWord(), replaceWord.getNewWord());
         }
-        File newFile = new File(dirPath + newUri);
+        File newFile = new File(targetDir.getPath() + newUri);
         if(newFile.getPath().equals(file.getPath())){
             return;
         }

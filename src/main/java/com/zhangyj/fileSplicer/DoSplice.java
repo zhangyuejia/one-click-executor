@@ -39,6 +39,7 @@ public class DoSplice implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        log.info("执行文件拼接功能");
         // 参数校验
         checkParam();
         // 初始化

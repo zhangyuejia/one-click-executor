@@ -14,14 +14,14 @@ file-splicer:
     # 生成文件之前，在path文件夹路径执行的cmd命令（如更新git或者svn）
     command: git pull upstream dev
 
-# 文件重命名名
+# 【文件重命名功能，常用于新建类似目录，但文件名仅通过替换即可】
 file-rename:
     # 是否启用该功能
-    enable: true
+    enable: false
     # 【必填】文件夹路径
     path: E:\mw_project_new\umc_git\umc_sql\UMC_V3.6
     # 目标文件夹路径
-    targetPath:
+    targetPath: E:\mw_project_new\umc_git\umc_sql\UMC_V3.6
     # 【必填】替换关键字
     replaceWords: [{word: "3.6", newWord: "3.7"}, {word: "3.5", newWord: "3.6"}]
 
