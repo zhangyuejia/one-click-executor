@@ -2,7 +2,7 @@
 #【文件拼接功能，常用于将SQL脚本拼接到一个文件里面】
 file-splicer:
     # 是否启用该功能
-    enable: true
+    enable: false
     # 【必填】文件夹路径
     path: E:\mw_project_new\umc_git\umc_sql\UMC_V3.6\mysql\全新脚本
     # 【必填】生成文件名称或路径
