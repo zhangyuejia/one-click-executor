@@ -28,34 +28,40 @@ public class DoRenameFile implements CommandLineRunner {
         log.info("执行文件重命名功能");
         File sourceDir = new File(fileRenameConfig.getPath());
         File targetDir = new File(fileRenameConfig.getTargetPath());
-        if(sourceDir.isFile() || targetDir.isFile()) {
-            throw new RuntimeException("文件" + fileRenameConfig.getPath() + "不是文件夹，中止执行");
+        if(!sourceDir.isDirectory()) {
+            throw new RuntimeException("源文件" + fileRenameConfig.getPath() + "不是文件夹，中止执行");
+        }
+        if(targetDir.exists() && !targetDir.isDirectory()) {
+            throw new RuntimeException("目标文件" + fileRenameConfig.getTargetPath() + "不是文件夹，中止执行");
         }
         if(sourceDir.getPath().equals(targetDir.getPath())){
             throw new RuntimeException("源路径不能和目标路径一致！");
         }
         // 删除目标文件夹
+        log.info("删除文件夹：" + targetDir.getPath());
         deleteDir(targetDir);
         // 复制并重命名源文件夹
         renameFiles(sourceDir, sourceDir, targetDir);
     }
 
     private void deleteDir(File dirFile) {
-        File[] files = dirFile.listFiles();
-        if(!dirFile.exists() || files == null){
+        if(!dirFile.exists()){
             return;
         }
-        for (File item : files) {
-            if(item.isFile()){
-                if(!item.delete()){
-                    throw new RuntimeException("删除文件失败！" + item.getPath());
+        File[] files = dirFile.listFiles();
+        if(files != null){
+            for (File item : files) {
+                if(item.isFile()){
+                    if(!item.delete()){
+                        throw new RuntimeException("删除文件失败！" + item.getPath());
+                    }
+                }else {
+                    deleteDir(item);
                 }
-            }else {
-                deleteDir(item);
             }
         }
         if(!dirFile.delete()){
-            throw new RuntimeException("删除文件夹失败！" + dirFile.getPath());
+            throw new RuntimeException("删除文件失败！" + dirFile.getPath());
         }
     }
 
@@ -88,7 +94,10 @@ public class DoRenameFile implements CommandLineRunner {
             if(fail){
                 throw new RuntimeException("创建路径失败：" + parentFile.getPath());
             }
+            log.info("创建文件夹：" + parentFile.getPath());
         }
+        log.info("复制文件 FROM：" + file.toPath());
+        log.info("复制文件   TO：" + newFile.toPath());
         Files.copy(file.toPath(), newFile.toPath());
     }
 }

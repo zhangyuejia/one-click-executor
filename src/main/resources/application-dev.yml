@@ -2,17 +2,18 @@
 #【文件拼接功能，常用于将SQL脚本拼接到一个文件里面】
 file-splicer:
     # 是否启用该功能
-    enable: false
+    enable: true
     # 【必填】文件夹路径
-    path: E:\mw_project_new\20210602-umc_sql\UMC_V3.6\mysql\全新脚本
+    path: E:\mw_project_new\umc_git\umc_sql\UMC_V3.6\mysql\全新脚本
     # 【必填】生成文件名称或路径
-    gen-file-name: umc-mysql36.sql
+    gen-file-name: G:\Users\ZYJ\Desktop\umc-mysql36.sql
     # 文件名白名单模式，多个以逗号分隔
     whitePattern: .*sql
     # 文件名黑名单模式，多个以逗号分隔
     blackPattern: 000.*
     # 生成文件之前，在path文件夹路径执行的cmd命令（如更新git或者svn）
-    command: git pull upstream dev
+#    command: git pull upstream dev
+    command:
 
 # 【文件重命名功能，常用于新建类似目录，但文件名仅通过替换即可】
 file-rename:
@@ -21,7 +22,7 @@ file-rename:
     # 【必填】文件夹路径
     path: E:\mw_project_new\umc_git\umc_sql\UMC_V3.6
     # 目标文件夹路径
-    targetPath: E:\mw_project_new\umc_git\umc_sql\UMC_V3.6
+    targetPath: G:\Users\ZYJ\Desktop\UMC_V3.7
     # 【必填】替换关键字
     replaceWords: [{word: "3.6", newWord: "3.7"}, {word: "3.5", newWord: "3.6"}]
 
