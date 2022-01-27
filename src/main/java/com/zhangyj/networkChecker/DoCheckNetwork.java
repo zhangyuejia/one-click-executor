@@ -40,17 +40,26 @@ public class DoCheckNetwork implements CommandLineRunner {
             TimeUnit.SECONDS.sleep(netWorkCheckerConfig.getCheckPeriod());
             boolean networkEnable = checkNetwork();
             log.info("检测网络结果：" + (networkEnable? "正常":"断网"));
+
+
             if(!networkEnable){
-                log.info("重启网卡");
-                restartNetWork();
-                log.info("重启网卡成功，等待60秒");
-                TimeUnit.SECONDS.sleep(60);
+                log.info("3秒后再次检测");
+                TimeUnit.SECONDS.sleep(3);
                 networkEnable = checkNetwork();
-                log.info("再次检测网络结果：" + (networkEnable? "正常":"断网"));
+                log.info("第二次检测网络结果：" + (networkEnable? "正常":"断网"));
                 if(!networkEnable){
-                    log.info("重启电脑，再见");
-                    execCommand();
+                    log.info("重启网卡");
+                    restartNetWork();
+                    log.info("重启网卡成功，等待60秒");
+                    TimeUnit.SECONDS.sleep(60);
+                    networkEnable = checkNetwork();
+                    log.info("检测重启网络后网络结果：" + (networkEnable? "正常":"断网"));
+                    if(!networkEnable){
+                        log.info("重启电脑，再见");
+                        execCommand();
+                    }
                 }
+
             }
         }
     }
