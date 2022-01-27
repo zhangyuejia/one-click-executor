@@ -41,3 +41,14 @@ copy-list-maker:
         # 【必填】emp web项目编译路径（用于内部类检测，idea中Project Structure -> Artifacts中Output directory值）
         output-path: E:\mw_out\emp_tg_win69\web
 
+#【网络检测功能】
+network-checker:
+    # 是否启用该功能
+    enable: true
+    # 【必填】定时校验时间间隔(单位：秒)
+    checkPeriod: 10
+    # 网卡名称（如 以太网）
+    networkName: 以太网
+    # 断网执行的cmd命令
+    command: shutdown /r /t 0
+
