@@ -25,7 +25,7 @@ public class NetWorkCheckerConfig {
     /**
      * 【必填】定时校验定时corn表达式
      */
-    private Integer corn;
+    private String corn;
 
     /**
      * wifi名称（断网重连）

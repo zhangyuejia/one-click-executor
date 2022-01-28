@@ -28,14 +28,13 @@ public class DoCheckNetwork {
 
     private final NetWorkCheckerConfig netWorkCheckerConfig;
 
-    @Scheduled(cron = "${network-checker.corn:0/60 * * * * ?}")
+    @Scheduled(cron = "${network-checker.corn:0 */1 * * * ?}")
     public void checkNetworkTask(){
         try {
             if(checkNetwork()){
                 return;
             }
-            log.info("重新连接网络，Wifi：{}", netWorkCheckerConfig.getWifiName());
-            reconnectNetwork();
+//            reconnectNetwork();
             ThreadUtils.sleepQuiet(20 * 1000L);
             checkNetwork();
         }catch (Exception e){
