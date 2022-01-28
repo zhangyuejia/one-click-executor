@@ -1,14 +1,14 @@
 package com.zhangyj.copyListMaker.maker.impl;
 
 import com.google.common.collect.Sets;
-import com.zhangyj.constant.CharSetConst;
-import com.zhangyj.constant.CharSets;
-import com.zhangyj.constant.Const;
+import com.zhangyj.common.constant.CharSetConst;
+import com.zhangyj.common.constant.CharSets;
+import com.zhangyj.common.constant.Const;
 import com.zhangyj.copyListMaker.config.Config;
 import com.zhangyj.copyListMaker.maker.Maker;
 import com.zhangyj.copyListMaker.replactor.BaseCopyListConverter;
 import com.zhangyj.copyListMaker.replactor.ConverterFactory;
-import com.zhangyj.utils.SvnUtil;
+import com.zhangyj.common.utils.SvnUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;

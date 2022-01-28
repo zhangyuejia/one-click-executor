@@ -1,7 +1,7 @@
 package com.zhangyj.copyListMaker.replactor;
 
 import com.zhangyj.copyListMaker.config.Config;
-import com.zhangyj.utils.StringUtil;
+import com.zhangyj.common.utils.StringUtil;
 
 import java.util.Set;
 import java.util.stream.Collectors;

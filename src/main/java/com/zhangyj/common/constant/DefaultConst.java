@@ -1,4 +1,4 @@
-package com.zhangyj.constant;
+package com.zhangyj.common.constant;
 
 /**
  * 默认值

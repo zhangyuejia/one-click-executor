@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * 文件拼接器配置类
+ * 网络检测功能配置类
  * @author zhagnyj
  */
 @Data
@@ -23,17 +23,12 @@ public class NetWorkCheckerConfig {
     private Boolean enable;
 
     /**
-     * 【必填】定时校验时间间隔(单位：秒)
+     * 【必填】定时校验定时corn表达式
      */
-    private Integer checkPeriod;
+    private Integer corn;
 
     /**
-     * 网卡名称（如 以太网）
+     * wifi名称（断网重连）
      */
-    private String networkName;
-
-    /**
-     * 断网执行的cmd命令
-     */
-    private String command;
+    private String wifiName;
 }

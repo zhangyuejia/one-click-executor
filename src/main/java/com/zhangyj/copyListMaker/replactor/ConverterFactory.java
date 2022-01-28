@@ -1,6 +1,6 @@
 package com.zhangyj.copyListMaker.replactor;
 
-import com.zhangyj.constant.Const;
+import com.zhangyj.common.constant.Const;
 import com.zhangyj.copyListMaker.config.Config;
 import com.zhangyj.copyListMaker.replactor.impl.JavaCopyListConverter;
 import com.zhangyj.copyListMaker.replactor.impl.ResourceCopyListConverter;

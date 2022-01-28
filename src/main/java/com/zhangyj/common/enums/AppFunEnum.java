@@ -1,4 +1,4 @@
-package com.zhangyj.enums;
+package com.zhangyj.common.enums;
 
 /**
  * 应用功能枚举

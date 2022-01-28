@@ -1,7 +1,7 @@
 package com.zhangyj.copyListMaker.replactor.impl;
 
 import com.zhangyj.copyListMaker.config.Config;
-import com.zhangyj.constant.Const;
+import com.zhangyj.common.constant.Const;
 import com.zhangyj.copyListMaker.replactor.BaseCopyListConverter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;

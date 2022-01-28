@@ -1,8 +1,8 @@
 package com.zhangyj.copyListMaker.config;
 
-import com.zhangyj.constant.DefaultConst;
-import com.zhangyj.utils.StringUtil;
-import com.zhangyj.utils.SvnUtil;
+import com.zhangyj.common.constant.DefaultConst;
+import com.zhangyj.common.utils.StringUtil;
+import com.zhangyj.common.utils.SvnUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

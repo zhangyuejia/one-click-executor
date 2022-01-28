@@ -1,4 +1,4 @@
-package com.zhangyj.utils;
+package com.zhangyj.common.utils;
 
 import org.springframework.util.StringUtils;
 

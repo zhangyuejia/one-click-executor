@@ -1,6 +1,6 @@
-package com.zhangyj.utils;
+package com.zhangyj.common.utils;
 
-import com.zhangyj.constant.CharSets;
+import com.zhangyj.common.constant.CharSets;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;

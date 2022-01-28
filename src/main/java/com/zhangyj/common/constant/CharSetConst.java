@@ -1,4 +1,4 @@
-package com.zhangyj.constant;
+package com.zhangyj.common.constant;
 
 /**
  * 字符集常量

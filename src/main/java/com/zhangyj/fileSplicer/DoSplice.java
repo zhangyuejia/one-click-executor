@@ -1,8 +1,8 @@
 package com.zhangyj.fileSplicer;
 
 import com.zhangyj.fileSplicer.config.FileSplicerConfig;
-import com.zhangyj.utils.CommandUtil;
-import com.zhangyj.utils.StringUtil;
+import com.zhangyj.common.utils.CommandUtil;
+import com.zhangyj.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

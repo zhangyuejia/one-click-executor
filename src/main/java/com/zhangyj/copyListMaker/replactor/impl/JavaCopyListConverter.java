@@ -2,7 +2,7 @@ package com.zhangyj.copyListMaker.replactor.impl;
 
 import com.google.common.collect.Sets;
 import com.zhangyj.copyListMaker.config.Config;
-import com.zhangyj.constant.Const;
+import com.zhangyj.common.constant.Const;
 import com.zhangyj.copyListMaker.pojo.JavaFilePath;
 import com.zhangyj.copyListMaker.replactor.BaseCopyListConverter;
 import lombok.extern.slf4j.Slf4j;
