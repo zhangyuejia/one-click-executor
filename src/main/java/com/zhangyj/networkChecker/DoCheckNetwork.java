@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.BufferedReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -32,35 +33,32 @@ public class DoCheckNetwork implements CommandLineRunner {
 
     private final static String CHECK_KEYWORD = "时间=";
 
+    private final static String CONNECT_WIFI = "netsh wlan connect name=\"YJ&YR\" ssid=\"YJ&YR\"";
+
     @Override
     public void run(String... args) throws Exception {
         log.info("打开网络检测功能，检测间隔{}秒", netWorkCheckerConfig.getCheckPeriod());
         //noinspection InfiniteLoopStatement
         while (true){
-            TimeUnit.SECONDS.sleep(netWorkCheckerConfig.getCheckPeriod());
             boolean networkEnable = checkNetwork();
             log.info("检测网络结果：" + (networkEnable? "正常":"断网"));
-
-
             if(!networkEnable){
-                log.info("3秒后再次检测");
-                TimeUnit.SECONDS.sleep(3);
+                log.info("重新连接wifi");
+                reconnectWifi();
+                TimeUnit.SECONDS.sleep(20);
                 networkEnable = checkNetwork();
-                log.info("第二次检测网络结果：" + (networkEnable? "正常":"断网"));
-                if(!networkEnable){
-                    log.info("重启网卡");
-                    restartNetWork();
-                    log.info("重启网卡成功，等待60秒");
-                    TimeUnit.SECONDS.sleep(60);
-                    networkEnable = checkNetwork();
-                    log.info("检测重启网络后网络结果：" + (networkEnable? "正常":"断网"));
-                    if(!networkEnable){
-                        log.info("重启电脑，再见");
-                        execCommand();
-                    }
-                }
-
+                log.info("重新连接wifi检测网络结果：" + (networkEnable? "正常":"断网"));
             }
+            TimeUnit.SECONDS.sleep(netWorkCheckerConfig.getCheckPeriod());
+        }
+    }
+
+    private void reconnectWifi() {
+        try {
+            log.info("执行命令：{}", CONNECT_WIFI);
+            execCmd(CONNECT_WIFI, "GBK");
+        } catch (Exception e) {
+            log.error("执行命令出现异常:" + CONNECT_WIFI, e);
         }
     }
 
@@ -83,14 +81,15 @@ public class DoCheckNetwork implements CommandLineRunner {
     }
 
     private void restartNetWork(){
+
         String command = null;
         try {
             command = "netsh interface set interface "+netWorkCheckerConfig.getNetworkName()+" disabled";
             log.info("执行命令：{}", command);
-            Runtime.getRuntime().exec(command);
+            execCmd(command, "GBK");
             command = "netsh interface set interface "+netWorkCheckerConfig.getNetworkName()+" enable";
             log.info("执行命令：{}", command);
-            Runtime.getRuntime().exec(command);
+            execCmd(command, "GBK");
         } catch (Exception e) {
             log.error("执行命令出现异常:" + command, e);
         }
@@ -106,6 +105,14 @@ public class DoCheckNetwork implements CommandLineRunner {
             Runtime.getRuntime().exec(command);
         } catch (Exception e) {
             log.error("执行命令出现异常:" + command, e);
+        }
+    }
+
+    private void execCmd(String cmd, String charset){
+        try (BufferedReader reader = CommandUtil.getCommandReader(Charset.forName(charset), cmd)){
+            reader.lines().filter(StringUtil::isNotEmpty).forEach(log::info);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

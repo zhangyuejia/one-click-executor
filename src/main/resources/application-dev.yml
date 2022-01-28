@@ -46,9 +46,9 @@ network-checker:
     # 是否启用该功能
     enable: true
     # 【必填】定时校验时间间隔(单位：秒)
-    checkPeriod: 10
+    checkPeriod: 60
     # 网卡名称（如 以太网）
-    networkName: 以太网
+    networkName: WLAN
     # 断网执行的cmd命令
     command: shutdown /r /t 0
 
