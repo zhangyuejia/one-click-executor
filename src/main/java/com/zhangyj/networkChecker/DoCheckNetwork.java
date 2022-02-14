@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,13 +29,15 @@ public class DoCheckNetwork {
 
     private final NetWorkCheckerConfig netWorkCheckerConfig;
 
+    private Date offNetworkTime;
+
     @Scheduled(cron = "${network-checker.corn:0 */1 * * * ?}")
     public void checkNetworkTask(){
         try {
             if(checkNetwork()){
                 return;
             }
-//            reconnectNetwork();
+            reconnectNetwork();
             ThreadUtils.sleepQuiet(20 * 1000L);
             checkNetwork();
         }catch (Exception e){
@@ -53,6 +56,17 @@ public class DoCheckNetwork {
     private boolean checkNetwork() throws Exception {
         boolean networkWorked = isNetworkWorked();
         log.info("检测网络结果：" + (networkWorked? "正常":"断网"));
+        if(networkWorked){
+            offNetworkTime = null;
+        }else {
+            if(offNetworkTime == null){
+                offNetworkTime = new Date();
+            }else {
+                // todo 如果断网事件超过30分钟，电脑将重启
+//                DateUtil
+            }
+
+        }
         return networkWorked;
     }
 
