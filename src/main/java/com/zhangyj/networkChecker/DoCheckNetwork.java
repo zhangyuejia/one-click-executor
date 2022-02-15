@@ -2,6 +2,7 @@ package com.zhangyj.networkChecker;
 
 
 import com.zhangyj.common.cmd.PingOneCmd;
+import com.zhangyj.common.cmd.RebootCmd;
 import com.zhangyj.common.cmd.ReconnectWifiCmd;
 import com.zhangyj.common.constant.CharSets;
 import com.zhangyj.common.utils.CommandUtil;
@@ -14,6 +15,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class DoCheckNetwork {
 
     private final NetWorkCheckerConfig netWorkCheckerConfig;
 
-    private Date offNetworkTime;
+    private LocalDateTime offNetworkTime;
 
     @Scheduled(cron = "${network-checker.corn:0 */1 * * * ?}")
     public void checkNetworkTask(){
@@ -60,10 +63,14 @@ public class DoCheckNetwork {
             offNetworkTime = null;
         }else {
             if(offNetworkTime == null){
-                offNetworkTime = new Date();
+                offNetworkTime = LocalDateTime.now();
             }else {
-                // todo 如果断网事件超过30分钟，电脑将重启
-//                DateUtil
+                // 如果断网事件超过30分钟，电脑将重启
+                long offNetworkMinutes = ChronoUnit.MINUTES.between(offNetworkTime, LocalDateTime.now());
+                if(offNetworkMinutes >= 30){
+                    log.info("断网时间为：" + offNetworkMinutes + "分钟，即将重启电脑");
+                    CommandUtil.exec(new RebootCmd().getCmd());
+                }
             }
 
         }
