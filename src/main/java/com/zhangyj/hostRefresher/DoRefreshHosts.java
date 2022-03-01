@@ -47,8 +47,6 @@ public class DoRefreshHosts {
             if(CollectionUtils.isEmpty(hosts)){
                 return;
             }
-            System.setProperty("http.proxyPort", "443");
-            System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2,SSLv3");
             for (HostsInfo info : hosts) {
                 log.info("读取{}文件路径：{}", info.getName(), info.getUrl());
                 HttpRequest httpRequest = HttpUtil.createGet(info.getUrl());
@@ -57,6 +55,7 @@ public class DoRefreshHosts {
                     List<String> collect = reader.lines().collect(Collectors.toList());
                     FileUtil.writeLines(collect, hostsRefresherConfig.getHostsPath(), Charset.defaultCharset());
                 }
+                httpResponse.close();
             }
             // 刷新dns
             CommandUtil.exec(new RefreshDnsCmd().getCmd());
