@@ -2,12 +2,7 @@ package com.zhangyj.hostRefresher;
 
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
-import com.zhangyj.common.cmd.CurlGetCmd;
 import com.zhangyj.common.cmd.RefreshDnsCmd;
-import com.zhangyj.common.constant.CharSets;
 import com.zhangyj.common.utils.CommandUtil;
 import com.zhangyj.hostRefresher.config.HostsRefresherConfig;
 import com.zhangyj.hostRefresher.pojo.HostsInfo;
@@ -18,8 +13,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 刷新hosts文件
@@ -33,6 +33,7 @@ public class DoRefreshHosts {
 
     private final HostsRefresherConfig hostsRefresherConfig;
 
+
     @Scheduled(cron = "${host-refresher.corn:0 */1 * * * ?}")
     public void checkNetworkTask(){
         try {
@@ -42,8 +43,14 @@ public class DoRefreshHosts {
             }
             for (HostsInfo info : hosts) {
                 log.info("读取{}文件路径：{}", info.getName(), info.getUrl());
-                List<String> output = CommandUtil.getCommandOutput(CharSets.CHARSET_GBK, new CurlGetCmd(info.getUrl(), null).getCmd());
-                FileUtil.writeLines(output, new File(hostsRefresherConfig.getHostsPath()), CharSets.CHARSET_GBK);
+                URL url = new URL(info.getUrl());
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(10 * 1000);
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()), 1024)){
+                    List<String> collect = reader.lines().collect(Collectors.toList());
+                    FileUtil.writeLines(collect, hostsRefresherConfig.getHostsPath(), Charset.defaultCharset());
+                }
             }
             // 刷新dns
             CommandUtil.exec(new RefreshDnsCmd().getCmd());
