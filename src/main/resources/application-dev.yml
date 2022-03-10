@@ -57,7 +57,7 @@ host-refresher:
     # 网络hosts文件
     hosts: [{name: "github", url: "https://cdn.jsdelivr.net/gh/521xueweihan/GitHub520@main/hosts"}]
     # 定时器corn
-    corn: "*/20 * * * * ?"
+    corn: 0 */1 * * * ?
     # 本地hosts文件地址
     hosts-path: G:\Windows\System32\drivers\etc\hosts
 
