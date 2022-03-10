@@ -46,11 +46,19 @@ public class CommandUtil {
 
     public static Process exec(String command) throws IOException {
         log.info("执行命令：{}", command);
-        return Runtime.getRuntime().exec(command);
+        Runtime runtime = Runtime.getRuntime();
+        final Process process = runtime.exec(command);
+        //noinspection AlibabaAvoidManuallyCreateThread
+        runtime.addShutdownHook(new Thread(process::destroy));
+        return process;
     }
 
     public static Process exec(String[] command, File dir) throws IOException {
         log.info("执行命令：{} 地址为：{}", Arrays.toString(command), dir.getCanonicalPath());
-        return Runtime.getRuntime().exec(command, null, dir);
+        Runtime runtime = Runtime.getRuntime();
+        final Process process = runtime.exec(command, null, dir);
+        //noinspection AlibabaAvoidManuallyCreateThread
+        runtime.addShutdownHook(new Thread(process::destroy));
+        return process;
     }
 }
