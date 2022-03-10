@@ -1,10 +1,13 @@
 package com.zhangyj.hostRefresher;
 
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
+import com.zhangyj.common.cmd.CurlGetCmd;
 import com.zhangyj.common.cmd.RefreshDnsCmd;
+import com.zhangyj.common.constant.CharSets;
 import com.zhangyj.common.utils.CommandUtil;
 import com.zhangyj.hostRefresher.config.HostsRefresherConfig;
 import com.zhangyj.hostRefresher.pojo.HostsInfo;
@@ -15,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -38,10 +42,8 @@ public class DoRefreshHosts {
             }
             for (HostsInfo info : hosts) {
                 log.info("读取{}文件路径：{}", info.getName(), info.getUrl());
-                HttpRequest httpRequest = HttpUtil.createGet(info.getUrl());
-                httpRequest.timeout(10 * 1000);
-                HttpResponse httpResponse = httpRequest.execute();
-                httpResponse.writeBody(hostsRefresherConfig.getHostsPath());
+                List<String> output = CommandUtil.getCommandOutput(CharSets.CHARSET_GBK, new CurlGetCmd(info.getUrl(), null).getCmd());
+                FileUtil.writeLines(output, new File(hostsRefresherConfig.getHostsPath()), CharSets.CHARSET_GBK);
             }
             // 刷新dns
             CommandUtil.exec(new RefreshDnsCmd().getCmd());
