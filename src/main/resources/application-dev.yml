@@ -53,12 +53,59 @@ network-checker:
 #【定时刷新hosts】
 host-refresher:
     # 是否启用该功能
-    enable: true
+    enable: false
     # 网络hosts文件
     hosts: [{name: "github", url: "https://cdn.jsdelivr.net/gh/521xueweihan/GitHub520@main/hosts"}]
     # 定时器corn
     corn: "*/20 * * * * ?"
     # 本地hosts文件地址
     hosts-path: G:\Windows\System32\drivers\etc\hosts
+
+#【文件关键字替换】
+properties-replace:
+    # 是否启用该功能
+    enable: true
+    # 替换关键字描述
+    replaceKeys: [
+        {
+              filePaths: [
+                  E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
+                  E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
+              ],
+              propertiesMap: {
+                "server.addr":"192.169.7.13",
+                "montnets.outerUrl":"http://192.169.7.13:9777/umc/",
+                "server.port":"9777",
+                "emp.corptype":"0",
+                "video.encoder.system":"Windows",
+                "montnets.emp.nginx.url":"http://192.169.7.13:8008",
+                # 数据库信息
+                "emp.database.type":"mysql",
+                "emp.database.ip":"192.169.7.102",
+                "emp.database.port":"3306",
+                "emp.database.name":"umc310",
+                "spring.datasource.druid.username":"root",
+                "spring.datasource.druid.password":"ENC(s9tSvduQ9LOiLl6v48Y6ag==)",
+                "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
+                "spring.datasource.druid.driver-class-name":"com.mysql.cj.jdbc.Driver",
+                # redis
+                "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
+                "spring.redis.cluster.max-redirects":"3",
+                # 定时
+                "cluster.iscluster":"1",
+                "cluster.isruntimejob":"1",
+                "timer.callback.enable":"false",
+                # 文件服务器
+                "file.server.ip":"192.169.7.106",
+                "file.server.port":"8080",
+              },
+              uselessProperties: [
+                "spring.cloud.nacos.config.server-addr",
+                "spring.redis.host",
+                "spring.redis.port"
+              ]
+
+        }
+    ]
 
 
