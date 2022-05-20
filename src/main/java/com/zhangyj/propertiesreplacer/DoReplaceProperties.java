@@ -40,6 +40,9 @@ public class DoReplaceProperties implements CommandLineRunner {
     public void run(String... args) throws Exception {
         List<ReplaceProperties> replacePropertiesList = fileReplaceConfig.getReplaceKeys();
         for (ReplaceProperties replaceProperties : replacePropertiesList) {
+            if(!replaceProperties.getEnable()){
+                continue;
+            }
             propertiesLeftMap.putAll(replaceProperties.getPropertiesMap());
             List<String> filePaths = replaceProperties.getFilePaths();
             for (String filePath : filePaths) {

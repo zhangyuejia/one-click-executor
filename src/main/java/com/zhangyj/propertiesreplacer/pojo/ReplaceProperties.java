@@ -10,6 +10,12 @@ import java.util.Map;
  */
 @Data
 public class ReplaceProperties {
+
+    /**
+     * 是否替换改配置
+     */
+    private Boolean enable;
+
     /**
      * 关键字
      */
