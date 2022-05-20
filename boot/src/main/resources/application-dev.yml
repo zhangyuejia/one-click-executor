@@ -53,9 +53,9 @@ network-checker:
 #【定时刷新hosts】
 host-refresher:
     # 是否启用该功能
-    enable: false
+    enable: true
     # 网络hosts文件
-    hosts: [{name: "github", url: "https://cdn.jsdelivr.net/gh/521xueweihan/GitHub520@main/hosts"}]
+    hosts: [{name: "github", url: "https://raw.hellogithub.com/hosts"}]
     # 定时器corn
     corn: "*/20 * * * * ?"
     # 本地hosts文件地址

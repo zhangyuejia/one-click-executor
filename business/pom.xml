@@ -11,5 +11,12 @@
 
     <artifactId>business</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.zhangyj</groupId>
+            <artifactId>common</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+    </dependencies>
 
 </project>
