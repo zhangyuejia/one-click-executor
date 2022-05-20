@@ -20,6 +20,7 @@
     </dependencies>
 
     <build>
+        <finalName>tools</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

@@ -1,3 +1,3 @@
 @echo off
-java -jar app/copyListMaker-4.0.0.jar
+java -jar app/tools-4.0.0.jar
 pause

@@ -59,7 +59,7 @@ host-refresher:
     # 定时器corn
     corn: "*/20 * * * * ?"
     # 本地hosts文件地址
-    hosts-path: G:\Windows\System32\drivers\etc\hosts
+    hosts-path: C:\Windows\System32\drivers\etc\hosts
 
 #【文件关键字替换】
 properties-replace:
