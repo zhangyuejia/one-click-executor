@@ -6,7 +6,14 @@
 
     <groupId>com.zhangyj</groupId>
     <artifactId>copyListMaker</artifactId>
+    <packaging>pom</packaging>
     <version>4.0.0</version>
+    <modules>
+        <module>common</module>
+        <module>business</module>
+        <module>core</module>
+        <module>boot</module>
+    </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -72,7 +79,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix/>
-                            <mainClass>com.zhangyj.Application</mainClass>
+                            <mainClass>com.zhangyj.tools.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
