@@ -61,7 +61,7 @@ host-refresher:
     # 本地hosts文件地址
     hosts-path: C:\Windows\System32\drivers\etc\hosts
 
-#【文件关键字替换】
+#【Properties配置值替换】
 properties-replace:
     # 是否启用该功能
     enable: false
