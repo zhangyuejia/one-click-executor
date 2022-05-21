@@ -33,7 +33,7 @@
         <fileSet>
             <directory>/</directory>
             <includes>
-                <include>README.md</include>
+                <include>/README.md</include>
                 <include>version.txt</include>
             </includes>
             <outputDirectory>/app</outputDirectory>
