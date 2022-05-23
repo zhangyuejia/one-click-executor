@@ -1,9 +1,11 @@
 package com.zhangyj.tools.business.project.copyListmaker.config;
 
+import com.zhangyj.tools.common.base.AbstractConfig;
 import com.zhangyj.tools.common.constant.DefaultConst;
 import com.zhangyj.tools.common.utils.StringUtil;
 import com.zhangyj.tools.common.utils.SvnUtil;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -17,11 +19,12 @@ import java.io.IOException;
  * 用于处理配置项和打印配置信息
  * @author zhagnyj
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Slf4j
 @Component
 @ConditionalOnProperty(prefix = "copy-list-maker", name = "enable", havingValue = "true")
-public class Config {
+public class Config extends AbstractConfig {
 
     private final SvnConfig svn;
 
@@ -139,5 +142,10 @@ public class Config {
             result = result.substring(0, result.length() - 1);
         }
         return result;
+    }
+
+    @Override
+    public String getFunctionName() {
+        return "生成CopyList功能";
     }
 }

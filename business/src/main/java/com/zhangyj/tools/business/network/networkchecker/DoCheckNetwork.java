@@ -1,13 +1,14 @@
 package com.zhangyj.tools.business.network.networkchecker;
 
 
+import com.zhangyj.tools.business.network.networkchecker.config.NetWorkCheckerConfig;
+import com.zhangyj.tools.common.base.AbstractFunExecutor;
 import com.zhangyj.tools.common.cmd.PingOneCmd;
 import com.zhangyj.tools.common.cmd.RebootCmd;
 import com.zhangyj.tools.common.cmd.ReconnectWifiCmd;
 import com.zhangyj.tools.common.constant.CharSets;
 import com.zhangyj.tools.common.utils.CommandUtil;
 import com.zhangyj.tools.common.utils.ThreadUtils;
-import com.zhangyj.tools.business.network.networkchecker.config.NetWorkCheckerConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -27,9 +28,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnBean(NetWorkCheckerConfig.class)
-public class DoCheckNetwork {
-
-    private final NetWorkCheckerConfig netWorkCheckerConfig;
+public class DoCheckNetwork extends AbstractFunExecutor<NetWorkCheckerConfig> {
 
     private LocalDateTime offNetworkTime;
 
@@ -48,7 +47,7 @@ public class DoCheckNetwork {
     }
 
     private void reconnectNetwork() throws Exception {
-        List<String> commandOutput = CommandUtil.getCommandOutput(CharSets.CHARSET_GBK, new ReconnectWifiCmd(netWorkCheckerConfig.getWifiName()).getCmd());
+        List<String> commandOutput = CommandUtil.getCommandOutput(CharSets.CHARSET_GBK, new ReconnectWifiCmd(config.getWifiName()).getCmd());
         if(CollectionUtils.isEmpty(commandOutput)){
             return;
         }
@@ -88,5 +87,10 @@ public class DoCheckNetwork {
             }
         }
         return false;
+    }
+
+    @Override
+    protected void doExec() {
+
     }
 }

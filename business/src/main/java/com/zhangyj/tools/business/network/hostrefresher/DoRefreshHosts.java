@@ -2,10 +2,11 @@ package com.zhangyj.tools.business.network.hostrefresher;
 
 
 import cn.hutool.core.io.FileUtil;
-import com.zhangyj.tools.common.cmd.RefreshDnsCmd;
-import com.zhangyj.tools.common.utils.CommandUtil;
 import com.zhangyj.tools.business.network.hostrefresher.config.HostsRefresherConfig;
 import com.zhangyj.tools.business.network.hostrefresher.pojo.HostsInfo;
+import com.zhangyj.tools.common.base.AbstractFunExecutor;
+import com.zhangyj.tools.common.cmd.RefreshDnsCmd;
+import com.zhangyj.tools.common.utils.CommandUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -29,15 +30,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnBean(HostsRefresherConfig.class)
-public class DoRefreshHosts {
-
-    private final HostsRefresherConfig hostsRefresherConfig;
-
+public class DoRefreshHosts extends AbstractFunExecutor<HostsRefresherConfig> {
 
     @Scheduled(cron = "${host-refresher.corn:0 */1 * * * ?}")
     public void checkNetworkTask(){
         try {
-            List<HostsInfo> hosts = hostsRefresherConfig.getHosts();
+            List<HostsInfo> hosts = config.getHosts();
             if(CollectionUtils.isEmpty(hosts)){
                 return;
             }
@@ -49,7 +47,7 @@ public class DoRefreshHosts {
                 conn.setConnectTimeout(10 * 1000);
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()), 1024)){
                     List<String> collect = reader.lines().collect(Collectors.toList());
-                    FileUtil.writeLines(collect, hostsRefresherConfig.getHostsPath(), Charset.defaultCharset());
+                    FileUtil.writeLines(collect, config.getHostsPath(), Charset.defaultCharset());
                 }
             }
             // 刷新dns
@@ -58,4 +56,7 @@ public class DoRefreshHosts {
             log.error("刷新hosts文件过程中发生异常", e);
         }
     }
+
+    @Override
+    protected void doExec() {}
 }

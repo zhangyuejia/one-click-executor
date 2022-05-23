@@ -13,11 +13,6 @@ import org.springframework.stereotype.Component;
 public class CopyListConfig {
 
     /**
-     * 是否启用copyList功能
-     */
-    private Boolean enable;
-
-    /**
      * copyList路径
      */
     private String path;
