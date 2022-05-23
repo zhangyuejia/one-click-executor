@@ -8,7 +8,7 @@ import org.springframework.boot.CommandLineRunner;
  * @author zhangyj
  */
 @Slf4j
-public abstract class AbstractFunExecutor<T extends AbstractConfig> implements CommandLineRunner {
+public abstract class AbstractRunner<T extends AbstractConfig> implements CommandLineRunner {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
@@ -22,7 +22,7 @@ public abstract class AbstractFunExecutor<T extends AbstractConfig> implements C
     public void run(String... args) {
         try {
             log.info("执行：" + config.getFunctionName());
-            doExec();
+            doRun();
         } catch (Exception e) {
             log.error("抛出异常", e);
         }
@@ -32,5 +32,5 @@ public abstract class AbstractFunExecutor<T extends AbstractConfig> implements C
      * 供子类实现
      * @throws Exception 异常
      */
-    protected abstract void doExec() throws Exception;
+    protected abstract void doRun() throws Exception;
 }

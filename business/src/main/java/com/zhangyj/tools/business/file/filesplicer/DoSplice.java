@@ -1,7 +1,7 @@
 package com.zhangyj.tools.business.file.filesplicer;
 
 import com.zhangyj.tools.business.file.filesplicer.config.FileSplicerConfig;
-import com.zhangyj.tools.common.base.AbstractFunExecutor;
+import com.zhangyj.tools.common.base.AbstractRunner;
 import com.zhangyj.tools.common.utils.CommandUtil;
 import com.zhangyj.tools.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnBean(FileSplicerConfig.class)
-public class DoSplice extends AbstractFunExecutor<FileSplicerConfig> {
+public class DoSplice extends AbstractRunner<FileSplicerConfig> {
 
     private Pattern[] whitePattern;
 
@@ -38,7 +38,7 @@ public class DoSplice extends AbstractFunExecutor<FileSplicerConfig> {
     private final FileSplicerConfig fileSplicerConfig;
 
     @Override
-    protected void doExec() throws Exception {
+    protected void doRun() throws Exception {
         log.info("执行文件拼接功能");
         // 参数校验
         checkParam();

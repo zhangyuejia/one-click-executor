@@ -2,7 +2,7 @@ package com.zhangyj.tools.business.network.networkchecker;
 
 
 import com.zhangyj.tools.business.network.networkchecker.config.NetWorkCheckerConfig;
-import com.zhangyj.tools.common.base.AbstractFunExecutor;
+import com.zhangyj.tools.common.base.AbstractRunner;
 import com.zhangyj.tools.common.cmd.PingOneCmd;
 import com.zhangyj.tools.common.cmd.RebootCmd;
 import com.zhangyj.tools.common.cmd.ReconnectWifiCmd;
@@ -28,7 +28,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnBean(NetWorkCheckerConfig.class)
-public class DoCheckNetwork extends AbstractFunExecutor<NetWorkCheckerConfig> {
+public class DoCheckNetwork extends AbstractRunner<NetWorkCheckerConfig> {
 
     private LocalDateTime offNetworkTime;
 
@@ -90,7 +90,7 @@ public class DoCheckNetwork extends AbstractFunExecutor<NetWorkCheckerConfig> {
     }
 
     @Override
-    protected void doExec() {
+    protected void doRun() {
 
     }
 }

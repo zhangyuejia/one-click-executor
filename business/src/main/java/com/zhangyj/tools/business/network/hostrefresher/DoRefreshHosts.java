@@ -4,7 +4,7 @@ package com.zhangyj.tools.business.network.hostrefresher;
 import cn.hutool.core.io.FileUtil;
 import com.zhangyj.tools.business.network.hostrefresher.config.HostsRefresherConfig;
 import com.zhangyj.tools.business.network.hostrefresher.pojo.HostsInfo;
-import com.zhangyj.tools.common.base.AbstractFunExecutor;
+import com.zhangyj.tools.common.base.AbstractRunner;
 import com.zhangyj.tools.common.cmd.RefreshDnsCmd;
 import com.zhangyj.tools.common.utils.CommandUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnBean(HostsRefresherConfig.class)
-public class DoRefreshHosts extends AbstractFunExecutor<HostsRefresherConfig> {
+public class DoRefreshHosts extends AbstractRunner<HostsRefresherConfig> {
 
     @Scheduled(cron = "${host-refresher.corn:0 */1 * * * ?}")
     public void checkNetworkTask(){
@@ -58,5 +58,5 @@ public class DoRefreshHosts extends AbstractFunExecutor<HostsRefresherConfig> {
     }
 
     @Override
-    protected void doExec() {}
+    protected void doRun() {}
 }

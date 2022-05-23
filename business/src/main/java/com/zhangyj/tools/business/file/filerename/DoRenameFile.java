@@ -2,7 +2,7 @@ package com.zhangyj.tools.business.file.filerename;
 
 import com.zhangyj.tools.business.file.filerename.config.FileRenameConfig;
 import com.zhangyj.tools.business.file.filerename.pojo.ReplaceWord;
-import com.zhangyj.tools.common.base.AbstractFunExecutor;
+import com.zhangyj.tools.common.base.AbstractRunner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -19,10 +19,10 @@ import java.nio.file.Files;
 @Component
 @RequiredArgsConstructor
 @ConditionalOnBean(FileRenameConfig.class)
-public class DoRenameFile extends AbstractFunExecutor<FileRenameConfig> {
+public class DoRenameFile extends AbstractRunner<FileRenameConfig> {
 
     @Override
-    protected void doExec() throws Exception {
+    protected void doRun() throws Exception {
         File sourceDir = new File(config.getPath());
         File targetDir = new File(config.getTargetPath());
         if(!sourceDir.isDirectory()) {

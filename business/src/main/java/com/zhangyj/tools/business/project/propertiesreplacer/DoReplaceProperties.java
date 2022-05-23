@@ -2,7 +2,7 @@ package com.zhangyj.tools.business.project.propertiesreplacer;
 
 import com.zhangyj.tools.business.project.propertiesreplacer.config.PropertiesReplaceConfig;
 import com.zhangyj.tools.business.project.propertiesreplacer.pojo.ReplaceProperties;
-import com.zhangyj.tools.common.base.AbstractFunExecutor;
+import com.zhangyj.tools.common.base.AbstractRunner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -27,7 +27,7 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @ConditionalOnBean(PropertiesReplaceConfig.class)
-public class DoReplaceProperties extends AbstractFunExecutor<PropertiesReplaceConfig> {
+public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig> {
 
     /**
      * 剩下来没用到的，需要写入最后一个文件
@@ -35,7 +35,7 @@ public class DoReplaceProperties extends AbstractFunExecutor<PropertiesReplaceCo
     private final Map<String, String> propertiesLeftMap = new HashMap<>(2);
 
     @Override
-    protected void doExec() throws Exception {
+    protected void doRun() throws Exception {
         List<ReplaceProperties> replacePropertiesList = config.getReplaceKeys();
         for (ReplaceProperties replaceProperties : replacePropertiesList) {
             if(!replaceProperties.getEnable()){
