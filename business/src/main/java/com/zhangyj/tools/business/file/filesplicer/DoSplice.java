@@ -1,11 +1,11 @@
 package com.zhangyj.tools.business.file.filesplicer;
 
 import com.zhangyj.tools.business.file.filesplicer.config.FileSplicerConfig;
+import com.zhangyj.tools.common.base.AbstractFunExecutor;
 import com.zhangyj.tools.common.utils.CommandUtil;
 import com.zhangyj.tools.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnBean(FileSplicerConfig.class)
-public class DoSplice implements CommandLineRunner {
+public class DoSplice extends AbstractFunExecutor<FileSplicerConfig> {
 
     private Pattern[] whitePattern;
 
@@ -38,7 +38,7 @@ public class DoSplice implements CommandLineRunner {
     private final FileSplicerConfig fileSplicerConfig;
 
     @Override
-    public void run(String... args) throws Exception {
+    protected void doExec() throws Exception {
         log.info("执行文件拼接功能");
         // 参数校验
         checkParam();
@@ -51,7 +51,7 @@ public class DoSplice implements CommandLineRunner {
     }
 
     private void checkParam() {
-        if(StringUtil.isEmpty(fileSplicerConfig.getGenFileName())){
+        if(fileSplicerConfig.getGenFileName() == null){
             throw new IllegalArgumentException("生成文件名不能为空！");
         }
     }
@@ -64,7 +64,7 @@ public class DoSplice implements CommandLineRunner {
 
     private void execCommand() {
         String command = fileSplicerConfig.getCommand();
-        if(StringUtil.isEmpty(command)){
+        if(command == null){
             return;
         }
         log.info("执行命令：{} 执行路径：{}", command, fileSplicerConfig.getPath());

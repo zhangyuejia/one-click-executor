@@ -2,9 +2,9 @@ package com.zhangyj.tools.business.file.filerename;
 
 import com.zhangyj.tools.business.file.filerename.config.FileRenameConfig;
 import com.zhangyj.tools.business.file.filerename.pojo.ReplaceWord;
+import com.zhangyj.tools.common.base.AbstractFunExecutor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
@@ -19,20 +19,17 @@ import java.nio.file.Files;
 @Component
 @RequiredArgsConstructor
 @ConditionalOnBean(FileRenameConfig.class)
-public class DoRenameFile implements CommandLineRunner {
-
-    private final FileRenameConfig fileRenameConfig;
+public class DoRenameFile extends AbstractFunExecutor<FileRenameConfig> {
 
     @Override
-    public void run(String... args) throws IOException {
-        log.info("执行文件重命名功能");
-        File sourceDir = new File(fileRenameConfig.getPath());
-        File targetDir = new File(fileRenameConfig.getTargetPath());
+    protected void doExec() throws Exception {
+        File sourceDir = new File(config.getPath());
+        File targetDir = new File(config.getTargetPath());
         if(!sourceDir.isDirectory()) {
-            throw new RuntimeException("源文件" + fileRenameConfig.getPath() + "不是文件夹，中止执行");
+            throw new RuntimeException("源文件" + config.getPath() + "不是文件夹，中止执行");
         }
         if(targetDir.exists() && !targetDir.isDirectory()) {
-            throw new RuntimeException("目标文件" + fileRenameConfig.getTargetPath() + "不是文件夹，中止执行");
+            throw new RuntimeException("目标文件" + config.getTargetPath() + "不是文件夹，中止执行");
         }
         if(sourceDir.getPath().equals(targetDir.getPath())){
             throw new RuntimeException("源路径不能和目标路径一致！");
@@ -81,7 +78,7 @@ public class DoRenameFile implements CommandLineRunner {
 
     private void renameFile(File file, File sourceDir, File targetDir) throws IOException {
         String newUri = file.getPath().substring(sourceDir.getPath().length());
-        for (ReplaceWord replaceWord : fileRenameConfig.getReplaceWords()) {
+        for (ReplaceWord replaceWord : config.getReplaceWords()) {
             newUri = newUri.replaceAll(replaceWord.getWord(), replaceWord.getNewWord());
         }
         File newFile = new File(targetDir.getPath() + newUri);
