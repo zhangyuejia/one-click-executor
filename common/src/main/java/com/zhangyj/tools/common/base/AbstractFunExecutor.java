@@ -10,7 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 @Slf4j
 public abstract class AbstractFunExecutor<T extends AbstractConfig> implements CommandLineRunner {
 
-    @SuppressWarnings("SpringJavaAutowiredMembersInspection")
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     protected T config;
 
