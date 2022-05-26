@@ -65,11 +65,13 @@ host-refresher:
 properties-replace:
     # 是否启用该功能
     enable: true
+    # 启用替换id
+    enableReplaceId: ["umc310-dev-mysql"]
     # 替换关键字描述
     replaceKeys: [
         {
               # 开发环境配置
-              enable: true,
+              replaceId: "umc310-dev-mysql",
               filePaths: [
                 E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
                 E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
@@ -109,6 +111,7 @@ properties-replace:
                 "umc.tmpl.submit.allchannel.task.enable":"false",
                 "umc.tmpl.submit.task.enable":"false"
               },
+              # 需要注释的配置项
               uselessProperties: [
                 "spring.cloud.nacos.config.server-addr",
                 "spring.redis.host",
@@ -117,8 +120,57 @@ properties-replace:
 
         },
         {
-            # 测试3.10标准版环境配置
-            enable: false,
+          # 测试3.10 3.132 mysql标准版环境配置
+          replaceId: "umc310-test-mysql",
+          filePaths: [
+            E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
+            E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
+          ],
+          propertiesMap: {
+            "server.addr":"192.169.7.13",
+            "server.port":"9777",
+            "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
+            "emp.corptype":"0",
+            "video.encoder.system":"Windows",
+            "montnets.emp.nginx.url":"http://${server.addr}:8008",
+            # 数据库信息
+            "emp.database.type":"mysql",
+            "emp.database.ip":"192.169.3.91",
+            "emp.database.port":"3306",
+            "emp.database.name":"umc88",
+            "spring.datasource.druid.username":"emp88",
+            "spring.datasource.druid.password":"ENC(euGMt1BOxNOrmQ5t2SKAk6Cc9XxDpUJC)",
+            "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
+            "spring.datasource.druid.driver-class-name":"com.mysql.cj.jdbc.Driver",
+            # redis
+            "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
+            "spring.redis.cluster.max-redirects":"3",
+            # 定时
+            "cluster.iscluster":"1",
+            "cluster.isruntimejob":"0",
+            "timer.callback.enable":"false",
+            # 文件服务器
+            "file.server.ip":"192.169.3.132",
+            "file.server.port":"9999",
+            "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
+            # 关闭其他各种开关
+            "aim.shorturl.thread.enable":"false",
+            "montnets.redis.sync.enable":"false",
+            "montnets.emp.shorturl.thread.enable":"false",
+            "montnets.template.task.enable":"false",
+            "umc.tmpl.submit.allchannel.task.enable":"false",
+            "umc.tmpl.submit.task.enable":"false"
+          },
+          # 需要注释的配置项
+          uselessProperties: [
+            "spring.cloud.nacos.config.server-addr",
+            "spring.redis.host",
+            "spring.redis.port"
+          ]
+        },
+        {
+            # 测试3.10 5.160 oracle标准版环境配置
+            replaceId: "umc310-test-oracle",
             filePaths: [
                 E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
                 E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
@@ -158,6 +210,7 @@ properties-replace:
                 "umc.tmpl.submit.allchannel.task.enable":"false",
                 "umc.tmpl.submit.task.enable":"false"
             },
+            # 需要注释的配置项
             uselessProperties: [
                 "spring.cloud.nacos.config.server-addr",
                 "spring.redis.host",
@@ -166,7 +219,7 @@ properties-replace:
         },
         {
           # 测试3.10标准版polardb环境配置
-            enable: false,
+            replaceId: "umc310-test-polardb",
             filePaths: [
                 E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
                 E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
@@ -206,6 +259,7 @@ properties-replace:
                 "umc.tmpl.submit.allchannel.task.enable":"false",
                 "umc.tmpl.submit.task.enable":"false"
             },
+            # 需要注释的配置项
             uselessProperties: [
                 "spring.cloud.nacos.config.server-addr",
                 "spring.redis.host",

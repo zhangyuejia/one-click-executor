@@ -38,9 +38,10 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
     protected void doRun() throws Exception {
         List<ReplaceProperties> replacePropertiesList = config.getReplaceKeys();
         for (ReplaceProperties replaceProperties : replacePropertiesList) {
-            if(!replaceProperties.getEnable()){
+            if(!config.getEnableReplaceId().contains(replaceProperties.getReplaceId())){
                 continue;
             }
+            log.info("启用配置ID:{}", replaceProperties.getReplaceId());
             propertiesLeftMap.putAll(replaceProperties.getPropertiesMap());
             List<String> filePaths = replaceProperties.getFilePaths();
             for (String filePath : filePaths) {
@@ -78,7 +79,9 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
         List<String> filePaths = replaceProperties.getFilePaths();
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePaths.get(filePaths.size() - 1)), StandardOpenOption.APPEND)){
             for (Map.Entry<String, String> entry : propertiesLeftMap.entrySet()) {
-                writer.write(entry.getKey() + "=" + entry.getValue());
+                String line = entry.getKey() + "=" + entry.getValue();
+                log.info("写入配置项：{}", line);
+                writer.write(line);
                 writer.newLine();
             }
         }
@@ -89,6 +92,7 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
         List<String> uselessProperties = replaceProperties.getUselessProperties();
         for (String uselessProperty : uselessProperties) {
             if(line.startsWith(uselessProperty + "=")){
+                log.info("注释配置项：{}", uselessProperty);
                 return "#" + line;
             }
         }
@@ -100,6 +104,7 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
         Map<String, String> propertiesMap = replaceProperties.getPropertiesMap();
         for (String property : propertiesMap.keySet()) {
             if(line.startsWith(property + "=")){
+                log.info("修改配置项：{} 为{}", property, propertiesMap.get(property));
                 propertiesLeftMap.remove(property);
                 return property + "=" + propertiesMap.get(property);
             }

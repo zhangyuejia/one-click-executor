@@ -23,6 +23,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "properties-replace")
 public class PropertiesReplaceConfig extends AbstractConfig {
 
+    private List<String> enableReplaceId;
     /**
      * 替换关键字
      */

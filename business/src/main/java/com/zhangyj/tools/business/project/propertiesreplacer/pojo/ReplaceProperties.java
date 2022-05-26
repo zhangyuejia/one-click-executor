@@ -12,9 +12,9 @@ import java.util.Map;
 public class ReplaceProperties {
 
     /**
-     * 是否替换改配置
+     * id
      */
-    private Boolean enable;
+    private String replaceId;;
 
     /**
      * 关键字
