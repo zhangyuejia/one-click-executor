@@ -66,11 +66,16 @@ properties-replace:
     # 是否启用该功能
     enable: true
     # 启用替换id
-    enableReplaceId: ["umc310-dev-mysql"]
+    enableReplaceId: [
+      "umc310-dev-mysql",
+#      "umc310-test-mysql",
+#      "umc310-test-oracle",
+#      "umc310-test-polardb",
+    ]
     # 替换关键字描述
     replaceKeys: [
         {
-              # 开发环境配置
+              # umc3.10-开发环境配置
               replaceId: "umc310-dev-mysql",
               filePaths: [
                 E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
@@ -120,7 +125,7 @@ properties-replace:
 
         },
         {
-          # 测试3.10 3.132 mysql标准版环境配置
+          # umc3.10-测试3.10 3.132 mysql标准版环境配置
           replaceId: "umc310-test-mysql",
           filePaths: [
             E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
@@ -169,7 +174,7 @@ properties-replace:
           ]
         },
         {
-            # 测试3.10 5.160 oracle标准版环境配置
+            # umc3.10-测试3.10 5.160 oracle标准版环境配置
             replaceId: "umc310-test-oracle",
             filePaths: [
                 E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
@@ -218,7 +223,7 @@ properties-replace:
             ]
         },
         {
-          # 测试3.10标准版polardb环境配置
+          # umc3.10-测试3.10标准版polardb环境配置
             replaceId: "umc310-test-polardb",
             filePaths: [
                 E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
