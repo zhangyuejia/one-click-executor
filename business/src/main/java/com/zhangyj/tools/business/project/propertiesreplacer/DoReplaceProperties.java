@@ -34,6 +34,8 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
      */
     private final Map<String, String> propertiesLeftMap = new HashMap<>(2);
 
+    private final Map<String, String> currentPropertiesMap = new HashMap<>(2);
+
     @Override
     protected void doRun() throws Exception {
         List<ReplaceProperties> replacePropertiesList = config.getReplaceKeys();
@@ -42,13 +44,19 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
                 continue;
             }
             log.info("启用配置ID:{}", replaceProperties.getReplaceId());
-            propertiesLeftMap.putAll(replaceProperties.getPropertiesMap());
-            List<String> filePaths = replaceProperties.getFilePaths();
+            init(replaceProperties);
+            List<String> filePaths = config.getFilePaths();
             for (String filePath : filePaths) {
                 replaceFileKey(filePath, replaceProperties);
             }
-            handlePropertiesLeftMap(replaceProperties);
+            handlePropertiesLeftMap();
         }
+    }
+
+    private void init(ReplaceProperties replaceProperties) {
+        currentPropertiesMap.putAll(replaceProperties.getPropertiesMap());
+        currentPropertiesMap.putAll(config.getPropertiesMap());
+        propertiesLeftMap.putAll(currentPropertiesMap);
     }
 
     private void replaceFileKey(String filePath, ReplaceProperties replaceProperties) throws IOException {
@@ -72,11 +80,11 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
         }
     }
 
-    private void handlePropertiesLeftMap(ReplaceProperties replaceProperties) throws IOException {
+    private void handlePropertiesLeftMap() throws IOException {
         if(CollectionUtils.isEmpty(propertiesLeftMap)){
             return;
         }
-        List<String> filePaths = replaceProperties.getFilePaths();
+        List<String> filePaths = config.getFilePaths();
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePaths.get(filePaths.size() - 1)), StandardOpenOption.APPEND)){
             for (Map.Entry<String, String> entry : propertiesLeftMap.entrySet()) {
                 String line = entry.getKey() + "=" + entry.getValue();
@@ -101,12 +109,11 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
 
     private String replaceProperty(String line, ReplaceProperties replaceProperties) {
         // 替换关键字
-        Map<String, String> propertiesMap = replaceProperties.getPropertiesMap();
-        for (String property : propertiesMap.keySet()) {
+        for (String property : currentPropertiesMap.keySet()) {
             if(line.startsWith(property + "=")){
-                log.info("修改配置项：{} 为{}", property, propertiesMap.get(property));
+                log.info("修改配置项：{} 为{}", property, currentPropertiesMap.get(property));
                 propertiesLeftMap.remove(property);
-                return property + "=" + propertiesMap.get(property);
+                return property + "=" + currentPropertiesMap.get(property);
             }
         }
         return null;

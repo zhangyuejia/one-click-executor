@@ -17,11 +17,6 @@ public class ReplaceProperties {
     private String replaceId;;
 
     /**
-     * 关键字
-     */
-    private List<String> filePaths;
-
-    /**
      * 新关键字
      */
     private Map<String, String> propertiesMap;

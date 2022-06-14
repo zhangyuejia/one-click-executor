@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文件替换器配置类
@@ -24,6 +25,17 @@ import java.util.List;
 public class PropertiesReplaceConfig extends AbstractConfig {
 
     private List<String> enableReplaceId;
+
+    /**
+     * 配置文件路径
+     */
+    private List<String> filePaths;
+
+    /**
+     * 新关键字
+     */
+    private Map<String, String> propertiesMap;
+
     /**
      * 替换关键字
      */
