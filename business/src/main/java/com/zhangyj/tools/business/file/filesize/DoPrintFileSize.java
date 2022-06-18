@@ -9,7 +9,6 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.util.Comparator;
@@ -39,6 +38,8 @@ public class DoPrintFileSize extends AbstractRunner<PrintFileSizeConfig> {
                 return thread;
             });
 
+    private List<FileInfo> fileInfoList;
+
     private final ChainHandler<Long, String> fileSizeHandler;
 
     public DoPrintFileSize(@Qualifier("fileSizeHandler") ChainHandler<Long, String> fileSizeHandler) {
@@ -47,62 +48,61 @@ public class DoPrintFileSize extends AbstractRunner<PrintFileSizeConfig> {
 
     @Override
     protected void doRun() throws Exception {
-        List<FileInfo> fileInfoList = getFileInfoList(config.getPath());
-        printFileInfo(fileInfoList);
+        loadFileInfoList();
+        printFileInfoList();
     }
 
-    private void printFileInfo(List<FileInfo> fileInfoList) {
-        if(CollectionUtils.isEmpty(fileInfoList)){
-            log.info("文件夹路径内容为空:{}", config.getPath());
-            return;
-        }
+    private void printFileInfoList() {
         for (FileInfo fileInfo : fileInfoList) {
-            printFileInfo(fileInfo);
+            log.info("{}：{} 大小：{}", fileInfo.getIsFile()? "文件名":"文件夹", fileInfo.getFileName(), getFileSizeDesc(fileInfo.getSize()));
         }
         long sum = fileInfoList.stream().mapToLong(FileInfo::getSize).sum();
         log.info("路径:{} 总大小:{}", config.getPath(), fileSizeHandler.handle(sum));
     }
 
-    private void printFileInfo(FileInfo fileInfo) {
-        log.info("{}：{} 大小：{}", fileInfo.getIsFile()? "文件名":"文件夹", fileInfo.getFileName(), printFileSize(fileInfo.getSize()));
-    }
-
-    private String printFileSize(Long size) {
+    private String getFileSizeDesc(Long size) {
         if(size == null || size == 0){
             return "0";
         }
         return fileSizeHandler.handle(size);
     }
 
-    private List<FileInfo> getFileInfoList(String path) throws InterruptedException {
-        File[] files = new File(path).listFiles();
-        if(files == null){
-            return null;
+    private void loadFileInfoList() throws InterruptedException {
+        File file = new File(config.getPath());
+        if(!file.exists()){
+            throw new RuntimeException("文件路径不存在，" + config.getPath());
         }
+        File[] files = file.listFiles();
+        if(files == null){
+            throw new RuntimeException("文件路径内容为空，" + config.getPath());
+        }
+        // 计算文件大小
         calculateFileSize(files);
-        return Stream.of(files)
+        // 转换对象
+        transferToFileInfoList(files);
+    }
+
+    private void transferToFileInfoList(File[] files) {
+        this.fileInfoList = Stream.of(files)
                 .map(f -> FileInfo.builder()
-                .fileName(f.getName())
-                .isFile(f.isFile())
-                .size(fileSizeMap.get(f.getName())).build())
+                        .fileName(f.getName())
+                        .isFile(f.isFile())
+                        .size(fileSizeMap.get(f.getName())).build())
                 // 按大小倒序打印
                 .sorted(Comparator.comparing(FileInfo::getSize).reversed())
                 .collect(Collectors.toList());
     }
 
     private void calculateFileSize(File[] files) throws InterruptedException {
+        // 多线程计算文件大小
         CountDownLatch latch = new CountDownLatch(files.length);
         for (File file : files) {
              executorService.execute(() -> {
-                Long fileSize = getFileSize(file);
-                fileSizeMap.put(file.getName(), fileSize);
+                 long fileSize = file.isFile() ? file.length() : FileUtils.sizeOfDirectory(file);
+                 fileSizeMap.put(file.getName(), fileSize);
                 latch.countDown();
             });
         }
         latch.await();
-    }
-
-    private Long getFileSize(File file) {
-        return file.isFile()? file.length(): FileUtils.sizeOfDirectory(file);
     }
 }
