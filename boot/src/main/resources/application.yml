@@ -3,6 +3,10 @@ spring:
   profiles:
     active: copy-list-maker,file-rename,file-splicer,host-refresher,network-checker,print-file-size,properties-replace
 
+tools:
+  # 是否检查只有一个功能运行
+  checkOneFunction: true
+
 # slf4j配置
 logging:
   pattern:

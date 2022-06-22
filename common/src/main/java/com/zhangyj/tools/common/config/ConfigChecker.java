@@ -22,8 +22,13 @@ public class ConfigChecker implements InitializingBean {
 
     private final List<AbstractConfig> abstractConfigs;
 
+    private final ToolsConfig toolsConfig;
+
     @Override
     public void afterPropertiesSet() throws Exception {
+        if(!toolsConfig.getCheckOneFunction()){
+            return;
+        }
         if(CollectionUtils.isEmpty(abstractConfigs)){
             log.info("开启配置个数为0");
         }

@@ -50,7 +50,7 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
                 replaceFileKey(filePath, replaceProperties);
             }
             handlePropertiesLeftMap();
-            if(config.getOnlyFirstReplaceId()){
+            if(config.getOnlyEnableFirstReplaceId()){
                 // 开启是否只取第一个replaceId开关，只执行一次循环
                 break;
             }
