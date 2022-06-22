@@ -18,7 +18,7 @@ import java.nio.file.Files;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@ConditionalOnBean(FileRenameConfig.class)
+@ConditionalOnBean({FileRenameConfig.class})
 public class DoRenameFile extends AbstractRunner<FileRenameConfig> {
 
     @Override

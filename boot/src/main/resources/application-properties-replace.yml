@@ -1,99 +1,31 @@
-#【配置项冒号后面要有个空格！！！】
-#【文件拼接功能，常用于将SQL脚本拼接到一个文件里面】
-file-splicer:
-  # 是否启用该功能
-  enable: false
-  # 【必填】文件夹路径
-  path: E:\mw_project_new\umc_git\umc_sql\UMC_V3.6\mysql\全新脚本
-  # 【必填】生成文件名称或路径
-  gen-file-name: G:\Users\ZYJ\Desktop\umc-mysql36.sql
-  # 文件名白名单模式，多个以逗号分隔
-  whitePattern: .*sql
-  # 文件名黑名单模式，多个以逗号分隔
-  blackPattern: 000.*
-  # 生成文件之前，在path文件夹路径执行的cmd命令（如更新git或者svn）
-  #    command: git pull upstream dev
-  command:
-# 【打印文件夹大小功能】
-print-file-size:
-  # 是否启用该功能
-  enable: true
-  # 【必填】文件夹路径
-  path: G:\Users\ZYJ\Documents
-
-
-# 【文件重命名功能，常用于新建类似目录，但文件名仅通过替换即可】
-file-rename:
-  # 是否启用该功能
-  enable: false
-  # 【必填】文件夹路径
-  path: E:\mw_project_new\umc_git\umc_sql\UMC_V3.6
-  # 目标文件夹路径
-  targetPath: G:\Users\ZYJ\Desktop\UMC_V3.7
-  # 【必填】替换关键字
-  replaceWords: [{word: "3.6", newWord: "3.7"}, {word: "3.5", newWord: "3.6"}]
-
-#【生成copyList功能】
-copy-list-maker:
-  # 是否启用该功能
-  enable: false
-  # 【必填】svn起始版本号
-  svn:
-    rev-start: 309780
-    # svn截止版本号（不填默认最新版本号）
-    rev-end:
-    # 【必填】svn路径
-    path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/02branches/stable-6.9(m)/emp
-  emp:
-    # 【必填】emp web项目编译路径（用于内部类检测，idea中Project Structure -> Artifacts中Output directory值）
-    output-path: E:\mw_out\emp_tg_win69\web
-
-#【网络检测功能】
-network-checker:
-  # 是否启用该功能
-  enable: false
-  # 【必填】定时校验时间间隔(单位：秒)
-  # wifi名称（断网重连）
-  wifiName: YJ&YR
-  corn: 0 */1 * * * ?
-
-#【定时刷新hosts】
-host-refresher:
-  # 是否启用该功能
-  enable: false
-  # 网络hosts文件
-  hosts: [{name: "github", url: "https://raw.hellogithub.com/hosts"}]
-  # 定时器corn
-  corn: "*/20 * * * * ?"
-  # 本地hosts文件地址
-  hosts-path: C:\Windows\System32\drivers\etc\hosts
-
 #【Properties配置值替换】
 properties-replace:
   # 是否启用该功能
-  enable: false
+  enable: true
+  # 是否只取第一个replaceId
+  onlyFirstReplaceId: true
   # 启用替换id
   enableReplaceId: [
-#          "umc310-zhangyj-mysql",
-#          "umc310-zhangyjsass-mysql",
-    #      "umc39sass-dev-mysql",
-    #      "umc310sass-dev-mysql",
-#          "umc310-dev-mysql",
-#    "umc310-dev-yx-mysql",
-#          "umc310-test-mysql",
-#          "umc310-test-oracle",
-    #      "umc310-test-oracle-upgrade",
-    #      "umc310-test-polardb",
-          "umc-test-3132-mysql",
+    "umc310-zhangyj-mysql",
+    "umc310-zhangyjsass-mysql",
+    "umc39sass-dev-mysql",
+    "umc310sass-dev-mysql",
+    "umc310-dev-mysql",
+    "umc310-dev-yx-mysql",
+    "umc310-test-mysql",
+    "umc310-test-oracle",
+    "umc310-test-oracle-upgrade",
+    "umc310-test-polardb",
+    "umc-test-3132-mysql",
   ]
   filePaths: [
-#          E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
-#          E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-default.properties,
-#          E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
+    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
+    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-default.properties,
+    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
 
-    E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\bootstrap.properties,
-    E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-default.properties,
-    E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-dev.properties
+    #    E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\bootstrap.properties,
+    #    E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-default.properties,
+    #    E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-dev.properties
   ]
   # 配置项map，优先级最高
   propertiesMap: {
@@ -330,51 +262,51 @@ properties-replace:
       "spring.redis.port"
     ]
 
-        },
-        {
-          # umc3.10-开发环境配置
-          replaceId: "umc310-zhangyj-mysql",
-          propertiesMap: {
-            "server.addr":"192.169.7.13",
-            "server.port":"9777",
-            "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
-            "emp.corptype":"0",
-            "video.encoder.system":"Windows",
-            "montnets.emp.nginx.url":"http://${server.addr}:8008",
-            # 数据库信息
-            "emp.database.type":"mysql",
-            "emp.database.ip":"192.169.7.107",
-            "emp.database.port":"3307",
-            "emp.database.name":"umczhangyj",
-            "spring.datasource.druid.username":"root",
-            "spring.datasource.druid.password":"ENC(s9tSvduQ9LOiLl6v48Y6ag==)",
-            "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
-            "spring.datasource.druid.driver-class-name":"com.mysql.cj.jdbc.Driver",
-            # redis
-            "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
-            "spring.redis.cluster.max-redirects":"3",
-            # 定时
-            "cluster.iscluster":"1",
-            "cluster.isruntimejob":"1",
-            "timer.callback.enable":"false",
-            # 文件服务器
-            "file.server.ip":"192.169.7.106",
-            "file.server.port":"8080",
-            "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-            # 关闭其他各种开关
-            "aim.shorturl.thread.enable":"false",
-            "montnets.redis.sync.enable":"false",
-            "montnets.emp.shorturl.thread.enable":"false",
-            "montnets.template.task.enable":"false",
-            "umc.tmpl.submit.allchannel.task.enable":"false",
-            "umc.tmpl.submit.task.enable":"false"
-          },
-          # 需要注释的配置项
-          uselessProperties: [
-            "spring.cloud.nacos.config.server-addr",
-            "spring.redis.host",
-            "spring.redis.port"
-          ]
+  },
+  {
+    # umc3.10-开发环境配置
+    replaceId: "umc310-zhangyj-mysql",
+    propertiesMap: {
+      "server.addr":"192.169.7.13",
+      "server.port":"9777",
+      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
+      "emp.corptype":"0",
+      "video.encoder.system":"Windows",
+      "montnets.emp.nginx.url":"http://${server.addr}:8008",
+      # 数据库信息
+      "emp.database.type":"mysql",
+      "emp.database.ip":"192.169.7.107",
+      "emp.database.port":"3307",
+      "emp.database.name":"umczhangyj",
+      "spring.datasource.druid.username":"root",
+      "spring.datasource.druid.password":"ENC(s9tSvduQ9LOiLl6v48Y6ag==)",
+      "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
+      "spring.datasource.druid.driver-class-name":"com.mysql.cj.jdbc.Driver",
+      # redis
+      "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
+      "spring.redis.cluster.max-redirects":"3",
+      # 定时
+      "cluster.iscluster":"1",
+      "cluster.isruntimejob":"1",
+      "timer.callback.enable":"false",
+      # 文件服务器
+      "file.server.ip":"192.169.7.106",
+      "file.server.port":"8080",
+      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
+      # 关闭其他各种开关
+      "aim.shorturl.thread.enable":"false",
+      "montnets.redis.sync.enable":"false",
+      "montnets.emp.shorturl.thread.enable":"false",
+      "montnets.template.task.enable":"false",
+      "umc.tmpl.submit.allchannel.task.enable":"false",
+      "umc.tmpl.submit.task.enable":"false"
+    },
+    # 需要注释的配置项
+    uselessProperties: [
+      "spring.cloud.nacos.config.server-addr",
+      "spring.redis.host",
+      "spring.redis.port"
+    ]
 
   },
   {
@@ -391,7 +323,7 @@ properties-replace:
       "emp.database.type":"mysql",
       "emp.database.ip":"192.169.3.91",
       "emp.database.port":"3306",
-      "emp.database.name":"umc3100605",
+      "emp.database.name":"umc3100621",
       "spring.datasource.druid.username":"emp89",
       "spring.datasource.druid.password":"ENC(euGMt1BOxNOrmQ5t2SKAk6Cc9XxDpUJC)",
       "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
@@ -483,7 +415,7 @@ properties-replace:
       "emp.database.ip":"192.169.5.49",
       "emp.database.port":"1521",
       "emp.database.name":"umc3100329",
-      "spring.datasource.druid.username":"emp169",
+      "spring.datasource.druid.username":"emp171",
       "spring.datasource.druid.password":"ENC(JPrmvPBRYeH7A4hJUCtsaA==)",
       "spring.datasource.druid.url":"jdbc:oracle:thin:@${emp.database.ip}:${emp.database.port}/${emp.database.name}",
       "spring.datasource.druid.driver-class-name":"oracle.jdbc.driver.OracleDriver",
@@ -605,5 +537,3 @@ properties-replace:
 
   }
   ]
-
-

@@ -1,0 +1,9 @@
+host-refresher:
+  # 是否启用该功能
+  enable: false
+  # 网络hosts文件
+  hosts: [{name: "github", url: "https://raw.hellogithub.com/hosts"}]
+  # 定时器corn
+  corn: "*/20 * * * * ?"
+  # 本地hosts文件地址
+  hosts-path: C:\Windows\System32\drivers\etc\hosts

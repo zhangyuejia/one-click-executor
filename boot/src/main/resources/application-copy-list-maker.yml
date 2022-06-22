@@ -1,0 +1,14 @@
+#【生成copyList功能】
+copy-list-maker:
+  # 是否启用该功能
+  enable: false
+  # 【必填】svn起始版本号
+  svn:
+    rev-start: 309780
+    # svn截止版本号（不填默认最新版本号）
+    rev-end:
+    # 【必填】svn路径
+    path: https://192.169.1.81/svn/cmmi/04javaemp/01dev/05code/02branches/stable-6.9(m)/emp
+  emp:
+    # 【必填】emp web项目编译路径（用于内部类检测，idea中Project Structure -> Artifacts中Output directory值）
+    output-path: E:\mw_out\emp_tg_win69\web

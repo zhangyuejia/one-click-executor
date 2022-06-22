@@ -24,6 +24,11 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "properties-replace")
 public class PropertiesReplaceConfig extends AbstractConfig {
 
+    /**
+     * 是否只取第一个replaceId
+     */
+    private Boolean onlyFirstReplaceId;
+
     private List<String> enableReplaceId;
 
     /**
