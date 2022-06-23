@@ -2,8 +2,6 @@
 properties-replace:
   # 是否启用该功能
   enable: true
-  # 是否只取第一个replaceId
-  onlyEnableFirstReplaceId: true
   # 启用替换id
   enableReplaceId: [
     "umc310-zhangyj-mysql",

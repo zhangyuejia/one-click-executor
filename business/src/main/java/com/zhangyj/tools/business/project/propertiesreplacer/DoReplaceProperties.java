@@ -39,6 +39,10 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
     @Override
     protected void doRun() throws Exception {
         List<ReplaceProperties> replacePropertiesList = config.getReplaceKeys();
+        // 是否检查只有一个replaceId
+        if(config.getEnableReplaceId().size() > 1){
+            throw new RuntimeException("配置项[properties-replace.enableReplaceId]配置个数不能大于1个");
+        }
         for (ReplaceProperties replaceProperties : replacePropertiesList) {
             if(!config.getEnableReplaceId().contains(replaceProperties.getReplaceId())){
                 continue;
@@ -50,10 +54,6 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
                 replaceFileKey(filePath, replaceProperties);
             }
             handlePropertiesLeftMap();
-            if(config.getOnlyEnableFirstReplaceId()){
-                // 开启是否只取第一个replaceId开关，只执行一次循环
-                break;
-            }
         }
     }
 
