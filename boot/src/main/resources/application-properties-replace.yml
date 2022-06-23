@@ -5,16 +5,16 @@ properties-replace:
   # 启用替换id
   enableReplaceId: [
     "umc310-zhangyj-mysql",
-    "umc310-zhangyjsass-mysql",
-    "umc39sass-dev-mysql",
-    "umc310sass-dev-mysql",
-    "umc310-dev-mysql",
-    "umc310-dev-yx-mysql",
-    "umc310-test-mysql",
-    "umc310-test-oracle",
-    "umc310-test-oracle-upgrade",
-    "umc310-test-polardb",
-    "umc-test-3132-mysql",
+#    "umc310-zhangyjsass-mysql",
+#    "umc39sass-dev-mysql",
+#    "umc310sass-dev-mysql",
+#    "umc310-dev-mysql",
+#    "umc310-dev-yx-mysql",
+#    "umc310-test-mysql",
+#    "umc310-test-oracle",
+#    "umc310-test-oracle-upgrade",
+#    "umc310-test-polardb",
+#    "umc-test-3132-mysql",
   ]
   filePaths: [
     E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
