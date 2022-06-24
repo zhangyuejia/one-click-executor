@@ -1,16 +1,16 @@
 #【Properties配置值替换】
 properties-replace:
   # 是否启用该功能
-  enable: true
+  enable: false
   # 启用替换id
   enableReplaceId: [
-    "umc310-zhangyj-mysql",
+#    "umc310-zhangyj-mysql",
 #    "umc310-zhangyjsass-mysql",
 #    "umc39sass-dev-mysql",
 #    "umc310sass-dev-mysql",
 #    "umc310-dev-mysql",
 #    "umc310-dev-yx-mysql",
-#    "umc310-test-mysql",
+    "umc310-test-mysql",
 #    "umc310-test-oracle",
 #    "umc310-test-oracle-upgrade",
 #    "umc310-test-polardb",
@@ -21,9 +21,9 @@ properties-replace:
     E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-default.properties,
     E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
 
-    #    E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\bootstrap.properties,
-    #    E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-default.properties,
-    #    E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-dev.properties
+#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\bootstrap.properties,
+#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-default.properties,
+#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-dev.properties
   ]
   # 配置项map，优先级最高
   propertiesMap: {
@@ -72,6 +72,8 @@ properties-replace:
     },
     # 需要注释的配置项
     uselessProperties: [
+       # 管理服务注释监控，避免jrebel启动失败
+      "cluster.host.id",
       "spring.cloud.nacos.config.server-addr",
       "spring.redis.host",
       "spring.redis.port"
@@ -118,6 +120,8 @@ properties-replace:
     },
     # 需要注释的配置项
     uselessProperties: [
+      # 管理服务注释监控，避免jrebel启动失败
+      "cluster.host.id",
       "spring.cloud.nacos.config.server-addr",
       "spring.redis.host",
       "spring.redis.port"
@@ -164,6 +168,8 @@ properties-replace:
     },
     # 需要注释的配置项
     uselessProperties: [
+      # 管理服务注释监控，避免jrebel启动失败
+      "cluster.host.id",
       "spring.cloud.nacos.config.server-addr",
       "spring.redis.host",
       "spring.redis.port"
@@ -210,6 +216,8 @@ properties-replace:
     },
     # 需要注释的配置项
     uselessProperties: [
+      # 管理服务注释监控，避免jrebel启动失败
+      "cluster.host.id",
       "spring.cloud.nacos.config.server-addr",
       "spring.redis.host",
       "spring.redis.port"
@@ -255,6 +263,8 @@ properties-replace:
     },
     # 需要注释的配置项
     uselessProperties: [
+      # 管理服务注释监控，避免jrebel启动失败
+      "cluster.host.id",
       "spring.cloud.nacos.config.server-addr",
       "spring.redis.host",
       "spring.redis.port"
@@ -301,6 +311,8 @@ properties-replace:
     },
     # 需要注释的配置项
     uselessProperties: [
+      # 管理服务注释监控，避免jrebel启动失败
+      "cluster.host.id",
       "spring.cloud.nacos.config.server-addr",
       "spring.redis.host",
       "spring.redis.port"
@@ -347,6 +359,8 @@ properties-replace:
     },
     # 需要注释的配置项
     uselessProperties: [
+      # 管理服务注释监控，避免jrebel启动失败
+      "cluster.host.id",
       "spring.cloud.nacos.config.server-addr",
       "spring.redis.host",
       "spring.redis.port"
@@ -393,6 +407,8 @@ properties-replace:
     },
     # 需要注释的配置项
     uselessProperties: [
+      # 管理服务注释监控，避免jrebel启动失败
+      "cluster.host.id",
       "spring.cloud.nacos.config.server-addr",
       "spring.redis.host",
       "spring.redis.port"
@@ -438,6 +454,8 @@ properties-replace:
     },
     # 需要注释的配置项
     uselessProperties: [
+      # 管理服务注释监控，避免jrebel启动失败
+      "cluster.host.id",
       "spring.cloud.nacos.config.server-addr",
       "spring.redis.host",
       "spring.redis.port"
@@ -483,6 +501,8 @@ properties-replace:
     },
     # 需要注释的配置项
     uselessProperties: [
+      # 管理服务注释监控，避免jrebel启动失败
+      "cluster.host.id",
       "spring.cloud.nacos.config.server-addr",
       "spring.redis.host",
       "spring.redis.port"
@@ -528,6 +548,8 @@ properties-replace:
     },
     # 需要注释的配置项
     uselessProperties: [
+      # 管理服务注释监控，避免jrebel启动失败
+      "cluster.host.id",
       "spring.cloud.nacos.config.server-addr",
       "spring.redis.host",
       "spring.redis.port"

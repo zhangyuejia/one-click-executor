@@ -54,10 +54,11 @@ public class DoPrintFileSize extends AbstractRunner<PrintFileSizeConfig> {
 
     private void printFileInfoList() {
         for (FileInfo fileInfo : fileInfoList) {
-            log.info("{}：{} 大小：{}", fileInfo.getIsFile()? "文件名":"文件夹", fileInfo.getFileName(), getFileSizeDesc(fileInfo.getSize()));
+            log.info("{}：{} 大小：{}", fileInfo.getIsFile()? "单文件":"文件夹", fileInfo.getFileName(), getFileSizeDesc(fileInfo.getSize()));
         }
         long sum = fileInfoList.stream().mapToLong(FileInfo::getSize).sum();
         log.info("路径:{} 总大小:{}", config.getPath(), fileSizeHandler.handle(sum));
+        executorService.shutdownNow();
     }
 
     private String getFileSizeDesc(Long size) {
@@ -85,7 +86,7 @@ public class DoPrintFileSize extends AbstractRunner<PrintFileSizeConfig> {
     private void transferToFileInfoList(File[] files) {
         this.fileInfoList = Stream.of(files)
                 .map(f -> FileInfo.builder()
-                        .fileName(f.getName())
+                        .fileName(f.getAbsolutePath())
                         .isFile(f.isFile())
                         .size(fileSizeMap.get(f.getName())).build())
                 // 按大小倒序打印
