@@ -1,6 +1,6 @@
 package com.zhangyj.tools.business.file.filesize;
 
-import com.zhangyj.tools.business.file.filesize.config.PrintFileSizeConfig;
+import com.zhangyj.tools.business.file.filesize.config.FileSizeConfig;
 import com.zhangyj.tools.business.file.filesize.pojo.FileInfo;
 import com.zhangyj.tools.common.base.AbstractRunner;
 import com.zhangyj.tools.common.handler.ChainHandler;
@@ -25,8 +25,8 @@ import java.util.stream.Stream;
  */
 @Slf4j
 @Component
-@ConditionalOnBean(PrintFileSizeConfig.class)
-public class DoPrintFileSize extends AbstractRunner<PrintFileSizeConfig> {
+@ConditionalOnBean(FileSizeConfig.class)
+public class DoFileSize extends AbstractRunner<FileSizeConfig> {
 
     private final Map<String, Long> fileSizeMap = new HashMap<>();
 
@@ -42,7 +42,7 @@ public class DoPrintFileSize extends AbstractRunner<PrintFileSizeConfig> {
 
     private final ChainHandler<Long, String> fileSizeHandler;
 
-    public DoPrintFileSize(@Qualifier("fileSizeHandler") ChainHandler<Long, String> fileSizeHandler) {
+    public DoFileSize(@Qualifier("fileSizeHandler") ChainHandler<Long, String> fileSizeHandler) {
         this.fileSizeHandler = fileSizeHandler;
     }
 

@@ -1,8 +1,0 @@
-#【网络检测功能】
-network-checker:
-  # 是否启用该功能
-  enable: false
-  # 【必填】定时校验时间间隔(单位：秒)
-  # wifi名称（断网重连）
-  wifiName: YJ&YR
-  corn: 0 */1 * * * ?

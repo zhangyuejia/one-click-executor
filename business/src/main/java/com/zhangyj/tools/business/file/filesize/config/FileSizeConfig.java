@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component;
 @Data
 @Slf4j
 @Component
-@ConditionalOnProperty(prefix = "print-file-size", name = "enable", havingValue = "true")
-@ConfigurationProperties(prefix = "print-file-size")
-public class PrintFileSizeConfig extends AbstractConfig {
+@ConditionalOnProperty(prefix = "file-size", name = "enable", havingValue = "true")
+@ConfigurationProperties(prefix = "file-size")
+public class FileSizeConfig extends AbstractConfig {
 
     /**
      * 文件夹路径

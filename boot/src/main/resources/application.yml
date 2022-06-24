@@ -1,7 +1,7 @@
 # 配置文件配置
 spring:
   profiles:
-    active: copy-list-maker,file-rename,file-splicer,host-refresher,network-checker,print-file-size,properties-replace
+    active: file,network,project
 
 tools:
   # 是否检查只有一个功能运行
