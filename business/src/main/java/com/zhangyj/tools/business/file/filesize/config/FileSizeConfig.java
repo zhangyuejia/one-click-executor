@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 @Data
 @Slf4j
 @Component
-@ConditionalOnProperty(prefix = "file-size", name = "enable", havingValue = "true")
-@ConfigurationProperties(prefix = "file-size")
+@ConditionalOnProperty(prefix = "file-sizer", name = "enable", havingValue = "true")
+@ConfigurationProperties(prefix = "file-sizer")
 public class FileSizeConfig extends AbstractConfig {
 
     /**
