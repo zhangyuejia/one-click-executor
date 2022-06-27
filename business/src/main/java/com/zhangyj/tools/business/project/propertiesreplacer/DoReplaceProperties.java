@@ -16,9 +16,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zhangyj
@@ -36,6 +38,8 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
 
     private final Map<String, String> currentPropertiesMap = new HashMap<>(2);
 
+    private List<String> currentUselessProperties;
+
     @Override
     protected void doRun() throws Exception {
         List<ReplaceProperties> replacePropertiesList = config.getReplaceKeys();
@@ -49,39 +53,50 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
             }
             log.info("启用配置ID:{}", replaceProperties.getReplaceId());
             init(replaceProperties);
-            List<String> filePaths = config.getFilePaths();
-            for (String filePath : filePaths) {
-                replaceFileKey(filePath, replaceProperties);
-            }
+            replaceFilesKey();
             handlePropertiesLeftMap();
+            clear();
         }
     }
 
     private void init(ReplaceProperties replaceProperties) {
-        currentPropertiesMap.putAll(replaceProperties.getPropertiesMap());
-        currentPropertiesMap.putAll(config.getPropertiesMap());
-        propertiesLeftMap.putAll(currentPropertiesMap);
+        List<String> uselessProperties = new ArrayList<>(replaceProperties.getUselessProperties());
+        uselessProperties.addAll(config.getUselessProperties());
+        this.currentUselessProperties = uselessProperties.stream().distinct().collect(Collectors.toList());
+
+        this.currentPropertiesMap.putAll(replaceProperties.getPropertiesMap());
+        this.currentPropertiesMap.putAll(config.getPropertiesMap());
     }
 
-    private void replaceFileKey(String filePath, ReplaceProperties replaceProperties) throws IOException {
-        File file = new File(filePath);
-        if(file.isDirectory()) {
-            throw new RuntimeException("文件" + filePath + "不是文件，中止执行");
-        }
-        Path path = Paths.get(filePath);
+    private void clear() {
+        this.currentPropertiesMap.clear();
+        this.currentUselessProperties.clear();
+        this.propertiesLeftMap.clear();
+    }
 
-        List<String> lines = Files.readAllLines(path);
-        try (BufferedWriter writer = Files.newBufferedWriter(path)){
-            for (String line : lines) {
-                // 判断是否为应该注释的关键字
-                String newLine = replaceUselessProperty(line, replaceProperties);
-                if(newLine == null){
-                    newLine = replaceProperty(line, replaceProperties);
+    private void replaceFilesKey() throws IOException {
+        List<String> filePaths = config.getFilePaths();
+        for (String filePath : filePaths) {
+            File file = new File(filePath);
+            if(file.isDirectory()) {
+                throw new RuntimeException("文件" + filePath + "不是文件，中止执行");
+            }
+            Path path = Paths.get(filePath);
+
+            List<String> lines = Files.readAllLines(path);
+            try (BufferedWriter writer = Files.newBufferedWriter(path)){
+                for (String line : lines) {
+                    // 判断是否为应该注释的关键字
+                    String newLine = replaceUselessProperty(line);
+                    if(newLine == null){
+                        newLine = replaceProperty(line);
+                    }
+                    writer.write(newLine == null? line: newLine);
+                    writer.newLine();
                 }
-                writer.write(newLine == null? line: newLine);
-                writer.newLine();
             }
         }
+
     }
 
     private void handlePropertiesLeftMap() throws IOException {
@@ -97,11 +112,10 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
                 writer.newLine();
             }
         }
-        propertiesLeftMap.clear();
     }
 
-    private String replaceUselessProperty(String line, ReplaceProperties replaceProperties) {
-        List<String> uselessProperties = replaceProperties.getUselessProperties();
+    private String replaceUselessProperty(String line) {
+        List<String> uselessProperties = this.currentUselessProperties;
         for (String uselessProperty : uselessProperties) {
             if(line.startsWith(uselessProperty + "=")){
                 log.info("注释配置项：{}", uselessProperty);
@@ -111,7 +125,7 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
         return null;
     }
 
-    private String replaceProperty(String line, ReplaceProperties replaceProperties) {
+    private String replaceProperty(String line) {
         // 替换关键字
         for (String property : currentPropertiesMap.keySet()) {
             if(line.startsWith(property + "=")){

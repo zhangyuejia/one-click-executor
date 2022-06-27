@@ -29,6 +29,10 @@ properties-replace:
   propertiesMap: {
     "server.port":"9777",
   }
+  # 需要注释的配置项，优先级最高
+  uselessProperties: [
+
+  ]
   # 替换关键字描述
   replaceKeys: [
   {

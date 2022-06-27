@@ -37,6 +37,11 @@ public class PropertiesReplaceConfig extends AbstractConfig {
     private Map<String, String> propertiesMap;
 
     /**
+     * 需要注释的配置项，优先级最高
+     */
+    private List<String> uselessProperties;
+
+    /**
      * 替换关键字
      */
     private List<ReplaceProperties> replaceKeys;
