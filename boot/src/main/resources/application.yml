@@ -12,4 +12,4 @@ logging:
   pattern:
     console: '%d{MM-dd HH:mm:ss} %-5level%msg%n'
   file:
-    name: "./app/log/log.log"
+    name: "./logs/log.log"
