@@ -66,6 +66,7 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
 
         this.currentPropertiesMap.putAll(replaceProperties.getPropertiesMap());
         this.currentPropertiesMap.putAll(config.getPropertiesMap());
+        this.propertiesLeftMap.putAll(this.currentPropertiesMap);
     }
 
     private void clear() {
