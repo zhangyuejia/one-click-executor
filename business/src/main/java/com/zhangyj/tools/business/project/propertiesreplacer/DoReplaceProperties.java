@@ -53,8 +53,8 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
             }
             log.info("启用配置ID:{}", replaceProperties.getReplaceId());
             init(replaceProperties);
-            replaceFilesKey();
-            handlePropertiesLeftMap();
+            replaceProperties();
+            writeLeftProperties();
             clear();
         }
     }
@@ -75,7 +75,7 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
         this.propertiesLeftMap.clear();
     }
 
-    private void replaceFilesKey() throws IOException {
+    private void replaceProperties() throws IOException {
         List<String> filePaths = config.getFilePaths();
         for (String filePath : filePaths) {
             File file = new File(filePath);
@@ -100,7 +100,7 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
 
     }
 
-    private void handlePropertiesLeftMap() throws IOException {
+    private void writeLeftProperties() throws IOException {
         if(CollectionUtils.isEmpty(propertiesLeftMap)){
             return;
         }
