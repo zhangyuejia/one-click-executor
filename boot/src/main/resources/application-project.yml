@@ -1,16 +1,16 @@
 #【Properties配置值替换】
 properties-replace:
   # 是否启用该功能
-  enable: false
+  enable: true
   # 启用替换id
   enableReplaceId: [
 #    "umc310-zhangyj-mysql",
 #    "umc310-zhangyjsass-mysql",
 #    "umc39sass-dev-mysql",
 #    "umc310sass-dev-mysql",
-#    "umc310-dev-mysql",
+    "umc310-dev-mysql",
 #    "umc310-dev-yx-mysql",
-    "umc310-test-mysql",
+#    "umc310-test-mysql",
 #    "umc310-test-oracle",
 #    "umc310-test-oracle-upgrade",
 #    "umc310-test-polardb",
@@ -27,11 +27,31 @@ properties-replace:
   ]
   # 配置项map，优先级最高
   propertiesMap: {
-    "server.port":"9777",
+      "server.port":"9777",
+      "jwt.period":"18000000",
+      "umc.loginType":"0",
+      "server.addr":"192.169.7.13",
+      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
+      "video.encoder.system":"Windows",
+      "montnets.emp.nginx.url":"http://${server.addr}:8008",
+      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
+      "cluster.isruntimejob":"1",
+      "timer.callback.enable":"false",
+      # 关闭其他各种开关
+      "aim.shorturl.thread.enable":"false",
+      "montnets.redis.sync.enable":"false",
+      "montnets.emp.shorturl.thread.enable":"false",
+      "montnets.template.task.enable":"false",
+      "umc.tmpl.submit.allchannel.task.enable":"false",
+      "umc.tmpl.submit.task.enable":"false"
   }
   # 需要注释的配置项，优先级最高
   uselessProperties: [
-
+    # 管理服务注释监控，避免jrebel启动失败
+    "cluster.host.id",
+    "spring.cloud.nacos.config.server-addr",
+    "spring.redis.host",
+    "spring.redis.port"
   ]
   # 替换关键字描述
   replaceKeys: [
@@ -39,13 +59,7 @@ properties-replace:
     # umc3.10-开发环境配置
     replaceId: "umc39sass-dev-mysql",
     propertiesMap: {
-      "umc.loginType":"0",
-      "server.addr":"192.169.7.13",
-      "server.port":"9777",
-      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
       "emp.corptype":"1",
-      "video.encoder.system":"Windows",
-      "montnets.emp.nginx.url":"http://${server.addr}:8008",
       # 数据库信息
       "emp.database.type":"mysql",
       "emp.database.ip":"192.169.7.102",
@@ -60,40 +74,18 @@ properties-replace:
       "spring.redis.cluster.max-redirects":"3",
       # 定时
       "cluster.iscluster":"1",
-      "cluster.isruntimejob":"1",
-      "timer.callback.enable":"false",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
       "file.server.port":"8080",
-      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-      # 关闭其他各种开关
-      "aim.shorturl.thread.enable":"false",
-      "montnets.redis.sync.enable":"false",
-      "montnets.emp.shorturl.thread.enable":"false",
-      "montnets.template.task.enable":"false",
-      "umc.tmpl.submit.allchannel.task.enable":"false",
-      "umc.tmpl.submit.task.enable":"false"
     },
     # 需要注释的配置项
-    uselessProperties: [
-       # 管理服务注释监控，避免jrebel启动失败
-      "cluster.host.id",
-      "spring.cloud.nacos.config.server-addr",
-      "spring.redis.host",
-      "spring.redis.port"
-    ]
+    uselessProperties: []
   },
   {
     # umc3.10-开发环境配置
     replaceId: "umc310sass-dev-mysql",
     propertiesMap: {
-      "umc.loginType":"0",
-      "server.addr":"192.169.7.13",
-      "server.port":"9777",
-      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
       "emp.corptype":"1",
-      "video.encoder.system":"Windows",
-      "montnets.emp.nginx.url":"http://${server.addr}:8008",
       # 数据库信息
       "emp.database.type":"mysql",
       "emp.database.ip":"192.169.7.102",
@@ -108,40 +100,18 @@ properties-replace:
       "spring.redis.cluster.max-redirects":"3",
       # 定时
       "cluster.iscluster":"1",
-      "cluster.isruntimejob":"1",
-      "timer.callback.enable":"false",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
-      "file.server.port":"8080",
-      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-      # 关闭其他各种开关
-      "aim.shorturl.thread.enable":"false",
-      "montnets.redis.sync.enable":"false",
-      "montnets.emp.shorturl.thread.enable":"false",
-      "montnets.template.task.enable":"false",
-      "umc.tmpl.submit.allchannel.task.enable":"false",
-      "umc.tmpl.submit.task.enable":"false"
+      "file.server.port":"8080"
     },
     # 需要注释的配置项
-    uselessProperties: [
-      # 管理服务注释监控，避免jrebel启动失败
-      "cluster.host.id",
-      "spring.cloud.nacos.config.server-addr",
-      "spring.redis.host",
-      "spring.redis.port"
-    ]
+    uselessProperties: []
   },
   {
     # umc3.10-开发环境配置
     replaceId: "umc310-zhangyjsass-mysql",
     propertiesMap: {
-      "umc.loginType":"0",
-      "server.addr":"192.169.7.13",
-      "server.port":"9777",
-      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
       "emp.corptype":"1",
-      "video.encoder.system":"Windows",
-      "montnets.emp.nginx.url":"http://${server.addr}:8008",
       # 数据库信息
       "emp.database.type":"mysql",
       "emp.database.ip":"192.169.7.107",
@@ -156,40 +126,18 @@ properties-replace:
       "spring.redis.cluster.max-redirects":"3",
       # 定时
       "cluster.iscluster":"1",
-      "cluster.isruntimejob":"1",
-      "timer.callback.enable":"false",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
       "file.server.port":"8080",
-      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-      # 关闭其他各种开关
-      "aim.shorturl.thread.enable":"false",
-      "montnets.redis.sync.enable":"false",
-      "montnets.emp.shorturl.thread.enable":"false",
-      "montnets.template.task.enable":"false",
-      "umc.tmpl.submit.allchannel.task.enable":"false",
-      "umc.tmpl.submit.task.enable":"false"
     },
     # 需要注释的配置项
-    uselessProperties: [
-      # 管理服务注释监控，避免jrebel启动失败
-      "cluster.host.id",
-      "spring.cloud.nacos.config.server-addr",
-      "spring.redis.host",
-      "spring.redis.port"
-    ]
+    uselessProperties: []
   },
   {
     # umc3.10-开发环境配置
     replaceId: "umc310sass-dev-mysql",
     propertiesMap: {
-      "umc.loginType":"0",
-      "server.addr":"192.169.7.13",
-      "server.port":"9777",
-      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
       "emp.corptype":"1",
-      "video.encoder.system":"Windows",
-      "montnets.emp.nginx.url":"http://${server.addr}:8008",
       # 数据库信息
       "emp.database.type":"mysql",
       "emp.database.ip":"192.169.7.102",
@@ -204,44 +152,23 @@ properties-replace:
       "spring.redis.cluster.max-redirects":"3",
       # 定时
       "cluster.iscluster":"1",
-      "cluster.isruntimejob":"1",
-      "timer.callback.enable":"false",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
-      "file.server.port":"8080",
-      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-      # 关闭其他各种开关
-      "aim.shorturl.thread.enable":"false",
-      "montnets.redis.sync.enable":"false",
-      "montnets.emp.shorturl.thread.enable":"false",
-      "montnets.template.task.enable":"false",
-      "umc.tmpl.submit.allchannel.task.enable":"false",
-      "umc.tmpl.submit.task.enable":"false"
+      "file.server.port":"8080"
     },
     # 需要注释的配置项
-    uselessProperties: [
-      # 管理服务注释监控，避免jrebel启动失败
-      "cluster.host.id",
-      "spring.cloud.nacos.config.server-addr",
-      "spring.redis.host",
-      "spring.redis.port"
-    ]
+    uselessProperties: []
   },
   {
     # umc3.10-开发环境配置
     replaceId: "umc310-dev-mysql",
     propertiesMap: {
-      "server.addr":"192.169.7.13",
-      "server.port":"9777",
-      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
       "emp.corptype":"0",
-      "video.encoder.system":"Windows",
-      "montnets.emp.nginx.url":"http://${server.addr}:8008",
       # 数据库信息
       "emp.database.type":"mysql",
       "emp.database.ip":"192.169.7.102",
       "emp.database.port":"3306",
-      "emp.database.name":"umc310",
+      "emp.database.name":"umc311",
       "spring.datasource.druid.username":"root",
       "spring.datasource.druid.password":"ENC(s9tSvduQ9LOiLl6v48Y6ag==)",
       "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
@@ -251,40 +178,18 @@ properties-replace:
       "spring.redis.cluster.max-redirects":"3",
       # 定时
       "cluster.iscluster":"1",
-      "cluster.isruntimejob":"1",
-      "timer.callback.enable":"false",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
       "file.server.port":"8080",
-      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-      # 关闭其他各种开关
-      "aim.shorturl.thread.enable":"false",
-      "montnets.redis.sync.enable":"false",
-      "montnets.emp.shorturl.thread.enable":"false",
-      "montnets.template.task.enable":"false",
-      "umc.tmpl.submit.allchannel.task.enable":"false",
-      "umc.tmpl.submit.task.enable":"false"
     },
     # 需要注释的配置项
-    uselessProperties: [
-      # 管理服务注释监控，避免jrebel启动失败
-      "cluster.host.id",
-      "spring.cloud.nacos.config.server-addr",
-      "spring.redis.host",
-      "spring.redis.port"
-    ]
-
+    uselessProperties: []
   },
   {
     # umc3.10-开发环境配置
     replaceId: "umc310-zhangyj-mysql",
     propertiesMap: {
-      "server.addr":"192.169.7.13",
-      "server.port":"9777",
-      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
       "emp.corptype":"0",
-      "video.encoder.system":"Windows",
-      "montnets.emp.nginx.url":"http://${server.addr}:8008",
       # 数据库信息
       "emp.database.type":"mysql",
       "emp.database.ip":"192.169.7.107",
@@ -299,40 +204,18 @@ properties-replace:
       "spring.redis.cluster.max-redirects":"3",
       # 定时
       "cluster.iscluster":"1",
-      "cluster.isruntimejob":"1",
-      "timer.callback.enable":"false",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
       "file.server.port":"8080",
-      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-      # 关闭其他各种开关
-      "aim.shorturl.thread.enable":"false",
-      "montnets.redis.sync.enable":"false",
-      "montnets.emp.shorturl.thread.enable":"false",
-      "montnets.template.task.enable":"false",
-      "umc.tmpl.submit.allchannel.task.enable":"false",
-      "umc.tmpl.submit.task.enable":"false"
     },
     # 需要注释的配置项
-    uselessProperties: [
-      # 管理服务注释监控，避免jrebel启动失败
-      "cluster.host.id",
-      "spring.cloud.nacos.config.server-addr",
-      "spring.redis.host",
-      "spring.redis.port"
-    ]
-
+    uselessProperties: []
   },
   {
     # umc3.10-测试3.10 4.98 mysql标准版环境配置
     replaceId: "umc310-test-mysql",
     propertiesMap: {
-      "server.addr":"192.169.7.13",
-      "server.port":"9777",
-      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
       "emp.corptype":"0",
-      "video.encoder.system":"Windows",
-      "montnets.emp.nginx.url":"http://${server.addr}:8008",
       # 数据库信息
       "emp.database.type":"mysql",
       "emp.database.ip":"192.169.3.91",
@@ -347,40 +230,19 @@ properties-replace:
       "spring.redis.cluster.max-redirects":"3",
       # 定时
       "cluster.iscluster":"1",
-      "cluster.isruntimejob":"0",
-      "timer.callback.enable":"false",
       # 文件服务器
       "file.server.ip":"192.169.3.132",
       "file.server.port":"9999",
-      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-      # 关闭其他各种开关
-      "aim.shorturl.thread.enable":"false",
-      "montnets.redis.sync.enable":"false",
-      "montnets.emp.shorturl.thread.enable":"false",
-      "montnets.template.task.enable":"false",
-      "umc.tmpl.submit.allchannel.task.enable":"false",
-      "umc.tmpl.submit.task.enable":"false"
     },
     # 需要注释的配置项
-    uselessProperties: [
-      # 管理服务注释监控，避免jrebel启动失败
-      "cluster.host.id",
-      "spring.cloud.nacos.config.server-addr",
-      "spring.redis.host",
-      "spring.redis.port"
-    ]
+    uselessProperties: []
   },
 
   {
     # umc3.10-测试3.10 3.132 mysql标准版环境配置
     replaceId: "umc-test-3132-mysql",
     propertiesMap: {
-      "server.addr":"192.169.7.13",
-      "server.port":"9777",
-      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
       "emp.corptype":"0",
-      "video.encoder.system":"Windows",
-      "montnets.emp.nginx.url":"http://${server.addr}:8008",
       # 数据库信息
       "emp.database.type":"mysql",
       "emp.database.ip":"192.169.3.91",
@@ -395,39 +257,18 @@ properties-replace:
       "spring.redis.cluster.max-redirects":"3",
       # 定时
       "cluster.iscluster":"1",
-      "cluster.isruntimejob":"0",
-      "timer.callback.enable":"false",
       # 文件服务器
       "file.server.ip":"192.169.3.132",
       "file.server.port":"9999",
-      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-      # 关闭其他各种开关
-      "aim.shorturl.thread.enable":"false",
-      "montnets.redis.sync.enable":"false",
-      "montnets.emp.shorturl.thread.enable":"false",
-      "montnets.template.task.enable":"false",
-      "umc.tmpl.submit.allchannel.task.enable":"false",
-      "umc.tmpl.submit.task.enable":"false"
     },
     # 需要注释的配置项
-    uselessProperties: [
-      # 管理服务注释监控，避免jrebel启动失败
-      "cluster.host.id",
-      "spring.cloud.nacos.config.server-addr",
-      "spring.redis.host",
-      "spring.redis.port"
-    ]
+    uselessProperties: []
   },
   {
     # umc3.10-测试3.10 5.160 oracle标准版环境配置
     replaceId: "umc310-test-oracle",
     propertiesMap: {
-      "server.addr":"192.169.7.13",
-      "server.port":"9777",
-      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
       "emp.corptype":"0",
-      "video.encoder.system":"Windows",
-      "montnets.emp.nginx.url":"http://${server.addr}:8008",
       # 数据库信息
       "emp.database.type":"oracle",
       "emp.database.ip":"192.169.5.49",
@@ -442,39 +283,18 @@ properties-replace:
       "spring.redis.cluster.max-redirects":"3",
       # 定时
       "cluster.iscluster":"1",
-      "cluster.isruntimejob":"0",
-      "timer.callback.enable":"false",
       # 文件服务器
       "file.server.ip":"192.169.5.160",
       "file.server.port":"9999",
-      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-      # 关闭其他各种开关
-      "aim.shorturl.thread.enable":"false",
-      "montnets.redis.sync.enable":"false",
-      "montnets.emp.shorturl.thread.enable":"false",
-      "montnets.template.task.enable":"false",
-      "umc.tmpl.submit.allchannel.task.enable":"false",
-      "umc.tmpl.submit.task.enable":"false"
     },
     # 需要注释的配置项
-    uselessProperties: [
-      # 管理服务注释监控，避免jrebel启动失败
-      "cluster.host.id",
-      "spring.cloud.nacos.config.server-addr",
-      "spring.redis.host",
-      "spring.redis.port"
-    ]
+    uselessProperties: []
   },
   {
     # umc3.10-测试3.10 4.98:8080 oracle标准版升级环境配置
     replaceId: "umc310-test-oracle-upgrade",
     propertiesMap: {
-      "server.addr":"192.169.7.13",
-      "server.port":"9777",
-      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
       "emp.corptype":"0",
-      "video.encoder.system":"Windows",
-      "montnets.emp.nginx.url":"http://${server.addr}:8008",
       # 数据库信息
       "emp.database.type":"oracle",
       "emp.database.ip":"192.169.0.165",
@@ -489,39 +309,18 @@ properties-replace:
       "spring.redis.cluster.max-redirects":"3",
       # 定时
       "cluster.iscluster":"1",
-      "cluster.isruntimejob":"0",
-      "timer.callback.enable":"false",
       # 文件服务器
       "file.server.ip":"192.169.4.99",
       "file.server.port":"9999",
-      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-      # 关闭其他各种开关
-      "aim.shorturl.thread.enable":"false",
-      "montnets.redis.sync.enable":"false",
-      "montnets.emp.shorturl.thread.enable":"false",
-      "montnets.template.task.enable":"false",
-      "umc.tmpl.submit.allchannel.task.enable":"false",
-      "umc.tmpl.submit.task.enable":"false"
     },
     # 需要注释的配置项
-    uselessProperties: [
-      # 管理服务注释监控，避免jrebel启动失败
-      "cluster.host.id",
-      "spring.cloud.nacos.config.server-addr",
-      "spring.redis.host",
-      "spring.redis.port"
-    ]
+    uselessProperties: []
   },
   {
     # umc3.10-测试3.10标准版polardb环境配置
     replaceId: "umc310-test-polardb",
     propertiesMap: {
-      "server.addr":"192.169.7.13",
-      "server.port":"9777",
-      "montnets.outerUrl":"http://${server.addr}:${server.port}/umc/",
       "emp.corptype":"0",
-      "video.encoder.system":"Windows",
-      "montnets.emp.nginx.url":"http://${server.addr}:8008",
       # 数据库信息
       "emp.database.type":"oracle",
       "emp.database.ip":"testtest.rwlb.polardb-pg-public.rds.aliyuncs.com",
@@ -536,29 +335,12 @@ properties-replace:
       "spring.redis.cluster.max-redirects":"3",
       # 定时
       "cluster.iscluster":"1",
-      "cluster.isruntimejob":"0",
-      "timer.callback.enable":"false",
       # 文件服务器
       "file.server.ip":"192.169.7.209",
       "file.server.port":"8081",
-      "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
-      # 关闭其他各种开关
-      "aim.shorturl.thread.enable":"false",
-      "montnets.redis.sync.enable":"false",
-      "montnets.emp.shorturl.thread.enable":"false",
-      "montnets.template.task.enable":"false",
-      "umc.tmpl.submit.allchannel.task.enable":"false",
-      "umc.tmpl.submit.task.enable":"false"
     },
     # 需要注释的配置项
-    uselessProperties: [
-      # 管理服务注释监控，避免jrebel启动失败
-      "cluster.host.id",
-      "spring.cloud.nacos.config.server-addr",
-      "spring.redis.host",
-      "spring.redis.port"
-    ]
-
+    uselessProperties: []
   }
   ]
 

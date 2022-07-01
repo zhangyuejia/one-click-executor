@@ -87,7 +87,8 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
             List<String> lines = Files.readAllLines(path);
             try (BufferedWriter writer = Files.newBufferedWriter(path)){
                 for (String line : lines) {
-                    // 判断是否为应该注释的关键字
+                    line = line.trim();
+                    // 先判断是否需要注释，再判断是否需要替换配置项
                     String newLine = replaceUselessProperty(line);
                     if(newLine == null){
                         newLine = replaceProperty(line);
