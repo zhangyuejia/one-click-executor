@@ -24,7 +24,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "properties-replace")
 public class PropertiesReplaceConfig extends AbstractConfig {
 
-    private List<String> enableReplaceId;
+    private List<String> enableRefId;
 
     /**
      * 配置文件路径

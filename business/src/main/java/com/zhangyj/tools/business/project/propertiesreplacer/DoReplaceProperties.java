@@ -44,14 +44,14 @@ public class DoReplaceProperties extends AbstractRunner<PropertiesReplaceConfig>
     protected void doRun() throws Exception {
         List<ReplaceProperties> replacePropertiesList = config.getReplaceKeys();
         // 是否检查只有一个replaceId
-        if(config.getEnableReplaceId().size() > 1){
+        if(config.getEnableRefId().size() > 1){
             throw new RuntimeException("配置项[properties-replace.enableReplaceId]配置个数不能大于1个");
         }
         for (ReplaceProperties replaceProperties : replacePropertiesList) {
-            if(!config.getEnableReplaceId().contains(replaceProperties.getReplaceId())){
+            if(!config.getEnableRefId().contains(replaceProperties.getRefId())){
                 continue;
             }
-            log.info("启用配置ID:{}", replaceProperties.getReplaceId());
+            log.info("启用配置ID:{}", replaceProperties.getRefId());
             init(replaceProperties);
             replaceProperties();
             writeLeftProperties();

@@ -3,7 +3,7 @@ properties-replace:
   # 是否启用该功能
   enable: true
   # 启用替换id
-  enableReplaceId: [
+  enableRefId: [
 #    "umc310-zhangyj-mysql",
 #    "umc310-zhangyjsass-mysql",
 #    "umc39sass-dev-mysql",
@@ -61,7 +61,7 @@ properties-replace:
   replaceKeys: [
   {
     # umc3.10-开发环境配置
-    replaceId: "umc39sass-dev-mysql",
+    refId: "umc39sass-dev-mysql",
     propertiesMap: {
       "emp.corptype":"1",
       # 数据库信息
@@ -85,7 +85,7 @@ properties-replace:
   },
   {
     # umc3.10-开发环境配置
-    replaceId: "umc310sass-dev-mysql",
+    refId: "umc310sass-dev-mysql",
     propertiesMap: {
       "emp.corptype":"1",
       # 数据库信息
@@ -109,7 +109,7 @@ properties-replace:
   },
   {
     # umc3.10-开发环境配置
-    replaceId: "umc310-zhangyjsass-mysql",
+    refId: "umc310-zhangyjsass-mysql",
     propertiesMap: {
       "emp.corptype":"1",
       # 数据库信息
@@ -133,7 +133,7 @@ properties-replace:
   },
   {
     # umc3.10-开发环境配置
-    replaceId: "umc310sass-dev-mysql",
+    refId: "umc310sass-dev-mysql",
     propertiesMap: {
       "emp.corptype":"1",
       # 数据库信息
@@ -157,7 +157,7 @@ properties-replace:
   },
   {
     # umc3.10-开发环境配置
-    replaceId: "umc310-dev-mysql",
+    refId: "umc310-dev-mysql",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -181,7 +181,7 @@ properties-replace:
   },
   {
     # umc3.10-开发环境配置
-    replaceId: "umc310-zhangyj-mysql",
+    refId: "umc310-zhangyj-mysql",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -205,7 +205,7 @@ properties-replace:
   },
   {
     # umc3.10-测试3.10 4.98 mysql标准版环境配置
-    replaceId: "umc310-test-mysql",
+    refId: "umc310-test-mysql",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -230,7 +230,7 @@ properties-replace:
 
   {
     # umc3.10-测试3.10 3.132 mysql标准版环境配置
-    replaceId: "umc-test-3132-mysql",
+    refId: "umc-test-3132-mysql",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -254,7 +254,7 @@ properties-replace:
   },
   {
     # umc3.10-测试3.10 3.132 mysql标准版环境配置
-    replaceId: "umc-test-31-mysql",
+    refId: "umc-test-31-mysql",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -278,7 +278,7 @@ properties-replace:
   },
   {
     # umc3.10-测试3.10 5.160 oracle标准版环境配置
-    replaceId: "umc310-test-oracle",
+    refId: "umc310-test-oracle",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -302,7 +302,7 @@ properties-replace:
   },
   {
     # umc3.10-测试3.10 3.132 mysql标准版环境配置
-    replaceId: "umc-test-388-mysql",
+    refId: "umc-test-388-mysql",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -326,7 +326,7 @@ properties-replace:
   },
   {
     # umc3.10-测试3.10 4.98:8080 oracle标准版升级环境配置
-    replaceId: "umc310-test-oracle-upgrade",
+    refId: "umc310-test-oracle-upgrade",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -350,7 +350,7 @@ properties-replace:
   },
   {
     # umc3.10-测试3.10标准版polardb环境配置
-    replaceId: "umc310-test-polardb",
+    refId: "umc310-test-polardb",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息

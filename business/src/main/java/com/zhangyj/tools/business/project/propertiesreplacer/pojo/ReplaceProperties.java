@@ -14,7 +14,7 @@ public class ReplaceProperties {
     /**
      * id
      */
-    private String replaceId;;
+    private String refId;
 
     /**
      * 新关键字
