@@ -8,22 +8,25 @@ properties-replace:
 #    "umc310-zhangyjsass-mysql",
 #    "umc39sass-dev-mysql",
 #    "umc310sass-dev-mysql",
-    "umc310-dev-mysql",
+#    "umc310-dev-mysql",
 #    "umc310-dev-yx-mysql",
 #    "umc310-test-mysql",
-#    "umc310-test-oracle",
+    "umc310-test-oracle",
 #    "umc310-test-oracle-upgrade",
 #    "umc310-test-polardb",
 #    "umc-test-3132-mysql",
+#    "umc-test-31-mysql",
+#    "umc-test-388-mysql",
   ]
   filePaths: [
-    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
-    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-default.properties,
-    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
+        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\bootstrap.properties,
+        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-default.properties,
+        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-dev.properties
 
-#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\bootstrap.properties,
-#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-default.properties,
-#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-dev.properties
+#    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
+#    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-default.properties,
+#    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
+
   ]
   # 配置项map，优先级最高
   propertiesMap: {
@@ -36,6 +39,7 @@ properties-replace:
       "montnets.emp.nginx.url":"http://${server.addr}:8008",
       "montnets.fileserver.outerUrl":"http://${file.server.ip}:${file.server.port}/emp_files/",
       "cluster.isruntimejob":"1",
+      "cluster.iscluster":"1",
       "timer.callback.enable":"false",
       # 关闭其他各种开关
       "aim.shorturl.thread.enable":"false",
@@ -72,8 +76,6 @@ properties-replace:
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
-      # 定时
-      "cluster.iscluster":"1",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
       "file.server.port":"8080",
@@ -98,8 +100,6 @@ properties-replace:
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
-      # 定时
-      "cluster.iscluster":"1",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
       "file.server.port":"8080"
@@ -124,8 +124,6 @@ properties-replace:
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
-      # 定时
-      "cluster.iscluster":"1",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
       "file.server.port":"8080",
@@ -150,8 +148,6 @@ properties-replace:
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
-      # 定时
-      "cluster.iscluster":"1",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
       "file.server.port":"8080"
@@ -176,8 +172,6 @@ properties-replace:
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
-      # 定时
-      "cluster.iscluster":"1",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
       "file.server.port":"8080",
@@ -202,8 +196,6 @@ properties-replace:
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
-      # 定时
-      "cluster.iscluster":"1",
       # 文件服务器
       "file.server.ip":"192.169.7.106",
       "file.server.port":"8080",
@@ -228,8 +220,6 @@ properties-replace:
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
-      # 定时
-      "cluster.iscluster":"1",
       # 文件服务器
       "file.server.ip":"192.169.3.132",
       "file.server.port":"9999",
@@ -255,10 +245,32 @@ properties-replace:
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
-      # 定时
-      "cluster.iscluster":"1",
       # 文件服务器
       "file.server.ip":"192.169.3.132",
+      "file.server.port":"9999",
+    },
+    # 需要注释的配置项
+    uselessProperties: []
+  },
+  {
+    # umc3.10-测试3.10 3.132 mysql标准版环境配置
+    replaceId: "umc-test-31-mysql",
+    propertiesMap: {
+      "emp.corptype":"0",
+      # 数据库信息
+      "emp.database.type":"mysql",
+      "emp.database.ip":"192.169.3.84",
+      "emp.database.port":"3306",
+      "emp.database.name":"umcyx",
+      "spring.datasource.druid.username":"root",
+      "spring.datasource.druid.password":"123456",
+      "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
+      "spring.datasource.druid.driver-class-name":"com.mysql.cj.jdbc.Driver",
+      # redis
+      "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
+      "spring.redis.cluster.max-redirects":"3",
+      # 文件服务器
+      "file.server.ip":"192.169.3.1",
       "file.server.port":"9999",
     },
     # 需要注释的配置项
@@ -274,17 +286,39 @@ properties-replace:
       "emp.database.ip":"192.169.5.49",
       "emp.database.port":"1521",
       "emp.database.name":"umc3100329",
-      "spring.datasource.druid.username":"emp171",
+      "spring.datasource.druid.username":"EMP715",
       "spring.datasource.druid.password":"ENC(JPrmvPBRYeH7A4hJUCtsaA==)",
       "spring.datasource.druid.url":"jdbc:oracle:thin:@${emp.database.ip}:${emp.database.port}/${emp.database.name}",
       "spring.datasource.druid.driver-class-name":"oracle.jdbc.driver.OracleDriver",
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
-      # 定时
-      "cluster.iscluster":"1",
       # 文件服务器
       "file.server.ip":"192.169.5.160",
+      "file.server.port":"9999",
+    },
+    # 需要注释的配置项
+    uselessProperties: []
+  },
+  {
+    # umc3.10-测试3.10 3.132 mysql标准版环境配置
+    replaceId: "umc-test-388-mysql",
+    propertiesMap: {
+      "emp.corptype":"0",
+      # 数据库信息
+      "emp.database.type":"mysql",
+      "emp.database.ip":"192.169.4.77",
+      "emp.database.port":"3306",
+      "emp.database.name":"umc3100618",
+      "spring.datasource.druid.username":"root",
+      "spring.datasource.druid.password":"123456",
+      "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
+      "spring.datasource.druid.driver-class-name":"com.mysql.cj.jdbc.Driver",
+      # redis
+      "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
+      "spring.redis.cluster.max-redirects":"3",
+      # 文件服务器
+      "file.server.ip":"192.169.3.1",
       "file.server.port":"9999",
     },
     # 需要注释的配置项
@@ -307,8 +341,6 @@ properties-replace:
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
-      # 定时
-      "cluster.iscluster":"1",
       # 文件服务器
       "file.server.ip":"192.169.4.99",
       "file.server.port":"9999",
@@ -333,8 +365,6 @@ properties-replace:
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
-      # 定时
-      "cluster.iscluster":"1",
       # 文件服务器
       "file.server.ip":"192.169.7.209",
       "file.server.port":"8081",
