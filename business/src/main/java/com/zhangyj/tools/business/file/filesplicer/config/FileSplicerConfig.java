@@ -41,6 +41,11 @@ public class FileSplicerConfig extends AbstractConfig {
     private String genFileName;
 
     /**
+     * 生成文件模式: new or append
+     */
+    private String genMode;
+
+    /**
      * 生成文件之前，在path文件夹路径执行的cmd命令（如更新git或者svn）
      */
     private String command;

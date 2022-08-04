@@ -1,6 +1,7 @@
 package com.zhangyj.tools.business.file.filesplicer;
 
 import com.zhangyj.tools.business.file.filesplicer.config.FileSplicerConfig;
+import com.zhangyj.tools.business.file.filesplicer.enums.GenModeEnum;
 import com.zhangyj.tools.common.base.AbstractRunner;
 import com.zhangyj.tools.common.utils.CommandUtil;
 import com.zhangyj.tools.common.utils.StringUtil;
@@ -77,6 +78,11 @@ public class DoSplice extends AbstractRunner<FileSplicerConfig> {
     }
 
     private void deleteGenFile() throws IOException {
+        String genMode = StringUtil.isNotEmpty(fileSplicerConfig.getGenMode())? fileSplicerConfig.getGenMode(): GenModeEnum.NEW.name();
+        log.info("生成文件模式为：{}", genMode);
+        if(GenModeEnum.APPEND.name().equalsIgnoreCase(genMode)){
+            return;
+        }
         String genFileName = fileSplicerConfig.getGenFileName();
         File file = new File(genFileName);
         if(!file.exists()) {
