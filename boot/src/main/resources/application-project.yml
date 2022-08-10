@@ -4,28 +4,28 @@ properties-replace:
   enable: true
   # 启用替换id
   enableRefId: [
-#    "umc310-zhangyj-mysql",
-#    "umc310-zhangyjsass-mysql",
+#    "umc-zhangyj-mysql",
+#    "umc-zhangyjsass-mysql",
 #    "umc39sass-dev-mysql",
-#    "umc310sass-dev-mysql",
-    "umc310-dev-mysql",
-#    "umc310-dev-yx-mysql",
-#    "umc310-test-mysql",
-#    "umc310-test-oracle",
-#    "umc310-test-oracle-upgrade",
-#    "umc310-test-polardb",
+#    "umcsass-dev-mysql",
+    "umc-dev-mysql",
+#    "umc-dev-yx-mysql",
+#    "umc-test-mysql",
+#    "umc-test-oracle",
+#    "umc-test-oracle-upgrade",
+#    "umc-test-polardb",
 #    "umc-test-3132-mysql",
 #    "umc-test-31-mysql",
 #    "umc-test-388-mysql",
   ]
   filePaths: [
-#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\bootstrap.properties,
-#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-default.properties,
-#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-dev.properties
+        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\bootstrap.properties,
+        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-default.properties,
+        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-dev.properties
 
-    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
-    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-default.properties,
-    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
+#    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
+#    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-default.properties,
+#    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
 
   ]
   # 配置项map，优先级最高
@@ -85,7 +85,7 @@ properties-replace:
   },
   {
     # umc3.10-开发环境配置
-    refId: "umc310sass-dev-mysql",
+    refId: "umcsass-dev-mysql",
     propertiesMap: {
       "emp.corptype":"1",
       # 数据库信息
@@ -109,7 +109,7 @@ properties-replace:
   },
   {
     # umc3.10-开发环境配置
-    refId: "umc310-zhangyjsass-mysql",
+    refId: "umc-zhangyjsass-mysql",
     propertiesMap: {
       "emp.corptype":"1",
       # 数据库信息
@@ -133,7 +133,7 @@ properties-replace:
   },
   {
     # umc3.10-开发环境配置
-    refId: "umc310sass-dev-mysql",
+    refId: "umcsass-dev-mysql",
     propertiesMap: {
       "emp.corptype":"1",
       # 数据库信息
@@ -157,7 +157,7 @@ properties-replace:
   },
   {
     # umc3.10-开发环境配置
-    refId: "umc310-dev-mysql",
+    refId: "umc-dev-mysql",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -181,7 +181,7 @@ properties-replace:
   },
   {
     # umc3.10-开发环境配置
-    refId: "umc310-dev-yx-mysql",
+    refId: "umc-dev-yx-mysql",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -205,7 +205,7 @@ properties-replace:
   },
   {
     # umc3.10-开发环境配置
-    refId: "umc310-zhangyj-mysql",
+    refId: "umc-zhangyj-mysql",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -229,7 +229,7 @@ properties-replace:
   },
   {
     # umc3.10-测试3.10 4.98 mysql标准版环境配置
-    refId: "umc310-test-mysql",
+    refId: "umc-test-mysql",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -302,7 +302,7 @@ properties-replace:
   },
   {
     # umc3.10-测试3.10 5.160 oracle标准版环境配置
-    refId: "umc310-test-oracle",
+    refId: "umc-test-oracle",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -350,7 +350,7 @@ properties-replace:
   },
   {
     # umc3.10-测试3.10 4.98:8080 oracle标准版升级环境配置
-    refId: "umc310-test-oracle-upgrade",
+    refId: "umc-test-oracle-upgrade",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
@@ -374,7 +374,7 @@ properties-replace:
   },
   {
     # umc3.10-测试3.10标准版polardb环境配置
-    refId: "umc310-test-polardb",
+    refId: "umc-test-polardb",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
