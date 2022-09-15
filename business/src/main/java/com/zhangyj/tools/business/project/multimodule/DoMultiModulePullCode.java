@@ -1,5 +1,6 @@
 package com.zhangyj.tools.business.project.multimodule;
 
+import com.google.common.collect.Lists;
 import com.zhangyj.tools.business.project.multimodule.config.MultiModulePullCodeConfig;
 import com.zhangyj.tools.business.project.multimodule.pojo.ModuleProperties;
 import com.zhangyj.tools.common.base.AbstractRunner;
@@ -25,7 +26,11 @@ import java.util.stream.Collectors;
 public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeConfig> {
 
     private final static String CURRENT_BRANCH_FLAG = "* ";
+
     private final static String LOCAL_BRANCH_FLAG = "  ";
+
+    private final static List<String> ERROR_OUTPUT_WORD = Lists.newArrayList("abort", "error");
+
     @Override
     protected void doRun() throws IOException {
         // 是否检查只有一个replaceId
@@ -43,7 +48,16 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
                 // 更新代码
                 pullCode(moduleProperties, modulesParam);
             }
+        }
+    }
 
+    private void checkOutput(List<String> commandOutput) {
+        for (String output : commandOutput) {
+            for (String errorWord : ERROR_OUTPUT_WORD) {
+                if(output.contains(errorWord)){
+                    throw new RuntimeException("包含错误关键词" + errorWord + " 请检查是否正常");
+                }
+            }
         }
     }
 
@@ -76,5 +90,6 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
 
     private void logOutput(List<String> commandOutput) {
         commandOutput.forEach(log::info);
+        checkOutput(commandOutput);
     }
 }
