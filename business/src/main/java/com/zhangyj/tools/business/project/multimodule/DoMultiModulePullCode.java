@@ -29,7 +29,7 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
 
     private final static String LOCAL_BRANCH_FLAG = "  ";
 
-    private final static List<String> ERROR_OUTPUT_WORD = Lists.newArrayList("abort", "error");
+    private final static List<String> ERROR_OUTPUT_WORD = Lists.newArrayList("abort", "error", "fail", "unable");
 
     @Override
     protected void doRun() throws IOException {
