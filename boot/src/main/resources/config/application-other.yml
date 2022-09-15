@@ -34,3 +34,22 @@ file-renamer:
   targetPath: G:\Users\ZYJ\Desktop\UMC_V3.7
   # 【必填】替换关键字
   replaceWords: [{word: "3.6", newWord: "3.7"}, {word: "3.5", newWord: "3.6"}]
+
+host-refresher:
+  # 是否启用该功能
+  enable: false
+  # 网络hosts文件
+  hosts: [{name: "github", url: "https://raw.hellogithub.com/hosts"}]
+  # 定时器corn
+  corn: "*/20 * * * * ?"
+  # 本地hosts文件地址
+  hosts-path: C:\Windows\System32\drivers\etc\hosts
+
+#【网络检测功能】
+network-checker:
+  # 是否启用该功能
+  enable: false
+  # 【必填】定时校验时间间隔(单位：秒)
+  # wifi名称（断网重连）
+  wifiName: YJ&YR
+  corn: 0 */1 * * * ?
