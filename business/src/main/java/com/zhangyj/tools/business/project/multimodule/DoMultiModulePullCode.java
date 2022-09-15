@@ -1,6 +1,5 @@
 package com.zhangyj.tools.business.project.multimodule;
 
-import com.google.common.collect.Lists;
 import com.zhangyj.tools.business.project.multimodule.config.MultiModulePullCodeConfig;
 import com.zhangyj.tools.business.project.multimodule.pojo.ModuleProperties;
 import com.zhangyj.tools.common.base.AbstractRunner;
@@ -41,6 +40,11 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
             }
             log.info("启用配置ID:{}", moduleProperties.getRefId());
             for (ModuleProperties.ModulesParam modulesParam : moduleProperties.getModulesParams()) {
+                String modulePath = moduleProperties.getProjectPath() + File.separator + modulesParam.getName();
+                if(!new File(modulePath).exists()){
+                    log.error("模块{}路径不存在，跳过:{}", modulesParam.getName(), modulePath);
+                    continue;
+                }
                 // 切换到本地分支
                 checkoutLocalBranch(moduleProperties, modulesParam);
                 // 更新代码
