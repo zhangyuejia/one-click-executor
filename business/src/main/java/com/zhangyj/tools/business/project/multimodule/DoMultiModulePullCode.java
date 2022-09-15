@@ -53,7 +53,7 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
         for (String output : commandOutput) {
             for (String errorWord : config.getErrorLogWords()) {
                 if(output.contains(errorWord)){
-                    throw new RuntimeException("包含错误关键词" + errorWord + " 请检查是否正常");
+                    throw new RuntimeException("输出日志包含错误关键词" + errorWord + "，请检查是否正常");
                 }
             }
         }
