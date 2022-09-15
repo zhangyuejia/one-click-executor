@@ -22,7 +22,7 @@ file-sizer:
   # 是否启用该功能
   enable: false
   # 【必填】文件夹路径
-  path: G:\Users\ZYJ\Documents
+  path: F:\\
 
 # 【文件重命名功能，常用于新建类似目录，但文件名仅通过替换即可】
 file-renamer:

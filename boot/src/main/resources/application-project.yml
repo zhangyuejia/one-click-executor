@@ -1,14 +1,15 @@
 #【Properties配置值替换】
 properties-replace:
   # 是否启用该功能
-  enable: true
+  enable: false
   # 启用替换id
   enableRefId: [
 #    "umc-zhangyj-mysql",
 #    "umc-zhangyjsass-mysql",
 #    "umc39sass-dev-mysql",
 #    "umcsass-dev-mysql",
-    "umc-dev-mysql",
+#    "umc-dev-mysql",
+    "umc-dev-oracle",
 #    "umc-dev-yx-mysql",
 #    "umc-test-mysql",
 #    "umc-test-oracle",
@@ -17,15 +18,34 @@ properties-replace:
 #    "umc-test-3132-mysql",
 #    "umc-test-31-mysql",
 #    "umc-test-388-mysql",
+#    "umcsysadmin-dev-mysql",
   ]
   filePaths: [
-        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\bootstrap.properties,
-        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-default.properties,
-        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-dev.properties
+
+#    E:\mw_project_new\umc_git\umc-refactoring2\umc-portal-boot\src\main\resources\bootstrap.properties,
+#    E:\mw_project_new\umc_git\umc-refactoring2\umc-portal-boot\src\main\resources\config\application-default.properties,
+#    E:\mw_project_new\umc_git\umc-refactoring2\umc-portal-boot\src\main\resources\config\application-dev.properties,
+
+    E:\mw_project_new\umc_git\umc-refactoring3\umc-portal-boot\src\main\resources\bootstrap.properties,
+    E:\mw_project_new\umc_git\umc-refactoring3\umc-portal-boot\src\main\resources\config\application-default.properties,
+    E:\mw_project_new\umc_git\umc-refactoring3\umc-portal-boot\src\main\resources\config\application-dev.properties,
+
+#    E:\mw_project_new\umc_git\umc-refactoring\umc-portal-boot\src\main\resources\bootstrap.properties,
+#    E:\mw_project_new\umc_git\umc-refactoring\umc-portal-boot\src\main\resources\config\application-default.properties,
+#    E:\mw_project_new\umc_git\umc-refactoring\umc-portal-boot\src\main\resources\config\application-dev.properties,
+#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\bootstrap.properties,
+#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-default.properties,
+#        E:\mw_project_new\umc_git\umc-portal\system\src\main\resources\application-dev.properties
+
 
 #    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\bootstrap.properties,
 #    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-default.properties,
 #    E:\mw_project_new\umc_git\umc-portal2\system\src\main\resources\application-dev.properties
+
+#    E:\mw_project_new\umc_git\umc_sysadmin\system\src\main\resources\bootstrap.properties,
+#    E:\mw_project_new\umc_git\umc_sysadmin\system\src\main\resources\application-default.properties,
+#    E:\mw_project_new\umc_git\umc_sysadmin\system\src\main\resources\application-dev.properties
+
 
   ]
   # 配置项map，优先级最高
@@ -59,6 +79,30 @@ properties-replace:
   ]
   # 替换关键字描述
   replaceKeys: [
+  {
+    # umc3.10-开发环境配置
+    refId: "umcsysadmin-dev-mysql",
+    propertiesMap: {
+      "emp.corptype":"1",
+      # 数据库信息
+      "emp.database.type":"mysql",
+      "emp.database.ip":"192.169.7.102",
+      "emp.database.port":"3306",
+      "emp.database.name":"umcsass1.2h5",
+      "spring.datasource.druid.username":"root",
+      "spring.datasource.druid.password":"ENC(s9tSvduQ9LOiLl6v48Y6ag==)",
+      "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
+      "spring.datasource.druid.driver-class-name":"com.mysql.cj.jdbc.Driver",
+      # redis
+      "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
+      "spring.redis.cluster.max-redirects":"3",
+      # 文件服务器
+      "file.server.ip":"192.169.7.106",
+      "file.server.port":"8080",
+    },
+    # 需要注释的配置项
+    uselessProperties: []
+  },
   {
     # umc3.10-开发环境配置
     refId: "umc39sass-dev-mysql",
@@ -164,7 +208,7 @@ properties-replace:
       "emp.database.type":"mysql",
       "emp.database.ip":"192.169.7.102",
       "emp.database.port":"3306",
-      "emp.database.name":"umc311",
+      "emp.database.name":"umc_3.13_local",
       "spring.datasource.druid.username":"root",
       "spring.datasource.druid.password":"ENC(s9tSvduQ9LOiLl6v48Y6ag==)",
       "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
@@ -307,10 +351,10 @@ properties-replace:
       "emp.corptype":"0",
       # 数据库信息
       "emp.database.type":"oracle",
-      "emp.database.ip":"192.169.5.49",
+      "emp.database.ip":"192.169.5.167",
       "emp.database.port":"1521",
-      "emp.database.name":"umc3100329",
-      "spring.datasource.druid.username":"EMP715",
+      "emp.database.name":"umc3120818",
+      "spring.datasource.druid.username":"emp0906",
       "spring.datasource.druid.password":"ENC(JPrmvPBRYeH7A4hJUCtsaA==)",
       "spring.datasource.druid.url":"jdbc:oracle:thin:@${emp.database.ip}:${emp.database.port}/${emp.database.name}",
       "spring.datasource.druid.driver-class-name":"oracle.jdbc.driver.OracleDriver",
@@ -325,24 +369,49 @@ properties-replace:
     uselessProperties: []
   },
   {
+    # umc3.10-测试3.10 5.160 oracle标准版环境配置
+    refId: "umc-dev-oracle",
+    propertiesMap: {
+      "emp.corptype":"0",
+      # 数据库信息
+      "emp.database.type":"oracle",
+      "emp.database.ip":"192.169.6.71",
+      "emp.database.port":"1521",
+      "emp.database.name":"orcl",
+      "spring.datasource.druid.username":"emp313",
+      "spring.datasource.druid.password":"123456",
+      "spring.datasource.druid.url":"jdbc:oracle:thin:@${emp.database.ip}:${emp.database.port}/${emp.database.name}",
+      "spring.datasource.druid.driver-class-name":"oracle.jdbc.driver.OracleDriver",
+      # redis
+      "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
+      "spring.redis.cluster.max-redirects":"3",
+      # 文件服务器
+      "file.server.ip":"192.169.7.106",
+      "file.server.port":"8080",
+    },
+    # 需要注释的配置项
+    uselessProperties: []
+  },
+
+  {
     # umc3.10-测试3.10 3.132 mysql标准版环境配置
     refId: "umc-test-388-mysql",
     propertiesMap: {
       "emp.corptype":"0",
       # 数据库信息
       "emp.database.type":"mysql",
-      "emp.database.ip":"192.169.4.77",
+      "emp.database.ip":"192.169.3.91",
       "emp.database.port":"3306",
-      "emp.database.name":"umc3100618",
-      "spring.datasource.druid.username":"root",
-      "spring.datasource.druid.password":"123456",
+      "emp.database.name":"umc3130906",
+      "spring.datasource.druid.username":"emp",
+      "spring.datasource.druid.password":"ENC(PQ7OsN1gsC81Bdclr30nA1h3pX6cFyw1)",
       "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
       "spring.datasource.druid.driver-class-name":"com.mysql.cj.jdbc.Driver",
       # redis
       "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
       "spring.redis.cluster.max-redirects":"3",
       # 文件服务器
-      "file.server.ip":"192.169.3.1",
+      "file.server.ip":"192.169.3.88",
       "file.server.port":"9999",
     },
     # 需要注释的配置项

@@ -1,0 +1,89 @@
+# 多模块代码更新
+multi-module-pull-code:
+  # 是否开启该功能
+  enable: true
+  # 启用id
+  enableRefId: [
+    "dev-spfee",
+  ]
+  # 模块参数
+  modules-properties: [
+    {
+      refId: "dev-spfee",
+      # 远程仓库名称
+      remote-repo-name: "origin",
+      # 项目路径
+      project-path: E:\mw_project_new\umc_git\umc-refactoring3,
+      # 是否需要切换到本地分支
+      enable-checkout-localbranch: true,
+      # 模块参数
+      modules-params: [
+        {
+          name: "umc-portal",
+          # 本地分支
+          local-branch: "dev-spfee",
+          # 远程分支
+          remote-branch: "umc-3.12-refactoring,dev-spfee"
+        },
+        {
+          name: "umc-portal-audit",
+          # 本地分支
+          local-branch: "dev",
+          # 远程分支
+          remote-branch: "dev"
+        },
+        {
+          name: "umc-portal-boot",
+          # 本地分支
+          local-branch: "dev",
+          # 远程分支
+          remote-branch: "dev"
+        },
+        {
+          name: "umc-portal-business",
+          # 本地分支
+          local-branch: "dev",
+          # 远程分支
+          remote-branch: "dev"
+        },
+        {
+          name: "umc-portal-common",
+          # 本地分支
+          local-branch: "dev-spfee",
+          # 远程分支
+          remote-branch: "dev-spfee,dev"
+        },
+        {
+          name: "umc-portal-communication",
+          # 本地分支
+          local-branch: "dev",
+          # 远程分支
+          remote-branch: "dev"
+        },
+        {
+          name: "umc-portal-dependencies",
+          # 本地分支
+          local-branch: "dev",
+          # 远程分支
+          remote-branch: "dev"
+        },
+        {
+          name: "umc-portal-system",
+          # 本地分支
+          local-branch: "dev-spfee",
+          # 远程分支
+          remote-branch: "dev,dev-spfee"
+        },
+        {
+          name: "umc-portal-utils",
+          # 本地分支
+          local-branch: "dev",
+          # 远程分支
+          remote-branch: "dev"
+        }
+      ]
+    }
+  ]
+
+
+

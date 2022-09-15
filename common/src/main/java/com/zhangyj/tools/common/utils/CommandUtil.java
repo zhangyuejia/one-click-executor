@@ -38,6 +38,12 @@ public class CommandUtil {
         return new BufferedReader(new InputStreamReader(exec(command, new File(dir)).getInputStream(), charset));
     }
 
+    public static List<String> getCommandOutput(Charset charset, String[] command, String dir) throws IOException {
+        try (BufferedReader reader = CommandUtil.getCommandReader(charset, command, dir)){
+            return reader.lines().collect(Collectors.toList());
+        }
+    }
+
     public static List<String> getCommandOutput(Charset charset, String command) throws Exception {
         try (BufferedReader reader = CommandUtil.getCommandReader(charset, command)){
             return reader.lines().collect(Collectors.toList());

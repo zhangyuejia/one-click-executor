@@ -1,7 +1,7 @@
 # 配置文件配置
 spring:
   profiles:
-    active: file,network,project
+    active: file,network,project,multi-module
 
 tools:
   # 是否检查只有一个功能运行
