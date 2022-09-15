@@ -7,6 +7,8 @@ multi-module-pull-code:
 #    "dev-spfee",
     "dev",
   ]
+  # 日志错误关键词（判断是否命令是否成功执行）
+  error-log-words: "abort,error,fail,unable"
   # 模块参数
   modules-properties: [
     {

@@ -39,6 +39,6 @@ public class ModuleProperties {
 
         private String localBranch;
 
-        private String[] remoteBranch;
+        private List<String> remoteBranch;
     }
 }

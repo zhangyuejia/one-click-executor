@@ -30,6 +30,8 @@ public class MultiModulePullCodeConfig extends AbstractConfig {
      */
     private List<ModuleProperties> modulesProperties;
 
+    private List<String> errorLogWords;
+
     @Override
     public String getFunctionName() {
         return "多模块代码更新配置";

@@ -29,8 +29,6 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
 
     private final static String LOCAL_BRANCH_FLAG = "  ";
 
-    private final static List<String> ERROR_OUTPUT_WORD = Lists.newArrayList("abort", "error", "fail", "unable");
-
     @Override
     protected void doRun() throws IOException {
         // 是否检查只有一个replaceId
@@ -53,7 +51,7 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
 
     private void checkOutput(List<String> commandOutput) {
         for (String output : commandOutput) {
-            for (String errorWord : ERROR_OUTPUT_WORD) {
+            for (String errorWord : config.getErrorLogWords()) {
                 if(output.contains(errorWord)){
                     throw new RuntimeException("包含错误关键词" + errorWord + " 请检查是否正常");
                 }
