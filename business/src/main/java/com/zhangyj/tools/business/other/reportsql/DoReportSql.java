@@ -48,7 +48,7 @@ public class DoReportSql implements IExec {
     @Override
     public void exec() throws IOException {
         String excelPath = "G:\\Users\\ZYJ\\Desktop\\杭州天翼智慧城市科技有限公司2021-12月-22年6月数据0915.xls";
-        String sqlPath = "G:\\Users\\ZYJ\\Desktop\\杭州天翼.sql";
+        String sqlPath = "G:\\Users\\ZYJ\\Desktop\\杭州天翼报表调整.sql";
         String sheetName = "调整后数据-日明细";
         EasyExcel.read(excelPath, ExcelRecord.class, new ReadListener<ExcelRecord>(){
             @Override
