@@ -1,7 +1,7 @@
 # 多模块代码更新
 multi-module-pull-code:
   # 是否开启该功能
-  enable: true
+  enable: false
   # 启用id
   enableRefId: [
     "dev",

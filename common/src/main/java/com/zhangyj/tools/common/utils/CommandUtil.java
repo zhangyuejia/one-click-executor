@@ -25,7 +25,7 @@ public class CommandUtil {
      * @throws IOException 异常
      */
     public static BufferedReader getCommandReader(Charset charset, String command) throws IOException {
-        return new BufferedReader(new InputStreamReader(exec(command).getInputStream(), charset));
+        return new BufferedReader(new InputStreamReader(exec(command, null).getInputStream(), charset));
     }
 
     /**
@@ -38,7 +38,17 @@ public class CommandUtil {
         return new BufferedReader(new InputStreamReader(exec(command, new File(dir)).getInputStream(), charset));
     }
 
+    public static BufferedReader getCommandReader(Charset charset, String command, String dir) throws IOException {
+        return new BufferedReader(new InputStreamReader(exec(command, new File(dir)).getInputStream(), charset));
+    }
+
     public static List<String> getCommandOutput(Charset charset, String[] command, String dir) throws IOException {
+        try (BufferedReader reader = CommandUtil.getCommandReader(charset, command, dir)){
+            return reader.lines().collect(Collectors.toList());
+        }
+    }
+
+    public static List<String> getCommandOutput(Charset charset, String command, String dir) throws IOException {
         try (BufferedReader reader = CommandUtil.getCommandReader(charset, command, dir)){
             return reader.lines().collect(Collectors.toList());
         }
@@ -51,9 +61,13 @@ public class CommandUtil {
     }
 
     public static Process exec(String command) throws IOException {
-        log.info("执行命令：{}", command);
+        return exec(command, null);
+    }
+
+    public static Process exec(String command, File dir) throws IOException {
+        log.info("执行命令：{}" + (dir != null? "地址：" + dir.getCanonicalPath(): ""), command);
         Runtime runtime = Runtime.getRuntime();
-        final Process process = runtime.exec(command);
+        final Process process = runtime.exec(command, null, dir);
         //noinspection AlibabaAvoidManuallyCreateThread
         runtime.addShutdownHook(new Thread(process::destroy));
         return process;
