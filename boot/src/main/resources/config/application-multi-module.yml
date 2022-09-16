@@ -4,13 +4,88 @@ multi-module-pull-code:
   enable: true
   # 启用id
   enableRefId: [
-#    "dev-spfee",
     "dev",
+#    "dev-spfee",
   ]
   # 日志错误关键词（判断是否命令是否成功执行）
   error-log-words: "abort,error,fail,unable"
   # 模块参数
   modules-properties: [
+      {
+          refId: "dev",
+        # 远程仓库名称
+          remote-repo-name: "origin",
+        # 项目路径
+          project-path: E:\mw_project_new\umc_git\umc-refactoring2,
+        # 是否需要切换到本地分支
+          enable-checkout-localbranch: true,
+        # 模块参数
+          modules-params: [
+          {
+              name: "umc-portal",
+            # 本地分支
+              local-branch: "umc-3.12-refactoring",
+            # 远程分支
+              remote-branch: "umc-3.12-refactoring"
+          },
+          {
+              name: "umc-portal-audit",
+            # 本地分支
+              local-branch: "dev",
+            # 远程分支
+              remote-branch: "dev"
+          },
+          {
+              name: "umc-portal-boot",
+            # 本地分支
+              local-branch: "dev",
+            # 远程分支
+              remote-branch: "dev"
+          },
+          {
+              name: "umc-portal-business",
+            # 本地分支
+              local-branch: "dev",
+            # 远程分支
+              remote-branch: "dev"
+          },
+          {
+              name: "umc-portal-common",
+            # 本地分支
+              local-branch: "dev",
+            # 远程分支
+              remote-branch: "dev"
+          },
+          {
+              name: "umc-portal-communication",
+            # 本地分支
+              local-branch: "dev",
+            # 远程分支
+              remote-branch: "dev"
+          },
+          {
+              name: "umc-portal-dependencies",
+            # 本地分支
+              local-branch: "dev",
+            # 远程分支
+              remote-branch: "dev"
+          },
+          {
+              name: "umc-portal-system",
+            # 本地分支
+              local-branch: "dev",
+            # 远程分支
+              remote-branch: "dev"
+          },
+          {
+              name: "umc-portal-utils",
+            # 本地分支
+              local-branch: "dev",
+            # 远程分支
+              remote-branch: "dev"
+          }
+          ]
+      },
     {
       refId: "dev-spfee",
       # 远程仓库名称
@@ -73,9 +148,9 @@ multi-module-pull-code:
         {
           name: "umc-portal-system",
           # 本地分支
-          local-branch: "dev-spfee",
+          local-branch: "dev",
           # 远程分支
-          remote-branch: "dev,dev-spfee"
+          remote-branch: "dev"
         },
         {
           name: "umc-portal-utils",
@@ -85,81 +160,6 @@ multi-module-pull-code:
           remote-branch: "dev"
         }
       ]
-    },
-    {
-        refId: "dev",
-      # 远程仓库名称
-        remote-repo-name: "origin",
-      # 项目路径
-        project-path: E:\mw_project_new\umc_git\umc-refactoring2,
-      # 是否需要切换到本地分支
-        enable-checkout-localbranch: true,
-      # 模块参数
-        modules-params: [
-        {
-            name: "umc-portal",
-          # 本地分支
-            local-branch: "umc-3.12-refactoring",
-          # 远程分支
-            remote-branch: "umc-3.12-refactoring"
-        },
-        {
-            name: "umc-portal-audit",
-          # 本地分支
-            local-branch: "dev",
-          # 远程分支
-            remote-branch: "dev"
-        },
-        {
-            name: "umc-portal-boot",
-          # 本地分支
-            local-branch: "dev",
-          # 远程分支
-            remote-branch: "dev"
-        },
-        {
-            name: "umc-portal-business",
-          # 本地分支
-            local-branch: "dev",
-          # 远程分支
-            remote-branch: "dev"
-        },
-        {
-            name: "umc-portal-common",
-          # 本地分支
-            local-branch: "dev",
-          # 远程分支
-            remote-branch: "dev"
-        },
-        {
-            name: "umc-portal-communication",
-          # 本地分支
-            local-branch: "dev",
-          # 远程分支
-            remote-branch: "dev"
-        },
-        {
-            name: "umc-portal-dependencies",
-          # 本地分支
-            local-branch: "dev",
-          # 远程分支
-            remote-branch: "dev"
-        },
-        {
-            name: "umc-portal-system",
-          # 本地分支
-            local-branch: "dev",
-          # 远程分支
-            remote-branch: "dev"
-        },
-        {
-            name: "umc-portal-utils",
-          # 本地分支
-            local-branch: "dev",
-          # 远程分支
-            remote-branch: "dev"
-        }
-        ]
     }
   ]
 

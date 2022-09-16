@@ -53,3 +53,6 @@ network-checker:
   # wifi名称（断网重连）
   wifiName: YJ&YR
   corn: 0 */1 * * * ?
+
+other:
+  enable: false
