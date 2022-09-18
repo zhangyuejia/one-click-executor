@@ -8,6 +8,7 @@ import com.zhangyj.tools.business.project.copyListmaker.config.Config;
 import com.zhangyj.tools.business.project.copyListmaker.maker.Maker;
 import com.zhangyj.tools.business.project.copyListmaker.replactor.BaseCopyListConverter;
 import com.zhangyj.tools.business.project.copyListmaker.replactor.ConverterFactory;
+import com.zhangyj.tools.common.utils.CommandUtil;
 import com.zhangyj.tools.common.utils.SvnUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -21,6 +22,7 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -54,10 +56,10 @@ public class CopyListMaker implements Maker<String> {
         return config.getCopyList().getPath();
     }
 
-    private void readCopyList() throws IOException {
+    private void readCopyList() throws Exception {
         // 获取输入输出流
-        try (BufferedReader reader = SvnUtil.getDiffRecordReader(config.getSvn().getPath(), config.getSvn().getRevStart(), config.getSvn().getRevEnd())){
-            reader.lines()
+        String command = String.format("svn diff -r %d:%d  --summarize %s", config.getSvn().getRevStart() - 1, config.getSvn().getRevEnd(), config.getSvn().getPath());
+        CommandUtil.execCommand(CharSets.CHARSET_GBK, command).stream()
                     // utf-8转码，支持中文显示
                     .map(decodeUtf8())
                     // 过滤无效svn记录
@@ -66,7 +68,6 @@ public class CopyListMaker implements Maker<String> {
                     .map(this::toRelativePath)
                     // 将相对路径转化为copyList行
                     .forEach(relativePath -> copyListLines.addAll(toCopyListLines(relativePath)));
-        }
     }
 
     private void writeCopyList() throws IOException {

@@ -24,6 +24,8 @@ public class CmdExecutorConfig extends AbstractConfig {
 
     private String execPath;
 
+    private String charset;
+
     @Override
     public String getFunctionName() {
         return "命令执行功能";

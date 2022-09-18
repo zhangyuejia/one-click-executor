@@ -7,9 +7,9 @@ import com.zhangyj.tools.common.utils.SvnUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,12 +80,12 @@ public class Config extends AbstractConfig {
     private void processCopyListConfig() throws IOException {
         // 设置为绝对路径
         String path = copyList.getPath();
-        if(StringUtils.isEmpty(path)){
+        if(StringUtils.isBlank(path)){
             path = DefaultConst.COPY_LIST_PATH;
         }
         copyList.setPath(new File(path).getCanonicalPath());
 
-        if(StringUtils.isEmpty(copyList.getPrefix())){
+        if(org.apache.commons.lang3.StringUtils.isBlank(copyList.getPrefix())){
             copyList.setPrefix(DefaultConst.COPY_LIST_PREFIX);
         }
     }
@@ -93,7 +93,7 @@ public class Config extends AbstractConfig {
     /**
      * 处理svn配置信息
      */
-    private void processSvnConfig() {
+    private void processSvnConfig() throws Exception {
         if(svn.getRevEnd() == null){
             // 获取版本文件最新版本号
             Integer revEnd = getLatestVersion();
@@ -110,7 +110,7 @@ public class Config extends AbstractConfig {
      * 获取版本文件最新版本号
      * @return 版本文件最新版本号
      */
-    private Integer getLatestVersion() {
+    private Integer getLatestVersion() throws Exception {
         String latestVerPrefix = "Last Changed Rev:";
         String lastChangeInfo = SvnUtil.getSvnInfo(svn.getPath(), line -> line.startsWith(latestVerPrefix)).get(0);
         return Integer.parseInt(lastChangeInfo.substring(latestVerPrefix.length()).trim());
@@ -119,7 +119,7 @@ public class Config extends AbstractConfig {
     /**
      * 打印配置信息
      */
-    private void printConfig() {
+    private void printConfig() throws Exception {
         log.info("************************** 打印配置信息-开始 **************************");
         log.info("【svn路径】:{}", this.svn.getPath());
         log.info("【svn开始版本号】：{}，备注信息如下：", this.svn.getRevStart());

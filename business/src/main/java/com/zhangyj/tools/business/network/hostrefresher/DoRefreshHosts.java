@@ -51,7 +51,7 @@ public class DoRefreshHosts extends AbstractRunner<HostsRefresherConfig> {
                 }
             }
             // 刷新dns
-            CommandUtil.exec(new RefreshDnsCmd().getCmd());
+            CommandUtil.execCommand(Charset.defaultCharset(), new RefreshDnsCmd().getCmd());
         }catch (Exception e){
             log.error("刷新hosts文件过程中发生异常", e);
         }

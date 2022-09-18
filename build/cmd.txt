@@ -1,27 +1,3 @@
 git clone http://192.169.2.234/zhanglj001/umc-portal.git
 git remote add upstream http://192.169.2.234/umc/umc-portal.git$umc-portal
 git fetch --all$umc-portal
-
-git clone http://192.169.2.234/zhanglj001/umc-portal-boot.git
-git remote add upstream http://192.169.2.234/umc/umc-portal-boot.git$umc-portal-boot
-
-git clone http://192.169.2.234/zhanglj001/umc-portal-utils.git
-git remote add upstream http://192.169.2.234/umc/umc-portal-utils.git$umc-portal-utils
-
-git clone http://192.169.2.234/zhanglj001/umc-portal-common.git
-git remote add upstream http://192.169.2.234/umc/umc-portal-common.git$umc-portal-common
-
-git clone http://192.169.2.234/zhanglj001/umc-portal-business.git
-git remote add upstream http://192.169.2.234/umc/umc-portal.git$umc-portal-business
-
-git clone http://192.169.2.234/zhanglj001/umc-portal-dependencies.git
-git remote add upstream http://192.169.2.234/umc/umc-portal-dependencies.git$umc-portal-dependencies
-
-git clone http://192.169.2.234/zhanglj001/umc-portal-system.git
-git remote add upstream http://192.169.2.234/umc/umc-portal-system.git$umc-portal-system
-
-git clone http://192.169.2.234/zhanglj001/umc-portal-audit.git
-git remote add upstream http://192.169.2.234/umc/umc-portal-audit.git$umc-portal-audit
-
-git clone http://192.169.2.234/zhanglj001/umc-portal-communication.git
-git remote add upstream http://192.169.2.234/umc/umc-portal-communication.git$umc-portal-communication

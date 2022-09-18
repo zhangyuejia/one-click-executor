@@ -8,7 +8,7 @@ multi-module-pull-code:
 #    "dev-spfee",
   ]
   # 日志错误关键词（判断是否命令是否成功执行）
-  error-log-words: "abort,error,fail,unable"
+  error-log-words: "abort,error,fail,unable,Could not"
   # 模块参数
   modules-properties: [
       {
@@ -17,6 +17,7 @@ multi-module-pull-code:
           remote-repo-name: "origin",
         # 项目路径
           project-path: E:\mw_project_new\umc_git\umc-refactoring2,
+#          project-path: E:\mw_project_new\umc_git\umc-portal-refactoring,
         # 是否需要切换到本地分支
           enable-checkout-localbranch: true,
         # 模块参数

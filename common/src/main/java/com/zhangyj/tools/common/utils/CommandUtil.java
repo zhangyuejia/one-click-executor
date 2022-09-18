@@ -1,15 +1,14 @@
 package com.zhangyj.tools.common.utils;
 
+import cn.hutool.core.thread.ThreadUtil;
+import com.zhangyj.tools.common.handler.MsgHandler;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.Charset;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * 命令执行器
@@ -18,53 +17,51 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CommandUtil {
 
-    /**
-     * 获取命令读取流
-     * @param command 命令
-     * @return 命令读取流
-     * @throws IOException 异常
-     */
-    public static BufferedReader getCommandReader(Charset charset, String command) throws IOException {
-        return new BufferedReader(new InputStreamReader(exec(command, null).getInputStream(), charset));
+    public static void execCommand(Charset charset, String command, String dir, MsgHandler handler) throws Exception{
+        handleExecCommand(charset, exec(command, new File(dir)), handler);
     }
 
-    /**
-     * 获取命令读取流
-     * @param command 命令
-     * @return 命令读取流
-     * @throws IOException 异常
-     */
-    public static BufferedReader getCommandReader(Charset charset, String[] command, String dir) throws IOException {
-        return new BufferedReader(new InputStreamReader(exec(command, new File(dir)).getInputStream(), charset));
+    public static List<String> execCommand(Charset charset, String command) throws Exception {
+        return execCommand(charset, exec(command, null));
     }
 
-    public static BufferedReader getCommandReader(Charset charset, String command, String dir) throws IOException {
-        return new BufferedReader(new InputStreamReader(exec(command, new File(dir)).getInputStream(), charset));
+    public static List<String> execCommand(Charset charset, String command, String dir) throws Exception {
+        return execCommand(charset, exec(command, new File(dir)));
     }
 
-    public static List<String> getCommandOutput(Charset charset, String[] command, String dir) throws IOException {
-        try (BufferedReader reader = CommandUtil.getCommandReader(charset, command, dir)){
-            return reader.lines().collect(Collectors.toList());
+    private static List<String> execCommand(Charset charset, Process process) throws InterruptedException {
+        List<String> list = new ArrayList<>();
+        handleExecCommand(charset, process, list::add);
+        return list;
+    }
+
+    private static void handleExecCommand(Charset charset, Process process, MsgHandler handler) throws InterruptedException {
+        if(handler == null){
+            return;
+        }
+        InputStream[] inputStreams = {process.getInputStream(), process.getErrorStream()};
+        CountDownLatch countDownLatch = new CountDownLatch(inputStreams.length);
+        for (InputStream inputStream : inputStreams) {
+            ThreadUtil.execute(() -> {
+                handleExecCommand(charset, inputStream, handler);
+                countDownLatch.countDown();
+            });
+        }
+        countDownLatch.await();
+    }
+
+    private static void handleExecCommand(Charset charset, InputStream inputStream, MsgHandler handler){
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, charset))){
+            String line;
+            while ((line = reader.readLine()) != null){
+                handler.handle(line);
+            }
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
     }
 
-    public static List<String> getCommandOutput(Charset charset, String command, String dir) throws IOException {
-        try (BufferedReader reader = CommandUtil.getCommandReader(charset, command, dir)){
-            return reader.lines().collect(Collectors.toList());
-        }
-    }
-
-    public static List<String> getCommandOutput(Charset charset, String command) throws Exception {
-        try (BufferedReader reader = CommandUtil.getCommandReader(charset, command)){
-            return reader.lines().collect(Collectors.toList());
-        }
-    }
-
-    public static Process exec(String command) throws IOException {
-        return exec(command, null);
-    }
-
-    public static Process exec(String command, File dir) throws IOException {
+    private static Process exec(String command, File dir) throws IOException {
         log.info("执行命令：{}" + (dir != null? "地址：" + dir.getCanonicalPath(): ""), command);
         Runtime runtime = Runtime.getRuntime();
         final Process process = runtime.exec(command, null, dir);
@@ -73,12 +70,4 @@ public class CommandUtil {
         return process;
     }
 
-    public static Process exec(String[] command, File dir) throws IOException {
-        log.info("执行命令：{} 地址为：{}", Arrays.toString(command), dir.getCanonicalPath());
-        Runtime runtime = Runtime.getRuntime();
-        final Process process = runtime.exec(command, null, dir);
-        //noinspection AlibabaAvoidManuallyCreateThread
-        runtime.addShutdownHook(new Thread(process::destroy));
-        return process;
-    }
 }

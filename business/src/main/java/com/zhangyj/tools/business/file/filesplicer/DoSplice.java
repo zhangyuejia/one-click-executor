@@ -57,24 +57,19 @@ public class DoSplice extends AbstractRunner<FileSplicerConfig> {
         }
     }
 
-    private void init() {
+    private void init() throws Exception {
         this.whitePattern = getPatterns(fileSplicerConfig.getWhitePattern());
         this.blackPattern = getPatterns(fileSplicerConfig.getBlackPattern());
         execCommand();
     }
 
-    private void execCommand() {
+    private void execCommand() throws Exception {
         String command = fileSplicerConfig.getCommand();
         if(command == null){
             return;
         }
         log.info("执行命令：{} 执行路径：{}", command, fileSplicerConfig.getPath());
-        String[] commands = {"cmd", "/c",  command};
-        try (BufferedReader reader = CommandUtil.getCommandReader(StandardCharsets.UTF_8, commands, fileSplicerConfig.getPath())){
-            reader.lines().filter(StringUtil::isNotEmpty).forEach(log::info);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        CommandUtil.execCommand(StandardCharsets.UTF_8, command, fileSplicerConfig.getPath(), log::info);
     }
 
     private void deleteGenFile() throws IOException {

@@ -4,6 +4,7 @@ import com.zhangyj.tools.business.project.multimodule.config.MultiModulePullCode
 import com.zhangyj.tools.business.project.multimodule.pojo.ModuleProperties;
 import com.zhangyj.tools.common.base.AbstractRunner;
 import com.zhangyj.tools.common.constant.CharSets;
+import com.zhangyj.tools.common.handler.MsgHandler;
 import com.zhangyj.tools.common.utils.CommandUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +34,7 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
 
 
     @Override
-    protected void doRun() throws IOException {
+    protected void doRun() throws Exception {
         // 是否检查只有一个replaceId
         if(config.getEnableRefId().size() > 1){
             throw new RuntimeException("配置项[multi-module-pull.enableReplaceId]配置个数不能大于1个");
@@ -59,63 +59,60 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
         }
     }
 
-    private void fetchRepo(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam) throws IOException {
-        String[] cmdArr = {"git", "fetch", "--all"};
-        logExecCmdOutput(moduleProperties, modulesParam, cmdArr);
+    private void fetchRepo(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam) throws Exception {
+        String command = "git fetch --all";
+        logExecCmdOutput(moduleProperties, modulesParam, command);
     }
 
-    private void pullCode(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam) throws IOException {
+    private void pullCode(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam) throws Exception {
         for (String remoteBranch : modulesParam.getRemoteBranch()) {
-            String[] cmdArr = {"git", "pull", moduleProperties.getRemoteRepoName(), remoteBranch};
-            logExecCmdOutput(moduleProperties, modulesParam, cmdArr);
+            String command = "git pull " + moduleProperties.getRemoteRepoName() + " " + remoteBranch;
+            logExecCmdOutput(moduleProperties, modulesParam, command);
         }
     }
 
-    private void checkoutLocalBranch(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam) throws IOException {
+    private void checkoutLocalBranch(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam) throws Exception {
         if (!moduleProperties.getEnableCheckoutLocalBranch()) {
             log.info("未开启本地分支切换开关，无需切换");
             return;
         }
-        List<String> commandOutput = getCommandOutput(moduleProperties, modulesParam, new String[]{"git", "branch", "-a"});
+
+        String modulePath = getModulePath(moduleProperties, modulesParam);
+        List<String> commandOutput = CommandUtil.execCommand(CharSets.CHARSET_GBK, "git branch -a", modulePath);
         String currentBranch = commandOutput.stream().filter(v -> v.startsWith(CURRENT_BRANCH_FLAG)).collect(Collectors.toList()).get(0).substring(CURRENT_BRANCH_FLAG.length());
         String localBranch = modulesParam.getLocalBranch().trim();
         if(currentBranch.equals(localBranch)){
             log.info("{}仓库处于本地分支{}，无需切换", modulesParam.getName(), modulesParam.getLocalBranch());
         } else if(commandOutput.contains(LOCAL_BRANCH_FLAG + localBranch)){
             log.info("{}仓库处于其他分支{}，需要切换为{}", modulesParam.getName(), currentBranch, modulesParam.getLocalBranch());
-            String[] cmdArr = {"git", "checkout", localBranch};
-            logExecCmdOutput(moduleProperties, modulesParam, cmdArr);
+            String command = "git checkout " + localBranch;
+            logExecCmdOutput(moduleProperties, modulesParam, command);
         }else if(commandOutput.contains(REMOTE_BRANCH_FLAG + moduleProperties.getRemoteRepoName() + BRANCH_SP + localBranch)){
             log.info("{}仓库不存在分支，从远程仓库{}检出分支{}", modulesParam.getName(), moduleProperties.getRemoteRepoName(), modulesParam.getLocalBranch());
-            String[] cmdArr = {"git", "checkout", "-b", localBranch, moduleProperties.getRemoteRepoName() + BRANCH_SP + modulesParam.getLocalBranch()};
-            logExecCmdOutput(moduleProperties, modulesParam, cmdArr);
+            String command = "git checkout -b " + localBranch + " " + moduleProperties.getRemoteRepoName() + BRANCH_SP + modulesParam.getLocalBranch();
+            logExecCmdOutput(moduleProperties, modulesParam, command);
         }else {
             throw new RuntimeException("远程仓库不存在分支" + modulesParam.getLocalBranch() + ",无法进行检出");
         }
     }
 
-    private void logExecCmdOutput(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam, String[] cmdArr) throws IOException {
-        List<String> commandOutput = getCommandOutput(moduleProperties, modulesParam, cmdArr);
-        commandOutput.forEach(log::info);
-        checkOutput(commandOutput);
+    private void logExecCmdOutput(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam, String cmdArr) throws Exception {
+        getCommandOutput(moduleProperties, modulesParam, cmdArr, msg -> {
+            log.info(msg);
+            for (String errorWord : config.getErrorLogWords()) {
+                if(msg.contains(errorWord)){
+                    throw new RuntimeException("输出日志包含错误关键词" + errorWord + "，请检查是否正常");
+                }
+            }
+        });
     }
 
-    private List<String> getCommandOutput(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam, String[] cmdArr) throws IOException {
+    private void getCommandOutput(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam, String cmdArr, MsgHandler handler) throws Exception {
         String modulePath = getModulePath(moduleProperties, modulesParam);
-        return CommandUtil.getCommandOutput(CharSets.CHARSET_GBK, cmdArr, modulePath);
+        CommandUtil.execCommand(CharSets.CHARSET_GBK, cmdArr, modulePath, handler);
     }
 
     private String getModulePath(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam){
         return moduleProperties.getProjectPath() + File.separator + modulesParam.getName();
-    }
-
-    private void checkOutput(List<String> commandOutput) {
-        for (String output : commandOutput) {
-            for (String errorWord : config.getErrorLogWords()) {
-                if(output.contains(errorWord)){
-                    throw new RuntimeException("输出日志包含错误关键词" + errorWord + "，请检查是否正常");
-                }
-            }
-        }
     }
 }
