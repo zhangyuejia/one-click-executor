@@ -1,6 +1,7 @@
 package com.zhangyj.tools.common.utils;
 
-import com.zhangyj.tools.common.constant.CharSets;
+import cn.hutool.core.util.CharsetUtil;
+import com.zhangyj.tools.common.handler.DefaultMsgHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -31,12 +32,12 @@ public class SvnUtil {
      */
     public static void showLog(String svnPath, Integer rev) throws Exception {
         String command = String.format("svn log %s -r %d", svnPath, rev);
-        CommandUtil.execCommand(CharSets.CHARSET_GBK, command, null, log::info);
+        CommandUtil.execCommand(CharsetUtil.CHARSET_GBK, command, null, new DefaultMsgHandler());
     }
 
     public static List<String> getSvnInfo(String svnPath, Predicate<String> predicate) throws Exception {
         String command = String.format("svn info %s",svnPath);
-        return CommandUtil.execCommand(CharSets.CHARSET_GBK, command, null).stream().filter(predicate).collect(Collectors.toList());
+        return CommandUtil.execCommand(CharsetUtil.CHARSET_GBK, command, null).stream().filter(predicate).collect(Collectors.toList());
     }
 
 }

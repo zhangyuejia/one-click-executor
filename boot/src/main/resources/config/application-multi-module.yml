@@ -1,3 +1,15 @@
+# 【命令执行功能】
+cmd-executor:
+    # 是否启用该功能
+    enable: false
+    # 命令执行路径，相当于在以下路径打开cmd
+#    base-dir: E:\mw_project_new\umc_git\umc-portal-refactoring
+    base-dir: E:\mw_project_new\umc_git\umc-portal-refactoring2
+    # 执行编码，避免日志输出乱码
+    charset: "gbk"
+    # 命令文件
+    cmd-file-path: E:\mw_project_new\zhangyj\zhangyuejia\tools\build\cmd.txt
+
 # 多模块代码更新
 multi-module-pull-code:
   # 是否开启该功能
@@ -14,10 +26,10 @@ multi-module-pull-code:
       {
           refId: "dev",
         # 远程仓库名称
-          remote-repo-name: "origin",
+          remote-repo-name: "upstream",
         # 项目路径
-          project-path: E:\mw_project_new\umc_git\umc-refactoring2,
 #          project-path: E:\mw_project_new\umc_git\umc-portal-refactoring,
+          project-path: E:\mw_project_new\umc_git\umc-portal-refactoring2,
         # 是否需要切换到本地分支
           enable-checkout-localbranch: true,
         # 模块参数

@@ -18,7 +18,7 @@ import java.util.concurrent.CountDownLatch;
 public class CommandUtil {
 
     public static void execCommand(Charset charset, String command, String dir, MsgHandler handler) throws Exception{
-        handleExecCommand(charset, exec(command, new File(dir)), handler);
+        handleExecCommand(charset, exec(command, dir), handler);
     }
 
     public static List<String> execCommand(Charset charset, String command) throws Exception {
@@ -26,7 +26,7 @@ public class CommandUtil {
     }
 
     public static List<String> execCommand(Charset charset, String command, String dir) throws Exception {
-        return execCommand(charset, exec(command, new File(dir)));
+        return execCommand(charset, exec(command, dir));
     }
 
     private static List<String> execCommand(Charset charset, Process process) throws InterruptedException {
@@ -42,10 +42,11 @@ public class CommandUtil {
         InputStream[] inputStreams = {process.getInputStream(), process.getErrorStream()};
         CountDownLatch countDownLatch = new CountDownLatch(inputStreams.length);
         for (InputStream inputStream : inputStreams) {
-            ThreadUtil.execute(() -> {
+            // 设置为守护线程，主线程执行完自动结束
+            ThreadUtil.execAsync(() -> {
                 handleExecCommand(charset, inputStream, handler);
                 countDownLatch.countDown();
-            });
+            }, true);
         }
         countDownLatch.await();
     }
@@ -61,10 +62,10 @@ public class CommandUtil {
         }
     }
 
-    private static Process exec(String command, File dir) throws IOException {
-        log.info("执行命令：{}" + (dir != null? "地址：" + dir.getCanonicalPath(): ""), command);
+    private static Process exec(String command, String dir) throws IOException {
+        log.info("执行命令：{}" + (dir != null? "地址：" + dir: ""), command);
         Runtime runtime = Runtime.getRuntime();
-        final Process process = runtime.exec(command, null, dir);
+        final Process process = dir == null? runtime.exec(command): runtime.exec(command, null, new File(dir));
         //noinspection AlibabaAvoidManuallyCreateThread
         runtime.addShutdownHook(new Thread(process::destroy));
         return process;

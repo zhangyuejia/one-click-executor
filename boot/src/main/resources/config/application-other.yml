@@ -53,15 +53,6 @@ network-checker:
   # wifi名称（断网重连）
   wifiName: YJ&YR
   corn: 0 */1 * * * ?
-# 【命令执行功能】
-cmd-executor:
-  # 是否启用该功能
-  enable: true
-  #
-  exec-path: E:\mw_project_new\umc_git\umc-portal-refactoring1
-  # 命令文件
-  cmd-file-path: E:\mw_project_new\zhangyj\zhangyuejia\tools\build\cmd.txt
-
 
 other:
   enable: false

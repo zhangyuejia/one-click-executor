@@ -1,10 +1,9 @@
 package com.zhangyj.tools.business.project.multimodule;
 
+import cn.hutool.core.util.CharsetUtil;
 import com.zhangyj.tools.business.project.multimodule.config.MultiModulePullCodeConfig;
 import com.zhangyj.tools.business.project.multimodule.pojo.ModuleProperties;
 import com.zhangyj.tools.common.base.AbstractRunner;
-import com.zhangyj.tools.common.constant.CharSets;
-import com.zhangyj.tools.common.handler.MsgHandler;
 import com.zhangyj.tools.common.utils.CommandUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +77,7 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
         }
 
         String modulePath = getModulePath(moduleProperties, modulesParam);
-        List<String> commandOutput = CommandUtil.execCommand(CharSets.CHARSET_GBK, "git branch -a", modulePath);
+        List<String> commandOutput = CommandUtil.execCommand(CharsetUtil.CHARSET_GBK, "git branch -a", modulePath);
         String currentBranch = commandOutput.stream().filter(v -> v.startsWith(CURRENT_BRANCH_FLAG)).collect(Collectors.toList()).get(0).substring(CURRENT_BRANCH_FLAG.length());
         String localBranch = modulesParam.getLocalBranch().trim();
         if(currentBranch.equals(localBranch)){
@@ -97,7 +96,8 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
     }
 
     private void logExecCmdOutput(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam, String cmdArr) throws Exception {
-        getCommandOutput(moduleProperties, modulesParam, cmdArr, msg -> {
+        String modulePath = getModulePath(moduleProperties, modulesParam);
+        CommandUtil.execCommand(CharsetUtil.CHARSET_GBK, cmdArr, modulePath, msg -> {
             log.info(msg);
             for (String errorWord : config.getErrorLogWords()) {
                 if(msg.contains(errorWord)){
@@ -105,11 +105,6 @@ public class DoMultiModulePullCode extends AbstractRunner<MultiModulePullCodeCon
                 }
             }
         });
-    }
-
-    private void getCommandOutput(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam, String cmdArr, MsgHandler handler) throws Exception {
-        String modulePath = getModulePath(moduleProperties, modulesParam);
-        CommandUtil.execCommand(CharSets.CHARSET_GBK, cmdArr, modulePath, handler);
     }
 
     private String getModulePath(ModuleProperties moduleProperties, ModuleProperties.ModulesParam modulesParam){

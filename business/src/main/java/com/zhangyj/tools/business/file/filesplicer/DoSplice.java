@@ -3,6 +3,7 @@ package com.zhangyj.tools.business.file.filesplicer;
 import com.zhangyj.tools.business.file.filesplicer.config.FileSplicerConfig;
 import com.zhangyj.tools.business.file.filesplicer.enums.GenModeEnum;
 import com.zhangyj.tools.common.base.AbstractRunner;
+import com.zhangyj.tools.common.handler.DefaultMsgHandler;
 import com.zhangyj.tools.common.utils.CommandUtil;
 import com.zhangyj.tools.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +70,7 @@ public class DoSplice extends AbstractRunner<FileSplicerConfig> {
             return;
         }
         log.info("执行命令：{} 执行路径：{}", command, fileSplicerConfig.getPath());
-        CommandUtil.execCommand(StandardCharsets.UTF_8, command, fileSplicerConfig.getPath(), log::info);
+        CommandUtil.execCommand(StandardCharsets.UTF_8, command, fileSplicerConfig.getPath(), new DefaultMsgHandler());
     }
 
     private void deleteGenFile() throws IOException {

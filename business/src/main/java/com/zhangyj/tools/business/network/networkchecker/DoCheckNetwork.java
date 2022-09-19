@@ -1,12 +1,12 @@
 package com.zhangyj.tools.business.network.networkchecker;
 
 
+import cn.hutool.core.util.CharsetUtil;
 import com.zhangyj.tools.business.network.networkchecker.config.NetWorkCheckerConfig;
 import com.zhangyj.tools.common.base.AbstractRunner;
 import com.zhangyj.tools.common.cmd.PingOneCmd;
 import com.zhangyj.tools.common.cmd.RebootCmd;
 import com.zhangyj.tools.common.cmd.ReconnectWifiCmd;
-import com.zhangyj.tools.common.constant.CharSets;
 import com.zhangyj.tools.common.utils.CommandUtil;
 import com.zhangyj.tools.common.utils.ThreadUtils;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class DoCheckNetwork extends AbstractRunner<NetWorkCheckerConfig> {
     }
 
     private void reconnectNetwork() throws Exception {
-        List<String> commandOutput = CommandUtil.execCommand(CharSets.CHARSET_GBK, new ReconnectWifiCmd(config.getWifiName()).getCmd());
+        List<String> commandOutput = CommandUtil.execCommand(CharsetUtil.CHARSET_GBK, new ReconnectWifiCmd(config.getWifiName()).getCmd());
         if(CollectionUtils.isEmpty(commandOutput)){
             return;
         }
@@ -67,7 +67,7 @@ public class DoCheckNetwork extends AbstractRunner<NetWorkCheckerConfig> {
                 long offNetworkMinutes = ChronoUnit.MINUTES.between(offNetworkTime, LocalDateTime.now());
                 if(offNetworkMinutes >= 30){
                     log.info("断网时间为：" + offNetworkMinutes + "分钟，即将重启电脑");
-                    CommandUtil.execCommand(CharSets.CHARSET_GBK, new RebootCmd().getCmd(), null, null);
+                    CommandUtil.execCommand(CharsetUtil.CHARSET_GBK, new RebootCmd().getCmd(), null, null);
                 }
             }
 
@@ -76,7 +76,7 @@ public class DoCheckNetwork extends AbstractRunner<NetWorkCheckerConfig> {
     }
 
     private boolean isNetworkWorked() throws Exception {
-        List<String> commandOutput = CommandUtil.execCommand(CharSets.CHARSET_GBK, new PingOneCmd().getCmd());
+        List<String> commandOutput = CommandUtil.execCommand(CharsetUtil.CHARSET_GBK, new PingOneCmd().getCmd());
         if(CollectionUtils.isEmpty(commandOutput)){
             return false;
         }

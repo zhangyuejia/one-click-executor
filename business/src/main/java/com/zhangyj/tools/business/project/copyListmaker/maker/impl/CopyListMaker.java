@@ -1,20 +1,18 @@
 package com.zhangyj.tools.business.project.copyListmaker.maker.impl;
 
+import cn.hutool.core.util.CharsetUtil;
 import com.google.common.collect.Sets;
-import com.zhangyj.tools.common.constant.CharSetConst;
-import com.zhangyj.tools.common.constant.CharSets;
-import com.zhangyj.tools.common.constant.Const;
 import com.zhangyj.tools.business.project.copyListmaker.config.Config;
 import com.zhangyj.tools.business.project.copyListmaker.maker.Maker;
 import com.zhangyj.tools.business.project.copyListmaker.replactor.BaseCopyListConverter;
 import com.zhangyj.tools.business.project.copyListmaker.replactor.ConverterFactory;
+import com.zhangyj.tools.common.constant.Const;
 import com.zhangyj.tools.common.utils.CommandUtil;
 import com.zhangyj.tools.common.utils.SvnUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -22,7 +20,6 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -59,7 +56,7 @@ public class CopyListMaker implements Maker<String> {
     private void readCopyList() throws Exception {
         // 获取输入输出流
         String command = String.format("svn diff -r %d:%d  --summarize %s", config.getSvn().getRevStart() - 1, config.getSvn().getRevEnd(), config.getSvn().getPath());
-        CommandUtil.execCommand(CharSets.CHARSET_GBK, command).stream()
+        CommandUtil.execCommand(CharsetUtil.CHARSET_GBK, command).stream()
                     // utf-8转码，支持中文显示
                     .map(decodeUtf8())
                     // 过滤无效svn记录
@@ -73,7 +70,7 @@ public class CopyListMaker implements Maker<String> {
     private void writeCopyList() throws IOException {
         // 获取输入输出流
         try (BufferedWriter writer =
-                     Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()), CharSets.CHARSET_GBK)){
+                     Files.newBufferedWriter(Paths.get(config.getCopyList().getPath()), CharsetUtil.CHARSET_GBK)){
             // 将copyList数据写入文件
             copyListLines.forEach((line) ->{
                 try {
@@ -107,7 +104,7 @@ public class CopyListMaker implements Maker<String> {
     private Function<String, String> decodeUtf8() {
         return svnRecord -> {
             try {
-                return URLDecoder.decode(svnRecord, CharSetConst.UTF8);
+                return URLDecoder.decode(svnRecord, CharsetUtil.UTF_8);
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }

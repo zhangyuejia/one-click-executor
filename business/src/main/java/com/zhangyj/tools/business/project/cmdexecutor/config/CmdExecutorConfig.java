@@ -22,7 +22,7 @@ public class CmdExecutorConfig extends AbstractConfig {
 
     private String cmdFilePath;
 
-    private String execPath;
+    private String baseDir;
 
     private String charset;
 
