@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.zhangyj</groupId>
-    <artifactId>tools</artifactId>
+    <artifactId>cmd-executor</artifactId>
     <packaging>pom</packaging>
     <version>4.0.0</version>
     <modules>
         <module>common</module>
-        <module>business</module>
+        <module>component</module>
         <module>boot</module>
     </modules>
 
