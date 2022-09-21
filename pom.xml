@@ -12,6 +12,7 @@
         <module>common</module>
         <module>component</module>
         <module>boot</module>
+        <module>core</module>
     </modules>
 
     <properties>

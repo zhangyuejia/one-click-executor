@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.zhangyj</groupId>
-            <artifactId>business</artifactId>
+            <artifactId>component</artifactId>
             <version>4.0.0</version>
         </dependency>
     </dependencies>

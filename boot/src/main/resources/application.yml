@@ -1,0 +1,13 @@
+# 【命令执行功能】
+cmd-executor:
+  # 命令执行路径，相当于在以下路径打开cmd
+  dir: E:\mw_project_new\umc_git\umc-portal-refactoring
+  # 执行编码，避免日志输出乱码
+  charset: "gbk"
+
+# slf4j配置
+logging:
+  pattern:
+    console: '%d{MM-dd HH:mm:ss} %-5level%msg%n'
+  file:
+    name: "./logs/log.log"
