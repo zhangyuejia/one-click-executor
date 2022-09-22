@@ -10,7 +10,7 @@ modulesProperties: [
     refId: "umc3.13",
     # 远程仓库名称
     remoteRepoName: "upstream",
-    # 项目根目录，此处可以为空，为空会被替换为 cmd-executor.dir
+    # 命令执行根目录，此处可以为空，为空会被替换为 cmd-executor.dir
     dir:
     # 是否需要切换到本地分支
     enableCheckoutLocalBranch: true,
