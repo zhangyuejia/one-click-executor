@@ -1,4 +1,4 @@
-package com.zhangyj.cmdexecutor.common.common.util;
+package com.zhangyj.cmdexecutor.core.common.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;

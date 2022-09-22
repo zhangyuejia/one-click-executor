@@ -9,7 +9,6 @@
     <packaging>pom</packaging>
     <version>4.0.0</version>
     <modules>
-        <module>common</module>
         <module>component</module>
         <module>boot</module>
         <module>core</module>

@@ -1,13 +1,11 @@
 package com.zhangyj.cmdexecutor.core.service.impl;
 
-import com.zhangyj.cmdexecutor.common.common.util.FileUtils;
-import com.zhangyj.cmdexecutor.common.common.util.StrUtils;
+import com.zhangyj.cmdexecutor.core.common.util.FileUtils;
+import com.zhangyj.cmdexecutor.core.common.util.StrUtils;
 import com.zhangyj.cmdexecutor.core.common.config.CmdConfig;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
-import com.zhangyj.cmdexecutor.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
 import com.zhangyj.cmdexecutor.core.entity.bo.CmdExecParameterPO;
-import com.zhangyj.cmdexecutor.core.entity.bo.CmdLinePO;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import com.zhangyj.cmdexecutor.core.service.CmdExecService;
 import lombok.RequiredArgsConstructor;
