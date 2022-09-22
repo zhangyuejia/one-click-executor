@@ -2,21 +2,21 @@
 dir:
 # 启用替换id
 enableRefId: [
-  #    "umc-zhangyj-mysql",
-  #    "umc-zhangyjsass-mysql",
-  #    "umc39sass-dev-mysql",
-  #    "umcsass-dev-mysql",
-  #    "umc-dev-mysql",
-  #    "umc-dev-oracle",
-  #    "umc-dev-yx-mysql",
-  #    "umc-test-mysql",
-  #    "umc-test-oracle",
-  #    "umc-test-oracle-upgrade",
-  #    "umc-test-polardb",
-      "umc-test-3132-mysql",
-  #    "umc-test-31-mysql",
-#  "umc-test-388-mysql",
-  #    "umcsysadmin-dev-mysql",
+#   "umc-zhangyj-mysql",
+#   "umc-zhangyjsass-mysql",
+#    "umc39sass-dev-mysql",
+#    "umcsass-dev-mysql",
+     "umc-dev-mysql",
+#    "umc-dev-oracle",
+#    "umc-dev-yx-mysql",
+#    "umc-test-mysql",
+#    "umc-test-oracle",
+#    "umc-test-oracle-upgrade",
+#    "umc-test-polardb",
+#     "umc-test-3132-mysql",
+#    "umc-test-31-mysql",
+#    "umc-test-388-mysql",
+#    "umcsysadmin-dev-mysql",
 ]
 # 替换配置文件相对地址
 filePaths: [
