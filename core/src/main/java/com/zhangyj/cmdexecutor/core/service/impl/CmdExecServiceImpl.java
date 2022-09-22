@@ -48,7 +48,6 @@ public class CmdExecServiceImpl extends AbstractCmdService implements CmdExecSer
                 for (CmdHandler cmdHandler : cmdHandlers) {
                     if (cmdHandler.match(line)) {
                         String content = StrUtils.parseTplContent(line, cmdParameter);
-                        log.info("cmd:{}", content);
                         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(content);
                         cmdHandler.handle(config, cmdLinePo);
                     }

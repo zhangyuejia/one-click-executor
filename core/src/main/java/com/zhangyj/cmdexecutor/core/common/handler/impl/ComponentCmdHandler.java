@@ -29,7 +29,7 @@ public class ComponentCmdHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, CmdLinePO cmdLinePo) throws Exception {
-        log.info(JSON.toJSONString(cmdLinePo));
+        log.info("cmd:" + JSON.toJSONString(cmdLinePo));
         CmdService cmdService = getCmdService(cmdLinePo);
         CmdConfig cmdConfig = getCmdConfig(cmdLinePo, cmdService);
         cmdService.exec(cmdConfig);
