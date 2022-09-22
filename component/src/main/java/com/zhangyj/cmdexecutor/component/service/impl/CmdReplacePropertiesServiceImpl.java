@@ -3,9 +3,10 @@ package com.zhangyj.cmdexecutor.component.service.impl;
 import com.zhangyj.cmdexecutor.component.common.config.CmdReplacePropertiesConfig;
 import com.zhangyj.cmdexecutor.component.entity.bo.ReplacePropertiesBO;
 import com.zhangyj.cmdexecutor.core.common.config.CmdConfig;
-import com.zhangyj.cmdexecutor.core.service.CmdService;
+import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class CmdReplacePropertiesServiceImpl implements CmdService {
+public class CmdReplacePropertiesServiceImpl extends AbstractCmdService {
 
     /**
      * 剩下来没用到的，需要写入最后一个文件
@@ -41,7 +42,7 @@ public class CmdReplacePropertiesServiceImpl implements CmdService {
 
     @Override
     public void exec(CmdConfig c) throws Exception {
-        CmdReplacePropertiesConfig config = (CmdReplacePropertiesConfig) c;
+        CmdReplacePropertiesConfig config = getConfig(c);
         List<ReplacePropertiesBO> replacePropertiesList = config.getReplaceKeys();
         // 是否检查只有一个replaceId
         if(config.getEnableRefId().size() > 1){
@@ -57,6 +58,14 @@ public class CmdReplacePropertiesServiceImpl implements CmdService {
             writeLeftProperties(config);
             clear();
         }
+    }
+
+    private CmdReplacePropertiesConfig getConfig(CmdConfig c) {
+        CmdReplacePropertiesConfig config = (CmdReplacePropertiesConfig) c;
+        if (StringUtils.isBlank(config.getDir())) {
+            config.setDir(cmdExecConfig.getDir());
+        }
+        return config;
     }
 
     @Override
@@ -81,7 +90,7 @@ public class CmdReplacePropertiesServiceImpl implements CmdService {
     }
 
     private void replaceProperties(CmdReplacePropertiesConfig config) throws IOException {
-        List<String> filePaths = config.getFilePaths();
+        List<String> filePaths = getAbsoluteFilePaths(config);
         for (String filePath : filePaths) {
             File file = new File(filePath);
             if(file.isDirectory()) {
@@ -106,11 +115,15 @@ public class CmdReplacePropertiesServiceImpl implements CmdService {
 
     }
 
+    private List<String> getAbsoluteFilePaths(CmdReplacePropertiesConfig config) {
+       return config.getFilePaths().stream().map(v -> config.getDir() + File.separator + v).collect(Collectors.toList());
+    }
+
     private void writeLeftProperties(CmdReplacePropertiesConfig config) throws IOException {
         if(CollectionUtils.isEmpty(propertiesLeftMap)){
             return;
         }
-        List<String> filePaths = config.getFilePaths();
+        List<String> filePaths = getAbsoluteFilePaths(config);
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePaths.get(filePaths.size() - 1)), StandardOpenOption.APPEND)){
             for (Map.Entry<String, String> entry : propertiesLeftMap.entrySet()) {
                 String line = entry.getKey() + "=" + entry.getValue();

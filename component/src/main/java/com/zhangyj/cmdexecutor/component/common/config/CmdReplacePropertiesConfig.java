@@ -18,6 +18,8 @@ import java.util.Map;
 @Component
 public class CmdReplacePropertiesConfig implements CmdConfig {
 
+    private String dir;
+
     private List<String> enableRefId;
 
     /**

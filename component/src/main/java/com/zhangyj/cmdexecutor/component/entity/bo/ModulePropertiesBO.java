@@ -22,7 +22,7 @@ public class ModulePropertiesBO {
     /**
      * 项目路径
      */
-    private String projectPath;
+    private String dir;
 
     /**
      * 是否需要切换到本地分支

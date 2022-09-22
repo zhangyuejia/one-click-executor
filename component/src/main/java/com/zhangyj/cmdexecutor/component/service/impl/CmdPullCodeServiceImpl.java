@@ -5,10 +5,12 @@ import com.zhangyj.cmdexecutor.component.common.config.CmdPullCodeConfig;
 import com.zhangyj.cmdexecutor.component.entity.bo.ModulePropertiesBO;
 import com.zhangyj.cmdexecutor.core.common.config.CmdConfig;
 import com.zhangyj.cmdexecutor.core.common.util.CommandUtils;
-import com.zhangyj.cmdexecutor.core.service.CmdService;
+import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CmdPullCodeServiceImpl implements CmdService {
+public class CmdPullCodeServiceImpl extends AbstractCmdService {
 
     private final static String CURRENT_BRANCH_FLAG = "* ";
 
@@ -32,10 +34,10 @@ public class CmdPullCodeServiceImpl implements CmdService {
 
     @Override
     public void exec(CmdConfig c) throws Exception {
-        CmdPullCodeConfig config = (CmdPullCodeConfig) c;
+        CmdPullCodeConfig config = getConfig(c);
         // 是否检查只有一个replaceId
         if(config.getEnableRefId().size() > 1){
-            throw new RuntimeException("配置项[multi-module-pull.enableReplaceId]配置个数不能大于1个");
+            throw new RuntimeException("配置项[enableReplaceId]配置个数不能大于1个");
         }
         for (ModulePropertiesBO moduleProperties : config.getModulesProperties()) {
             if(!config.getEnableRefId().contains(moduleProperties.getRefId())){
@@ -55,6 +57,19 @@ public class CmdPullCodeServiceImpl implements CmdService {
                 pullCode(config, moduleProperties, modulesParam);
             }
         }
+    }
+
+    private CmdPullCodeConfig getConfig(CmdConfig c) {
+        CmdPullCodeConfig config = (CmdPullCodeConfig) c;
+        if (CollectionUtils.isEmpty(config.getModulesProperties())) {
+            return config;
+        }
+        for (ModulePropertiesBO modulesProperty : config.getModulesProperties()) {
+            if (StringUtils.isBlank(modulesProperty.getDir())) {
+                modulesProperty.setDir(cmdExecConfig.getDir());
+            }
+        }
+        return config;
     }
 
     @Override
@@ -113,7 +128,7 @@ public class CmdPullCodeServiceImpl implements CmdService {
     }
 
     private String getModulePath(ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam){
-        return moduleProperties.getProjectPath() + File.separator + modulesParam.getName();
+        return moduleProperties.getDir() + File.separator + modulesParam.getName();
     }
 
 

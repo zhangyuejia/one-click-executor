@@ -9,9 +9,10 @@ import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
 import com.zhangyj.cmdexecutor.core.entity.bo.CmdExecParameterPO;
 import com.zhangyj.cmdexecutor.core.entity.bo.CmdLinePO;
 import com.zhangyj.cmdexecutor.core.service.CmdExecService;
+import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -25,15 +26,16 @@ import java.util.List;
 /**
  * @author zhangyj
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class CmdExecServiceImpl implements CmdExecService {
+public class CmdExecServiceImpl extends AbstractCmdService implements CmdExecService {
 
     private final List<CmdHandler> cmdHandlers;
 
     @Override
     public void exec(CmdConfig c) throws Exception {
-        CmdExecConfig config = (CmdExecConfig) c;
+        CmdExecConfig config = getConfig(c);
         // 初始化
         init(config);
         // CMD变量
@@ -44,12 +46,24 @@ public class CmdExecServiceImpl implements CmdExecService {
             while ((line = reader.readLine()) != null){
                 for (CmdHandler cmdHandler : cmdHandlers) {
                     if (cmdHandler.match(line)) {
-                        CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(StrUtils.parseTplContent(line, cmdParameter));
+                        String content = StrUtils.parseTplContent(line, cmdParameter);
+                        log.info("cmd:{} 转换后：{}", line, content);
+                        CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(content);
                         cmdHandler.handle(config, cmdLinePo);
                     }
                 }
             }
         }
+    }
+
+    private CmdExecConfig getConfig(CmdConfig c) {
+        CmdExecConfig config = (CmdExecConfig) c;
+        if (!Boolean.TRUE.equals(config.getBootLoad())) {
+            if (StringUtils.isBlank(config.getDir())) {
+                config.setDir(cmdExecConfig.getDir());
+            }
+        }
+        return config;
     }
 
     @Override
