@@ -1,5 +1,6 @@
 package com.zhangyj.cmdexecutor.common.common.util;
 
+import java.io.File;
 import java.net.URL;
 
 /**
@@ -7,11 +8,15 @@ import java.net.URL;
  */
 public class FileUtils {
 
-    public static String getResourcePath(String filePath) {
-        URL url = FileUtils.class.getClassLoader().getResource(filePath);
+    public static String getResourcePath(String resource) {
+        URL url = FileUtils.class.getClassLoader().getResource("");
         if(url == null){
-            throw new IllegalArgumentException(filePath + "文件不存在");
+            throw new IllegalArgumentException(resource + "文件不存在");
         }
-        return url.getPath().substring(1);
+        return url.getPath().substring(1) + resource;
+    }
+
+    public static boolean existsResource(String resource){
+        return new File(getResourcePath(resource)).exists();
     }
 }

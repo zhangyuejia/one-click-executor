@@ -5,7 +5,7 @@
 #component,replace-properties
 
 ## 替换配置
-component,replace-properties
+#component,replace-properties
 
 # 更新umc源码
 #component,pull-code

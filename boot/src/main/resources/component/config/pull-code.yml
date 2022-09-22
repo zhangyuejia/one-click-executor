@@ -11,7 +11,7 @@ modulesProperties: [
     # 远程仓库名称
     remoteRepoName: "upstream",
     # 项目根目录，此处可以为空，为空会被替换为 cmd-executor.dir
-    dir: E:\mw_project_new\umc_git\umc-portal-refactoring,
+    dir:
     # 是否需要切换到本地分支
     enableCheckoutLocalBranch: true,
     # 模块参数

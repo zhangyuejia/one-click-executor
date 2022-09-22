@@ -19,13 +19,13 @@ public class CmdExecConfig implements CmdConfig {
 
     private String charset;
 
-    private String filePath;
+    private String shellPath;
 
     /**
      * 是否为初始启动加载（与普通组件加载区分开）
      * 当配置为true时，dir属性不能为空；当为空或false时，dir取配置项[cmd-executor.dir]
      */
-    private Boolean bootLoad;
+    private Boolean bootLoad = false;
 
     @Override
     public String getDesc() {

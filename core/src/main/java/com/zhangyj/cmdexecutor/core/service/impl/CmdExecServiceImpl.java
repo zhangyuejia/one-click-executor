@@ -8,8 +8,8 @@ import com.zhangyj.cmdexecutor.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
 import com.zhangyj.cmdexecutor.core.entity.bo.CmdExecParameterPO;
 import com.zhangyj.cmdexecutor.core.entity.bo.CmdLinePO;
-import com.zhangyj.cmdexecutor.core.service.CmdExecService;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
+import com.zhangyj.cmdexecutor.core.service.CmdExecService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -40,18 +40,37 @@ public class CmdExecServiceImpl extends AbstractCmdService implements CmdExecSer
         init(config);
         // CMD变量
         CmdExecParameterPO cmdParameter = getCmdExecParameter(config);
-        String filePath = StringUtils.defaultIfBlank(config.getFilePath(), FileUtils.getResourcePath("cmd.sh"));
+        String filePath = getExecFilePath(config);
+
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())){
             String line;
             while ((line = reader.readLine()) != null){
                 for (CmdHandler cmdHandler : cmdHandlers) {
                     if (cmdHandler.match(line)) {
                         String content = StrUtils.parseTplContent(line, cmdParameter);
-                        log.info("cmd:{} 转换后：{}", line, content);
+                        log.info("cmd:{}", content);
                         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(content);
                         cmdHandler.handle(config, cmdLinePo);
                     }
                 }
+            }
+        }
+    }
+
+    private String getExecFilePath(CmdExecConfig config) {
+        if(StringUtils.isNotBlank(config.getShellPath())){
+            if(new File(config.getShellPath()).exists()){
+                return config.getShellPath();
+            }else if(FileUtils.existsResource(config.getShellPath())){
+                return FileUtils.getResourcePath(config.getShellPath());
+            }else {
+                throw new IllegalArgumentException("执行" + config.getDesc() + "报错，文件路径不存在:" + config.getShellPath());
+            }
+        }else {
+            if(cmdExecConfig.getBootLoad()){
+                return FileUtils.getResourcePath("cmd.sh");
+            }else {
+                throw new IllegalArgumentException("执行" + config.getDesc() + "报错，配置项[shellPath]不能为空");
             }
         }
     }
