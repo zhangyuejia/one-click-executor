@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class CommentCmdHandler implements CmdHandler {
 
     @Override
-    public void handle(CmdExecConfig config, CmdLinePO cmdLinePo) {
+    public void handle(CmdExecConfig config, String cmdLine) {
 
     }
 

@@ -8,6 +8,7 @@ import com.zhangyj.cmdexecutor.common.common.util.StrUtils;
 import com.zhangyj.cmdexecutor.core.common.config.CmdConfig;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
 import com.zhangyj.cmdexecutor.core.common.enums.CmdTypeEnum;
+import com.zhangyj.cmdexecutor.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
 import com.zhangyj.cmdexecutor.core.entity.bo.CmdLinePO;
 import com.zhangyj.cmdexecutor.core.service.CmdService;
@@ -28,7 +29,8 @@ public class ComponentCmdHandler implements CmdHandler {
     private final ApplicationContext context;
 
     @Override
-    public void handle(CmdExecConfig config, CmdLinePO cmdLinePo) throws Exception {
+    public void handle(CmdExecConfig config, String cmdLine) throws Exception {
+        CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         log.info("cmd:" + JSON.toJSONString(cmdLinePo));
         CmdService cmdService = getCmdService(cmdLinePo);
         CmdConfig cmdConfig = getCmdConfig(cmdLinePo, cmdService);

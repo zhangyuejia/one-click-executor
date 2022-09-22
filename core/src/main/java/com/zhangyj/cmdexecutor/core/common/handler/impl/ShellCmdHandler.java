@@ -3,6 +3,7 @@ package com.zhangyj.cmdexecutor.core.common.handler.impl;
 import com.alibaba.fastjson.JSON;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
 import com.zhangyj.cmdexecutor.core.common.enums.CmdTypeEnum;
+import com.zhangyj.cmdexecutor.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
 import com.zhangyj.cmdexecutor.core.common.util.CommandUtils;
 import com.zhangyj.cmdexecutor.core.entity.bo.CmdLinePO;
@@ -20,7 +21,8 @@ import java.nio.charset.Charset;
 public class ShellCmdHandler implements CmdHandler {
 
     @Override
-    public void handle(CmdExecConfig config, CmdLinePO cmdLinePo) throws Exception {
+    public void handle(CmdExecConfig config, String cmdLine) throws Exception {
+        CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         log.info("cmd:" + JSON.toJSONString(cmdLinePo));
         if(cmdLinePo.getDir() == null){
             cmdLinePo.setDir(config.getDir());
