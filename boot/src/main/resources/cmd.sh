@@ -9,7 +9,7 @@
 #component,replace-properties,replace-properties.yml
 
 ## 【功能】替换本地properties配置
-component,replace-properties,exec.yml
+#component,replace-properties,exec.yml
 
 ## 【功能】更新代码
 component,pull-code,pull-code.yml
