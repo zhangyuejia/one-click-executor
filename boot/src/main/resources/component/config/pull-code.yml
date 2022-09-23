@@ -1,9 +1,9 @@
+# 日志错误关键词（判断是否命令是否成功执行）
+errorLogWords: ["abort", "error", "fail", "unable", "Could not"]
 # 启用id
 enableRefId: [
     "umc3.13",
 ]
-# 日志错误关键词（判断是否命令是否成功执行）
-errorLogWords: ["abort", "error", "fail", "unable", "Could not"]
 # 模块参数
 modulesProperties: [
 {

@@ -4,13 +4,11 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.setting.yaml.YamlUtil;
-import com.alibaba.fastjson.JSON;
-import com.zhangyj.cmdexecutor.core.common.config.CmdConfig;
+import com.zhangyj.cmdexecutor.core.common.config.AbstractCmdConfig;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
 import com.zhangyj.cmdexecutor.core.common.enums.CmdTypeEnum;
 import com.zhangyj.cmdexecutor.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
-import com.zhangyj.cmdexecutor.core.common.util.FileUtils;
 import com.zhangyj.cmdexecutor.core.common.util.StrUtils;
 import com.zhangyj.cmdexecutor.core.entity.bo.CmdLinePO;
 import com.zhangyj.cmdexecutor.core.service.CmdService;
@@ -43,21 +41,20 @@ public class CmdComponentHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) throws Exception {
+        log.info("执行组件:" + cmdLine);
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
-        log.info("cmd:" + JSON.toJSONString(cmdLinePo));
         CmdService<?> cmdService = getCmdService(cmdLinePo);
-        CmdConfig cmdConfig = getCmdConfig(cmdLinePo, cmdService);
+        AbstractCmdConfig cmdConfig = getCmdConfig(cmdLinePo);
         ReflectUtil.invoke(cmdService, "setConfig", cmdConfig);
         ReflectUtil.invoke(cmdService, "exec");
     }
 
-    private CmdConfig getCmdConfig(CmdLinePO cmdLinePo, CmdService<?> cmdService) {
-        String configPath = FileUtils.getResourcePath("component/config/" + cmdLinePo.getCmd() + ".yml");
-        return (CmdConfig) YamlUtil.loadByPath(configPath, getConfigClass(cmdLinePo.getCmd()));
+    private AbstractCmdConfig getCmdConfig(CmdLinePO cmdLinePo) {
+        return (AbstractCmdConfig) YamlUtil.loadByPath(cmdLinePo.getDir(), getConfigClass(cmdLinePo.getCmd()));
     }
 
     private Class<?> getConfigClass(String cmd) {
-        Set<Class<?>> classes = ClassUtil.scanPackageBySuper(BASE_PACKAGE, CmdConfig.class);
+        Set<Class<?>> classes = ClassUtil.scanPackageBySuper(BASE_PACKAGE, AbstractCmdConfig.class);
         for (Class<?> aClass : classes) {
             if(StringUtils.containsIgnoreCase(aClass.getSimpleName(), cmd.replace("-", ""))){
                 return aClass;

@@ -3,7 +3,6 @@ package com.zhangyj.cmdexecutor.core.common.handler.impl;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
 import com.zhangyj.cmdexecutor.core.common.enums.CmdTypeEnum;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
-import com.zhangyj.cmdexecutor.core.entity.bo.CmdLinePO;
 import org.springframework.stereotype.Component;
 
 /**

@@ -2,7 +2,7 @@ package com.zhangyj.cmdexecutor.component.service.impl;
 
 import com.zhangyj.cmdexecutor.component.common.config.CmdSpliceFileConfig;
 import com.zhangyj.cmdexecutor.component.common.enums.GenModeEnum;
-import com.zhangyj.cmdexecutor.core.common.handler.impl.DefaultStringHandler;
+import com.zhangyj.cmdexecutor.core.common.handler.impl.CheckStringHandler;
 import com.zhangyj.cmdexecutor.core.common.util.CommandUtils;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class CmdSpliceFileServiceImpl extends AbstractCmdService<CmdSpliceFileCo
             return;
         }
         log.info("执行命令：{} 执行路径：{}", command, config.getPath());
-        CommandUtils.execCommand(StandardCharsets.UTF_8, command, config.getPath(), new DefaultStringHandler());
+        CommandUtils.execCommand(StandardCharsets.UTF_8, command, config.getPath(), new CheckStringHandler(config));
     }
 
     private void deleteGenFile() throws IOException {

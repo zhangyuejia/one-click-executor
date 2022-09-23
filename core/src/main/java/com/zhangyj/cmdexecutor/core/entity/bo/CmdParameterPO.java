@@ -9,10 +9,16 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class CmdExecParameterPO {
+public class CmdParameterPO {
 
     /**
      * 命令执行根路径
      */
     private String dir;
+
+
+    /**
+     * 本项目资源路径
+     */
+    private String resourceDir;
 }

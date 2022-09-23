@@ -3,6 +3,7 @@ package com.zhangyj.cmdexecutor.component.service.impl;
 import cn.hutool.core.util.CharsetUtil;
 import com.zhangyj.cmdexecutor.component.common.config.CmdPullCodeConfig;
 import com.zhangyj.cmdexecutor.component.entity.bo.ModulePropertiesBO;
+import com.zhangyj.cmdexecutor.core.common.handler.impl.CheckStringHandler;
 import com.zhangyj.cmdexecutor.core.common.util.CommandUtils;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import lombok.RequiredArgsConstructor;
@@ -99,7 +100,7 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService<CmdPullCodeConfig
             String command = "git checkout " + localBranch;
             logExecCmdOutput(moduleProperties, modulesParam, command);
         }else if(commandOutput.contains(REMOTE_BRANCH_FLAG + moduleProperties.getRemoteRepoName() + BRANCH_SP + localBranch)){
-            log.info("{}仓库不存在分支，从远程仓库{}检出分支{}", modulesParam.getName(), moduleProperties.getRemoteRepoName(), modulesParam.getLocalBranch());
+            log.info("{}仓库从远程仓库{}检出新分支{}", modulesParam.getName(), moduleProperties.getRemoteRepoName(), modulesParam.getLocalBranch());
             String command = "git checkout -b " + localBranch + " " + moduleProperties.getRemoteRepoName() + BRANCH_SP + modulesParam.getLocalBranch();
             logExecCmdOutput(moduleProperties, modulesParam, command);
         }else {
@@ -109,14 +110,7 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService<CmdPullCodeConfig
 
     private void logExecCmdOutput(ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam, String cmdArr) throws Exception {
         String modulePath = getModulePath(moduleProperties, modulesParam);
-        CommandUtils.execCommand(CharsetUtil.CHARSET_GBK, cmdArr, modulePath, msg -> {
-            log.info(msg);
-            for (String errorWord : config.getErrorLogWords()) {
-                if(msg.contains(errorWord)){
-                    throw new RuntimeException("输出日志包含错误关键词" + errorWord + "，请检查是否正常");
-                }
-            }
-        });
+        CommandUtils.execCommand(CharsetUtil.CHARSET_GBK, cmdArr, modulePath, new CheckStringHandler(config));
     }
 
     private String getModulePath(ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam){

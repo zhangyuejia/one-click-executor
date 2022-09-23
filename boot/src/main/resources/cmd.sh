@@ -1,18 +1,27 @@
-## 【功能】检出源码并检出为指定分支功能
+## !!!变量说明：dir:指application.yml中dir resourceDir:指本项目resource绝对路径
+##############################【功能】合并文件夹下的文件################################
+#component,splice-file,#{[resourceDir]}component\config\splice-file.yml
+
+##############################【功能】检出源码并检出为指定分支功能########################
 ## clone代码
-#component,exec,exec.yml
+#component,exec,#{[resourceDir]}component\config\exec.yml
 ## 更新代码
-#component,pull-code,pull-code.yml
+#component,pull-code,#{[resourceDir]}component\config\pull-code.yml
 ## 挂载audit模块代码到business
 #shell,cmd /c mklink /j #{[dir]}\umc-portal\business\src\main\java\com\montnets\umc\portal\audit #{[dir]}\umc-portal-audit\src\main\java\com\montnets\umc\portal\audit,#{[dir]}
 ## 替换本地properties配置
-#component,replace-properties,replace-properties.yml
+#component,replace-properties,#{[resourceDir]}component\config\replace-properties.yml
 
-## 【功能】替换本地properties配置
-#component,replace-properties,exec.yml
+##############################【功能】替换本地properties配置##############################
+#component,replace-properties,#{[resourceDir]}component\config\replace-properties.yml
 
-## 【功能】更新代码
-component,pull-code,pull-code.yml
+##############################【功能】更新后端代码########################################
+component,pull-code,#{[resourceDir]}component\config\pull-code.yml
 
-# 【功能】合并文件夹下的文件
-#component,splice-file,splice-file.yml
+##############################【功能】更新前端代码########################################
+component,exec,#{[resourceDir]}component\config\exec-pull-web.yml
+
+##############################【功能】更新前端代码并启动###################################
+#component,exec,#{[resourceDir]}component\config\exec-start-web.yml
+
+

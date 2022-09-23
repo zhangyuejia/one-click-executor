@@ -1,18 +1,12 @@
 package com.zhangyj.cmdexecutor.core.service;
 
 
-import com.zhangyj.cmdexecutor.core.common.config.CmdConfig;
+import com.zhangyj.cmdexecutor.core.common.config.AbstractCmdConfig;
 
 /**
  * @author zhangyj
  */
-public interface CmdService<T extends CmdConfig> {
-
-    /**
-     * 执行命令
-     * @throws Exception 异常
-     */
-    void exec() throws Exception;
+public interface CmdService<T extends AbstractCmdConfig> {
 
     /**
      * 获取配置类
@@ -25,4 +19,9 @@ public interface CmdService<T extends CmdConfig> {
      * @param c 配置类
      */
     void setConfig(T c);
+    /**
+     * 执行命令
+     * @throws Exception 异常
+     */
+    void exec() throws Exception;
 }

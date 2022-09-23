@@ -1,6 +1,5 @@
 package com.zhangyj.cmdexecutor.core.common.handler.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
 import com.zhangyj.cmdexecutor.core.common.enums.CmdTypeEnum;
 import com.zhangyj.cmdexecutor.core.common.factory.CmdLinePoFactory;
@@ -22,12 +21,12 @@ public class CmdShellHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) throws Exception {
+        log.info("执行shell:" + cmdLine);
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
-        log.info("cmd:" + JSON.toJSONString(cmdLinePo));
         if(cmdLinePo.getDir() == null){
             cmdLinePo.setDir(config.getDir());
         }
-        CommandUtils.execCommand(Charset.forName(config.getCharset()), cmdLinePo.getCmd(), cmdLinePo.getDir(), new DefaultStringHandler());
+        CommandUtils.execCommand(Charset.forName(config.getCharset()), cmdLinePo.getCmd(), cmdLinePo.getDir(), new CheckStringHandler(config));
     }
 
     @Override

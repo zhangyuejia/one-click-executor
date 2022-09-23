@@ -4,7 +4,7 @@ import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
 import com.zhangyj.cmdexecutor.core.common.util.FileUtils;
 import com.zhangyj.cmdexecutor.core.common.util.StrUtils;
-import com.zhangyj.cmdexecutor.core.entity.bo.CmdExecParameterPO;
+import com.zhangyj.cmdexecutor.core.entity.bo.CmdParameterPO;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import com.zhangyj.cmdexecutor.core.service.CmdExecService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         // 初始化
         initConfig();
         // CMD变量
-        CmdExecParameterPO cmdParameter = getCmdExecParameter();
+        initParameter();
         String filePath = getExecFilePath();
 
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())){
@@ -89,10 +89,11 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         }
     }
 
-    private CmdExecParameterPO getCmdExecParameter() {
-        CmdExecParameterPO cmdParameter = new CmdExecParameterPO();
+    private void initParameter() {
+        CmdParameterPO cmdParameter = new CmdParameterPO();
         cmdParameter.setDir(config.getDir());
-        return cmdParameter;
+        cmdParameter.setResourceDir(FileUtils.getResourcePath(""));
+        this.cmdParameter = cmdParameter;
     }
 
 

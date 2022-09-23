@@ -1,8 +1,10 @@
 package com.zhangyj.cmdexecutor.component.common.config;
 
 import com.zhangyj.cmdexecutor.component.entity.bo.ReplacePropertiesBO;
-import com.zhangyj.cmdexecutor.core.common.config.CmdConfig;
+import com.zhangyj.cmdexecutor.core.common.config.AbstractCmdConfig;
+import com.zhangyj.cmdexecutor.core.common.config.AbstractCmdConfig;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +15,10 @@ import java.util.Map;
  * 文件替换器配置类
  * @author zhagnyj
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Slf4j
-public class CmdReplacePropertiesConfig implements CmdConfig {
+public class CmdReplacePropertiesConfig extends AbstractCmdConfig {
 
     private String dir;
 

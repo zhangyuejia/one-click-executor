@@ -1,3 +1,5 @@
+# 日志错误关键词（判断是否命令是否成功执行）
+errorLogWords:
 # 【必填】文件夹路径
 path: E:\mw_project_new\umc_git\umc_sql\UMC_V3.13\mysql\全新脚本
 # 【必填】生成文件名称或路径
