@@ -1,10 +1,9 @@
 package com.zhangyj.cmdexecutor.core.service.impl;
 
-import com.zhangyj.cmdexecutor.core.common.util.FileUtils;
-import com.zhangyj.cmdexecutor.core.common.util.StrUtils;
-import com.zhangyj.cmdexecutor.core.common.config.CmdConfig;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
+import com.zhangyj.cmdexecutor.core.common.util.FileUtils;
+import com.zhangyj.cmdexecutor.core.common.util.StrUtils;
 import com.zhangyj.cmdexecutor.core.entity.bo.CmdExecParameterPO;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import com.zhangyj.cmdexecutor.core.service.CmdExecService;
@@ -27,18 +26,17 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CmdExecServiceImpl extends AbstractCmdService implements CmdExecService {
+public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implements CmdExecService {
 
     private final List<CmdHandler> cmdHandlers;
 
     @Override
-    public void exec(CmdConfig c) throws Exception {
-        CmdExecConfig config = getConfig(c);
+    public void exec() throws Exception {
         // 初始化
-        init(config);
+        initConfig();
         // CMD变量
-        CmdExecParameterPO cmdParameter = getCmdExecParameter(config);
-        String filePath = getExecFilePath(config);
+        CmdExecParameterPO cmdParameter = getCmdExecParameter();
+        String filePath = getExecFilePath();
 
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())){
             String line;
@@ -53,7 +51,7 @@ public class CmdExecServiceImpl extends AbstractCmdService implements CmdExecSer
         }
     }
 
-    private String getExecFilePath(CmdExecConfig config) {
+    private String getExecFilePath() {
         if(StringUtils.isNotBlank(config.getShellPath())){
             if(new File(config.getShellPath()).exists()){
                 return config.getShellPath();
@@ -71,22 +69,12 @@ public class CmdExecServiceImpl extends AbstractCmdService implements CmdExecSer
         }
     }
 
-    private CmdExecConfig getConfig(CmdConfig c) {
-        CmdExecConfig config = (CmdExecConfig) c;
+    private void initConfig() {
         if (!Boolean.TRUE.equals(config.getBootLoad())) {
             if (StringUtils.isBlank(config.getDir())) {
                 config.setDir(cmdExecConfig.getDir());
             }
         }
-        return config;
-    }
-
-    @Override
-    public Class<? extends CmdConfig> getConfigClass() {
-        return CmdExecConfig.class;
-    }
-
-    private void init(CmdExecConfig config) {
         // 默认utf-8编码
         if (config.getCharset() == null) {
             config.setCharset(StandardCharsets.UTF_8.toString());
@@ -101,9 +89,11 @@ public class CmdExecServiceImpl extends AbstractCmdService implements CmdExecSer
         }
     }
 
-    private CmdExecParameterPO getCmdExecParameter(CmdExecConfig config) {
+    private CmdExecParameterPO getCmdExecParameter() {
         CmdExecParameterPO cmdParameter = new CmdExecParameterPO();
         cmdParameter.setDir(config.getDir());
         return cmdParameter;
     }
+
+
 }

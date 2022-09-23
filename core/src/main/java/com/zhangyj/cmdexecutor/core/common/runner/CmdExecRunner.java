@@ -24,6 +24,7 @@ public class CmdExecRunner implements CommandLineRunner {
             throw new IllegalArgumentException("配置项[cmd-executor.dir]不能为空");
         }
         cmdExecConfig.setBootLoad(true);
-        cmdExecService.exec(cmdExecConfig);
+        cmdExecService.setConfig(cmdExecConfig);
+        cmdExecService.exec();
     }
 }

@@ -15,7 +15,6 @@ import java.util.Map;
  */
 @Data
 @Slf4j
-@Component
 public class CmdReplacePropertiesConfig implements CmdConfig {
 
     private String dir;

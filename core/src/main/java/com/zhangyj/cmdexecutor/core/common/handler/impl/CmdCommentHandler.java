@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @author zhangyj
  */
 @Component
-public class CommentCmdHandler implements CmdHandler {
+public class CmdCommentHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) {

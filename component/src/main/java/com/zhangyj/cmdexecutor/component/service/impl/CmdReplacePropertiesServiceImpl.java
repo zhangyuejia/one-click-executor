@@ -2,12 +2,12 @@ package com.zhangyj.cmdexecutor.component.service.impl;
 
 import com.zhangyj.cmdexecutor.component.common.config.CmdReplacePropertiesConfig;
 import com.zhangyj.cmdexecutor.component.entity.bo.ReplacePropertiesBO;
-import com.zhangyj.cmdexecutor.core.common.config.CmdConfig;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.io.BufferedWriter;
@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
  * @author zhangyj
  */
 @Slf4j
-@Component
+@Service
 @RequiredArgsConstructor
-public class CmdReplacePropertiesServiceImpl extends AbstractCmdService {
+public class CmdReplacePropertiesServiceImpl extends AbstractCmdService<CmdReplacePropertiesConfig> {
 
     /**
      * 剩下来没用到的，需要写入最后一个文件
@@ -41,8 +41,8 @@ public class CmdReplacePropertiesServiceImpl extends AbstractCmdService {
     private List<String> currentUselessProperties;
 
     @Override
-    public void exec(CmdConfig c) throws Exception {
-        CmdReplacePropertiesConfig config = getConfig(c);
+    public void exec() throws Exception {
+        initConfig();
         List<ReplacePropertiesBO> replacePropertiesList = config.getReplaceKeys();
         // 是否检查只有一个replaceId
         if(config.getEnableRefId().size() > 1){
@@ -53,27 +53,20 @@ public class CmdReplacePropertiesServiceImpl extends AbstractCmdService {
                 continue;
             }
             log.info("启用配置ID:{}", replaceProperties.getRefId());
-            init(replaceProperties, config);
-            replaceProperties(config);
-            writeLeftProperties(config);
+            init(replaceProperties);
+            replaceProperties();
+            writeLeftProperties();
             clear();
         }
     }
 
-    private CmdReplacePropertiesConfig getConfig(CmdConfig c) {
-        CmdReplacePropertiesConfig config = (CmdReplacePropertiesConfig) c;
+    private void initConfig() {
         if (StringUtils.isBlank(config.getDir())) {
             config.setDir(cmdExecConfig.getDir());
         }
-        return config;
     }
 
-    @Override
-    public Class<? extends CmdConfig> getConfigClass() {
-        return CmdReplacePropertiesConfig.class;
-    }
-
-    private void init(ReplacePropertiesBO replaceProperties, CmdReplacePropertiesConfig config) {
+    private void init(ReplacePropertiesBO replaceProperties) {
         List<String> uselessProperties = new ArrayList<>(replaceProperties.getUselessProperties());
         uselessProperties.addAll(config.getUselessProperties());
         this.currentUselessProperties = uselessProperties.stream().distinct().collect(Collectors.toList());
@@ -89,8 +82,8 @@ public class CmdReplacePropertiesServiceImpl extends AbstractCmdService {
         this.propertiesLeftMap.clear();
     }
 
-    private void replaceProperties(CmdReplacePropertiesConfig config) throws IOException {
-        List<String> filePaths = getAbsoluteFilePaths(config);
+    private void replaceProperties() throws IOException {
+        List<String> filePaths = getAbsoluteFilePaths();
         for (String filePath : filePaths) {
             File file = new File(filePath);
             if(file.isDirectory()) {
@@ -115,15 +108,15 @@ public class CmdReplacePropertiesServiceImpl extends AbstractCmdService {
 
     }
 
-    private List<String> getAbsoluteFilePaths(CmdReplacePropertiesConfig config) {
+    private List<String> getAbsoluteFilePaths() {
        return config.getFilePaths().stream().map(v -> config.getDir() + File.separator + v).collect(Collectors.toList());
     }
 
-    private void writeLeftProperties(CmdReplacePropertiesConfig config) throws IOException {
+    private void writeLeftProperties() throws IOException {
         if(CollectionUtils.isEmpty(propertiesLeftMap)){
             return;
         }
-        List<String> filePaths = getAbsoluteFilePaths(config);
+        List<String> filePaths = getAbsoluteFilePaths();
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePaths.get(filePaths.size() - 1)), StandardOpenOption.APPEND)){
             for (Map.Entry<String, String> entry : propertiesLeftMap.entrySet()) {
                 String line = entry.getKey() + "=" + entry.getValue();

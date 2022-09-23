@@ -18,7 +18,7 @@ import java.nio.charset.Charset;
  */
 @Slf4j
 @Component
-public class ShellCmdHandler implements CmdHandler {
+public class CmdShellHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) throws Exception {

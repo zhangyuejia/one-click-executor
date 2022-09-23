@@ -3,10 +3,10 @@ dir:
 # 启用替换id
 enableRefId: [
 #   "umc-zhangyj-mysql",
-#   "umc-zhangyjsass-mysql",
+   "umc-zhangyjsass-mysql",
 #    "umc39sass-dev-mysql",
 #    "umcsass-dev-mysql",
-     "umc-dev-mysql",
+#     "umc-dev-mysql",
 #    "umc-dev-oracle",
 #    "umc-dev-yx-mysql",
 #    "umc-test-mysql",
@@ -134,9 +134,9 @@ replaceKeys: [
     "emp.corptype":"1",
     # 数据库信息
     "emp.database.type":"mysql",
-    "emp.database.ip":"192.169.7.107",
-    "emp.database.port":"3307",
-    "emp.database.name":"umczhangyj",
+    "emp.database.ip":"192.169.7.102",
+    "emp.database.port":"3306",
+    "emp.database.name":"umc313sass",
     "spring.datasource.druid.username":"root",
     "spring.datasource.druid.password":"ENC(s9tSvduQ9LOiLl6v48Y6ag==)",
     "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",

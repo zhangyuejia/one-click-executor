@@ -3,7 +3,6 @@ package com.zhangyj.cmdexecutor.component.service.impl;
 import cn.hutool.core.util.CharsetUtil;
 import com.zhangyj.cmdexecutor.component.common.config.CmdPullCodeConfig;
 import com.zhangyj.cmdexecutor.component.entity.bo.ModulePropertiesBO;
-import com.zhangyj.cmdexecutor.core.common.config.CmdConfig;
 import com.zhangyj.cmdexecutor.core.common.util.CommandUtils;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CmdPullCodeServiceImpl extends AbstractCmdService {
+public class CmdPullCodeServiceImpl extends AbstractCmdService<CmdPullCodeConfig> {
 
     private final static String CURRENT_BRANCH_FLAG = "* ";
 
@@ -33,8 +32,8 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService {
     private final static String REMOTE_BRANCH_FLAG = LOCAL_BRANCH_FLAG + "remotes" + BRANCH_SP;
 
     @Override
-    public void exec(CmdConfig c) throws Exception {
-        CmdPullCodeConfig config = getConfig(c);
+    public void exec() throws Exception {
+        initConfig();
         // 是否检查只有一个replaceId
         if(config.getEnableRefId().size() > 1){
             throw new RuntimeException("配置项[enableReplaceId]配置个数不能大于1个");
@@ -50,46 +49,39 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService {
                     log.error("模块{}路径不存在，跳过:{}", modulesParam.getName(), modulePath);
                     continue;
                 }
-                fetchRepo(config, moduleProperties, modulesParam);
+                fetchRepo(moduleProperties, modulesParam);
                 // 切换到本地分支
-                checkoutLocalBranch(config, moduleProperties, modulesParam);
+                checkoutLocalBranch(moduleProperties, modulesParam);
                 // 更新代码
-                pullCode(config, moduleProperties, modulesParam);
+                pullCode(moduleProperties, modulesParam);
             }
         }
     }
 
-    private CmdPullCodeConfig getConfig(CmdConfig c) {
-        CmdPullCodeConfig config = (CmdPullCodeConfig) c;
+    private void initConfig() {
         if (CollectionUtils.isEmpty(config.getModulesProperties())) {
-            return config;
+            return;
         }
         for (ModulePropertiesBO modulesProperty : config.getModulesProperties()) {
             if (StringUtils.isBlank(modulesProperty.getDir())) {
                 modulesProperty.setDir(cmdExecConfig.getDir());
             }
         }
-        return config;
     }
 
-    @Override
-    public Class<? extends CmdConfig> getConfigClass() {
-        return CmdPullCodeConfig.class;
-    }
-
-    private void fetchRepo(CmdPullCodeConfig config, ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam) throws Exception {
+    private void fetchRepo(ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam) throws Exception {
         String command = "git fetch --all";
-        logExecCmdOutput(config, moduleProperties, modulesParam, command);
+        logExecCmdOutput(moduleProperties, modulesParam, command);
     }
 
-    private void pullCode(CmdPullCodeConfig config, ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam) throws Exception {
+    private void pullCode(ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam) throws Exception {
         for (String remoteBranch : modulesParam.getRemoteBranch()) {
             String command = "git pull " + moduleProperties.getRemoteRepoName() + " " + remoteBranch;
-            logExecCmdOutput(config, moduleProperties, modulesParam, command);
+            logExecCmdOutput(moduleProperties, modulesParam, command);
         }
     }
 
-    private void checkoutLocalBranch(CmdPullCodeConfig config, ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam) throws Exception {
+    private void checkoutLocalBranch(ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam) throws Exception {
         if (!moduleProperties.getEnableCheckoutLocalBranch()) {
             log.info("未开启本地分支切换开关，无需切换");
             return;
@@ -105,17 +97,17 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService {
         } else if(commandOutput.contains(LOCAL_BRANCH_FLAG + localBranch)){
             log.info("{}仓库处于其他分支{}，需要切换为{}", modulesParam.getName(), currentBranch, modulesParam.getLocalBranch());
             String command = "git checkout " + localBranch;
-            logExecCmdOutput(config, moduleProperties, modulesParam, command);
+            logExecCmdOutput(moduleProperties, modulesParam, command);
         }else if(commandOutput.contains(REMOTE_BRANCH_FLAG + moduleProperties.getRemoteRepoName() + BRANCH_SP + localBranch)){
             log.info("{}仓库不存在分支，从远程仓库{}检出分支{}", modulesParam.getName(), moduleProperties.getRemoteRepoName(), modulesParam.getLocalBranch());
             String command = "git checkout -b " + localBranch + " " + moduleProperties.getRemoteRepoName() + BRANCH_SP + modulesParam.getLocalBranch();
-            logExecCmdOutput(config, moduleProperties, modulesParam, command);
+            logExecCmdOutput(moduleProperties, modulesParam, command);
         }else {
             throw new RuntimeException("远程仓库不存在分支" + modulesParam.getLocalBranch() + ",无法进行检出");
         }
     }
 
-    private void logExecCmdOutput(CmdPullCodeConfig config, ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam, String cmdArr) throws Exception {
+    private void logExecCmdOutput(ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam, String cmdArr) throws Exception {
         String modulePath = getModulePath(moduleProperties, modulesParam);
         CommandUtils.execCommand(CharsetUtil.CHARSET_GBK, cmdArr, modulePath, msg -> {
             log.info(msg);

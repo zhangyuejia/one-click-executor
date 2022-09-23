@@ -1,0 +1,13 @@
+# 【必填】文件夹路径
+path: E:\mw_project_new\umc_git\umc_sql\UMC_V3.13\mysql\全新脚本
+# 【必填】生成文件名称或路径
+genFileName: G:\Users\ZYJ\Desktop\UMC_V3.13_mysql.sql
+# 生成文件模式: new（默认） or append
+genMode:
+# 文件名白名单模式，多个以逗号分隔
+whitePattern: [.*sql]
+# 文件名黑名单模式，多个以逗号分隔
+blackPattern:
+# 生成文件之前，在path文件夹路径执行的cmd命令（如更新git或者svn）
+#    command: git pull upstream dev
+command:
