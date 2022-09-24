@@ -21,10 +21,6 @@ public class CommandUtils {
         handleExecCommand(charset, exec(command, dir), handler);
     }
 
-    public static List<String> execCommand(Charset charset, String command) throws Exception {
-        return execCommand(charset, exec(command, null));
-    }
-
     public static List<String> execCommand(Charset charset, String command, String dir) throws Exception {
         return execCommand(charset, exec(command, dir));
     }
@@ -37,17 +33,22 @@ public class CommandUtils {
 
     private static void handleExecCommand(Charset charset, Process process, StringHandler handler) throws InterruptedException {
         if(handler == null){
+            // 此处是为了执行cmd -c start弹出cmd黑框,不等待不会弹出
+            process.waitFor();
             return;
         }
         InputStream[] inputStreams = {process.getInputStream(), process.getErrorStream()};
         CountDownLatch countDownLatch = new CountDownLatch(inputStreams.length);
         for (InputStream inputStream : inputStreams) {
-            // 设置为守护线程，主线程执行完自动结束
+            // 异步读取输入流,不然会阻塞
+            // 设置为守护线程，主线程执行完自动结束,不然执行完命令程序不会自动结束
             ThreadUtil.execAsync(() -> {
                 handleExecCommand(charset, inputStream, handler);
                 countDownLatch.countDown();
             }, true);
         }
+        // waitFor必须加载读取输入输出流后面,不然会阻塞
+        process.waitFor();
         countDownLatch.await();
     }
 
@@ -66,7 +67,6 @@ public class CommandUtils {
         log.info("执行命令：{}" + (dir != null? " 地址：" + dir: ""), command);
         Runtime runtime = Runtime.getRuntime();
         final Process process = dir == null? runtime.exec(command): runtime.exec(command, null, new File(dir));
-        process.waitFor();
         //noinspection AlibabaAvoidManuallyCreateThread
         runtime.addShutdownHook(new Thread(process::destroy));
         return process;
