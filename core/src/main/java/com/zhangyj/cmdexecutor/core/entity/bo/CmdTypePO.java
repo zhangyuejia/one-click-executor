@@ -9,19 +9,15 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class CmdLinePO {
+public class CmdTypePO {
 
     /**
      * 命令类型
      */
-    private CmdTypePO cmdType;
-    /**
-     * shell命令
-     */
-    private String cmd;
-    /**
-     * 命令执行路径
-     */
-    private String dir;
+    private String type;
 
+    /**
+     * 命令类型参数
+     */
+    private CmdTypeParameterPO cmdTypeParameter;
 }
