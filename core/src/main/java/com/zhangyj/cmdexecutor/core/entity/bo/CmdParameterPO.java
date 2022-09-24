@@ -18,7 +18,7 @@ public class CmdParameterPO {
 
 
     /**
-     * 本项目资源路径
+     * 类资源路径
      */
-    private String resourceDir;
+    private String classpath;
 }

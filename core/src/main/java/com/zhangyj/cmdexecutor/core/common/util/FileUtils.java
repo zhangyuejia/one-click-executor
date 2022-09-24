@@ -8,15 +8,23 @@ import java.net.URL;
  */
 public class FileUtils {
 
+    public static final String CLASSPATH = "classpath:";
+
     public static String getResourcePath(String resource) {
+        if(new File(resource).exists()){
+            return resource;
+        }
+        if(resource.startsWith(CLASSPATH)){
+            resource = resource.substring(CLASSPATH.length());
+        }
         URL url = FileUtils.class.getClassLoader().getResource("");
         if(url == null){
-            throw new IllegalArgumentException(resource + "文件不存在");
+            throw new IllegalArgumentException("路径不存在");
         }
         return url.getPath().substring(1) + resource;
     }
 
-    public static boolean existsResource(String resource){
-        return new File(getResourcePath(resource)).exists();
+    public static String getResourcePath() {
+        return getResourcePath("");
     }
 }

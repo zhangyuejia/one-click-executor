@@ -55,10 +55,8 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         if(StringUtils.isNotBlank(config.getShellPath())){
             if(new File(config.getShellPath()).exists()){
                 return config.getShellPath();
-            }else if(FileUtils.existsResource(config.getShellPath())){
-                return FileUtils.getResourcePath(config.getShellPath());
             }else {
-                throw new IllegalArgumentException("执行" + config.getDesc() + "报错，文件路径不存在:" + config.getShellPath());
+                return FileUtils.getResourcePath(config.getShellPath());
             }
         }else {
             if(cmdExecConfig.getBootLoad()){
@@ -92,9 +90,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
     private void initParameter() {
         CmdParameterPO cmdParameter = new CmdParameterPO();
         cmdParameter.setDir(config.getDir());
-        cmdParameter.setResourceDir(FileUtils.getResourcePath(""));
+        cmdParameter.setClasspath(FileUtils.getResourcePath());
         this.cmdParameter = cmdParameter;
     }
-
-
 }

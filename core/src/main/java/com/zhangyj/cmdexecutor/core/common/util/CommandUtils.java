@@ -62,10 +62,11 @@ public class CommandUtils {
         }
     }
 
-    private static Process exec(String command, String dir) throws IOException {
+    private static Process exec(String command, String dir) throws Exception {
         log.info("执行命令：{}" + (dir != null? " 地址：" + dir: ""), command);
         Runtime runtime = Runtime.getRuntime();
         final Process process = dir == null? runtime.exec(command): runtime.exec(command, null, new File(dir));
+        process.waitFor();
         //noinspection AlibabaAvoidManuallyCreateThread
         runtime.addShutdownHook(new Thread(process::destroy));
         return process;
