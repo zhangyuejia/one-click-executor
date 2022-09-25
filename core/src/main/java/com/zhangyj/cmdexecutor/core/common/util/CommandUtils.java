@@ -22,12 +22,8 @@ public class CommandUtils {
     }
 
     public static List<String> execCommand(Charset charset, String command, String dir) throws Exception {
-        return execCommand(charset, exec(command, dir));
-    }
-
-    private static List<String> execCommand(Charset charset, Process process) throws InterruptedException {
         List<String> list = new ArrayList<>();
-        handleExecCommand(charset, process, list::add);
+        handleExecCommand(charset, exec(command, dir), list::add);
         return list;
     }
 
@@ -43,24 +39,20 @@ public class CommandUtils {
             // 异步读取输入流,不然会阻塞
             // 设置为守护线程，主线程执行完自动结束,不然执行完命令程序不会自动结束
             ThreadUtil.execAsync(() -> {
-                handleExecCommand(charset, inputStream, handler);
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, charset))){
+                    String line;
+                    while ((line = reader.readLine()) != null){
+                        handler.handle(line);
+                    }
+                }catch (Exception e){
+                    throw new RuntimeException(e);
+                }
                 countDownLatch.countDown();
             }, true);
         }
         // waitFor必须加载读取输入输出流后面,不然会阻塞
         process.waitFor();
         countDownLatch.await();
-    }
-
-    private static void handleExecCommand(Charset charset, InputStream inputStream, StringHandler handler){
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, charset))){
-            String line;
-            while ((line = reader.readLine()) != null){
-                handler.handle(line);
-            }
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }
     }
 
     private static Process exec(String command, String dir) throws Exception {
