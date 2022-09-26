@@ -37,7 +37,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         // CMD变量
         initParameter();
         String filePath = getExecFilePath();
-
+        System.out.println(Paths.get(filePath));
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())){
             String line;
             while ((line = reader.readLine()) != null){
@@ -60,7 +60,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
             }
         }else {
             if(cmdExecConfig.getBootLoad()){
-                return FileUtils.getResourcePath("cmd.sh");
+                return FileUtils.getResourcePath("./build/cmd.sh");
             }else {
                 throw new IllegalArgumentException("执行" + config.getDesc() + "报错，配置项[shellPath]不能为空");
             }

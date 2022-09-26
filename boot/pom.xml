@@ -5,17 +5,18 @@
     <parent>
         <artifactId>cmd-executor</artifactId>
         <groupId>com.zhangyj</groupId>
-        <version>4.0.0</version>
+        <version>5.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>boot</artifactId>
 
+
     <dependencies>
         <dependency>
             <groupId>com.zhangyj</groupId>
             <artifactId>component</artifactId>
-            <version>4.0.0</version>
+            <version>5.0.0</version>
         </dependency>
     </dependencies>
 

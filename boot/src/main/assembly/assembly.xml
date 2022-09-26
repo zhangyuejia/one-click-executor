@@ -16,7 +16,9 @@
         <fileSet>
             <directory>target/classes</directory>
             <includes>
+                <include>component/*/*</include>
                 <include>application*.yml</include>
+                <include>*.sh</include>
             </includes>
             <outputDirectory>/</outputDirectory>
         </fileSet>
