@@ -59,7 +59,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
             }
         }else {
             if(cmdExecConfig.getBootLoad()){
-                return FileUtils.getResourcePath("./build/cmd.sh");
+                return FileUtils.getResourcePath("cmd.sh");
             }else {
                 throw new IllegalArgumentException("执行" + config.getDesc() + "报错，配置项[shellPath]不能为空");
             }
