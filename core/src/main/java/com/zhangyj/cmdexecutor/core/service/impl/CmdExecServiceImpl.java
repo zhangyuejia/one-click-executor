@@ -37,7 +37,6 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         // CMD变量
         initParameter();
         String filePath = getExecFilePath();
-        System.out.println(Paths.get(filePath));
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())){
             String line;
             while ((line = reader.readLine()) != null){
