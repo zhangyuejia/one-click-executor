@@ -13,25 +13,32 @@
                 <include>*.jar</include>
             </includes>
         </fileSet>
+
         <fileSet>
-            <directory>target/classes</directory>
+            <directory>../${project.basedir}</directory>
             <includes>
-                <include>component/*/*</include>
-                <include>application*.yml</include>
-                <include>*.sh</include>
+                <include>run/*/*</include>
+                <include>run/*</include>
             </includes>
             <outputDirectory>/</outputDirectory>
         </fileSet>
-        <!-- 从源目录拷贝文件去压缩 -->
+
         <fileSet>
-            <directory>src/main/run</directory>
+            <directory>../${project.basedir}</directory>
             <includes>
-                <include>*.sh</include>
-                <include>*.cmd</include>
                 <include>*.bat</include>
             </includes>
             <outputDirectory>/</outputDirectory>
         </fileSet>
+
+        <fileSet>
+            <directory>target/classes</directory>
+            <includes>
+                <include>application*.yml</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+
         <fileSet>
             <directory>/</directory>
             <includes>
