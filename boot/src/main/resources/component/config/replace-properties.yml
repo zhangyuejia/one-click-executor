@@ -5,11 +5,12 @@ errorLogWords: ["abort", "error", "fail", "unable", "Could not"]
 # 启用替换id
 enableRefId: [
 #   "umc-zhangyj-mysql",
-   "umc-zhangyjsass-mysql",
+#   "umc-zhangyjsass-mysql",
 #    "umc39sass-dev-mysql",
 #    "umcsass-dev-mysql",
 #     "umc-dev-mysql",
 #    "umc-dev-oracle",
+    "umc-dev-dm",
 #    "umc-dev-yx-mysql",
 #    "umc-test-mysql",
 #    "umc-test-oracle",
@@ -370,7 +371,30 @@ replaceKeys: [
   # 需要注释的配置项
   uselessProperties: []
 },
-
+{
+  # umc3.10-测试3.10 5.160 oracle标准版环境配置
+  refId: "umc-dev-dm",
+  propertiesMap: {
+    "emp.corptype":"0",
+    # 数据库信息
+    "emp.database.type":"oracle",
+    "emp.database.ip":"124.70.24.120",
+    "emp.database.port":"5236",
+    "emp.database.name":"DmServiceUMC",
+    "spring.datasource.druid.username":"emp315",
+    "spring.datasource.druid.password":"emp123456",
+    "spring.datasource.druid.url":"jdbc:dm://${emp.database.ip}:${emp.database.port}/${emp.database.name}?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&compatibleMode=oracle",
+    "spring.datasource.druid.driver-class-name":"dm.jdbc.driver.DmDriver",
+    # redis
+    "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
+    "spring.redis.cluster.max-redirects":"3",
+    # 文件服务器
+    "file.server.ip":"192.169.7.106",
+    "file.server.port":"8080",
+  },
+  # 需要注释的配置项
+  uselessProperties: []
+},
 {
   # umc3.10-测试3.10 3.132 mysql标准版环境配置
   refId: "umc-test-388-mysql",

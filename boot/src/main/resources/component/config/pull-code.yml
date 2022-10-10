@@ -2,12 +2,12 @@
 errorLogWords: ["abort", "error", "fail", "unable", "Could not"]
 # 启用id
 enableRefId: [
-    "umc3.13",
+    "umc3.15",
 ]
 # 模块参数
 modulesProperties: [
 {
-    refId: "umc3.13",
+    refId: "umc3.15",
     # 远程仓库名称
     remoteRepoName: "upstream",
     # 命令执行根目录，此处可以为空，为空会被替换为 cmd-executor.dir
@@ -19,9 +19,11 @@ modulesProperties: [
     {
         name: "umc-portal",
         # 本地分支
-        localBranch: "umc-3.12-refactoring",
+#        localBranch: "umc-3.13-SP1",
+        localBranch: "dev",
         # 远程分支
-        remoteBranch: ["umc-3.12-refactoring"]
+#        remoteBranch: ["umc-3.13-SP1"]
+        remoteBranch: ["dev"]
     },
     {
         name: "umc-portal-audit",
