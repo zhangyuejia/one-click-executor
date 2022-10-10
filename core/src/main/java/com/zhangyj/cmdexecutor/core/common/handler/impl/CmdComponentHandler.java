@@ -1,5 +1,6 @@
 package com.zhangyj.cmdexecutor.core.common.handler.impl;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -9,6 +10,7 @@ import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
 import com.zhangyj.cmdexecutor.core.common.enums.CmdTypeEnum;
 import com.zhangyj.cmdexecutor.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
+import com.zhangyj.cmdexecutor.core.common.util.FileUtils;
 import com.zhangyj.cmdexecutor.core.common.util.StrUtils;
 import com.zhangyj.cmdexecutor.core.entity.bo.CmdLinePO;
 import com.zhangyj.cmdexecutor.core.service.CmdService;
@@ -18,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.util.Set;
 
 /**
@@ -49,8 +52,8 @@ public class CmdComponentHandler implements CmdHandler {
         ReflectUtil.invoke(cmdService, "exec");
     }
 
-    private AbstractCmdConfig getCmdConfig(CmdLinePO cmdLinePo) {
-        return (AbstractCmdConfig) YamlUtil.loadByPath(cmdLinePo.getDir(), getConfigClass(cmdLinePo.getCmd()));
+    private AbstractCmdConfig getCmdConfig(CmdLinePO cmdLinePo) throws Exception {
+        return (AbstractCmdConfig) YamlUtil.loadByPath(FileUtils.getAbsolutePath(cmdLinePo.getDir()), getConfigClass(cmdLinePo.getCmd()));
     }
 
     private Class<?> getConfigClass(String cmd) {

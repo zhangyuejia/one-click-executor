@@ -24,6 +24,11 @@ public class FileUtils {
         return url.getPath().substring(1) + resource;
     }
 
+    public static String getAbsolutePath(String resource) throws Exception {
+        return new File(resource).getCanonicalPath();
+    }
+
+
     public static String getResourcePath() {
         return getResourcePath("");
     }

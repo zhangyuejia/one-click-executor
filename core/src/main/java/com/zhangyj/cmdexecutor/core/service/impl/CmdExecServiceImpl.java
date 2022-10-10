@@ -1,5 +1,6 @@
 package com.zhangyj.cmdexecutor.core.service.impl;
 
+import cn.hutool.core.io.FileUtil;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
 import com.zhangyj.cmdexecutor.core.common.util.FileUtils;
@@ -16,8 +17,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -37,7 +36,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         // CMD变量
         initParameter();
         String filePath = getExecFilePath();
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())){
+        try (BufferedReader reader = FileUtil.getReader(filePath, Charset.forName(config.getCharset()))){
             String line;
             while ((line = reader.readLine()) != null){
                 for (CmdHandler cmdHandler : cmdHandlers) {
@@ -50,7 +49,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         }
     }
 
-    private String getExecFilePath() {
+    private String getExecFilePath() throws Exception {
         if(StringUtils.isNotBlank(config.getShellPath())){
             if(new File(config.getShellPath()).exists()){
                 return config.getShellPath();
@@ -59,7 +58,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
             }
         }else {
             if(cmdExecConfig.getBootLoad()){
-                return FileUtils.getResourcePath("cmd.sh");
+                return FileUtils.getAbsolutePath("./run/exec.sh");
             }else {
                 throw new IllegalArgumentException("执行" + config.getDesc() + "报错，配置项[shellPath]不能为空");
             }
