@@ -48,7 +48,7 @@ public class BeanFactory {
                 }
 
                 @Override
-                protected boolean isHandle(Long aLong) {
+                protected boolean checkHandle(Long aLong) {
                     return aLong > item.getUnit();
                 }
 
