@@ -16,7 +16,7 @@ public abstract class ChainHandler<R, P> {
     private ChainHandler<R, P> nextHandler;
 
     public P handle(R r){
-        if(isHandle(r)){
+        if(checkHandle(r)){
             return getResponse(r);
         }else if (nextHandler != null){
             return nextHandler.handle(r);
@@ -38,5 +38,5 @@ public abstract class ChainHandler<R, P> {
      * @param r 请求
      * @return 是否进行处理
      */
-    protected abstract boolean isHandle(R r);
+    protected abstract boolean checkHandle(R r);
 }
