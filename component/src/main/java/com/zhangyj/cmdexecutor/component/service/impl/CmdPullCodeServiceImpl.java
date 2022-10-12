@@ -94,7 +94,7 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService<CmdPullCodeConfig
         String currentBranch = commandOutput.stream().filter(v -> v.startsWith(CURRENT_BRANCH_FLAG)).collect(Collectors.toList()).get(0).substring(CURRENT_BRANCH_FLAG.length());
         String localBranch = modulesParam.getLocalBranch().trim();
         if(currentBranch.equals(localBranch)){
-            log.info("{}仓库处于本地分支{}，无需切换", modulesParam.getName(), modulesParam.getLocalBranch());
+            log.debug("{}仓库处于本地分支{}，无需切换", modulesParam.getName(), modulesParam.getLocalBranch());
         } else if(commandOutput.contains(LOCAL_BRANCH_FLAG + localBranch)){
             log.info("{}仓库处于其他分支{}，需要切换为{}", modulesParam.getName(), currentBranch, modulesParam.getLocalBranch());
             String command = "git checkout " + localBranch;
