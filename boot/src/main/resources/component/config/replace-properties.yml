@@ -8,9 +8,11 @@ enableRefId: [
 #   "umc-zhangyjsass-mysql",
 #    "umc39sass-dev-mysql",
 #    "umcsass-dev-mysql",
-#     "umc-dev-mysql",
+     "umc-dev-mysql",
 #    "umc-dev-oracle",
-    "umc-dev-dm",
+#    "umc-dev-dm",
+#    "umc-test-dm",
+#    "umc-test-rdjc",
 #    "umc-dev-yx-mysql",
 #    "umc-test-mysql",
 #    "umc-test-oracle",
@@ -187,7 +189,7 @@ replaceKeys: [
     "emp.database.type":"mysql",
     "emp.database.ip":"192.169.7.102",
     "emp.database.port":"3306",
-    "emp.database.name":"umc313",
+    "emp.database.name":"umc311",
     "spring.datasource.druid.username":"root",
     "spring.datasource.druid.password":"ENC(s9tSvduQ9LOiLl6v48Y6ag==)",
     "spring.datasource.druid.url":"jdbc:mysql://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true",
@@ -390,6 +392,54 @@ replaceKeys: [
     "spring.redis.cluster.max-redirects":"3",
     # 文件服务器
     "file.server.ip":"192.169.7.106",
+    "file.server.port":"8080",
+  },
+  # 需要注释的配置项
+  uselessProperties: []
+},
+{
+  # umc3.10-测试3.10 5.160 oracle标准版环境配置
+  refId: "umc-test-dm",
+  propertiesMap: {
+    "emp.corptype":"0",
+    # 数据库信息
+    "emp.database.type":"oracle",
+    "emp.database.ip":"192.169.4.160",
+    "emp.database.port":"5236",
+    "emp.database.name":"DMSERVER",
+    "spring.datasource.druid.username":"emp",
+    "spring.datasource.druid.password":"emp123456",
+    "spring.datasource.druid.url":"jdbc:dm://${emp.database.ip}:${emp.database.port}/${emp.database.name}?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&compatibleMode=oracle",
+    "spring.datasource.druid.driver-class-name":"dm.jdbc.driver.DmDriver",
+    # redis
+    "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
+    "spring.redis.cluster.max-redirects":"3",
+    # 文件服务器
+    "file.server.ip":"192.169.4.161",
+    "file.server.port":"8080",
+  },
+  # 需要注释的配置项
+  uselessProperties: []
+},
+{
+  # umc3.10-测试3.10 5.160 oracle标准版环境配置
+  refId: "umc-test-rdjc",
+  propertiesMap: {
+    "emp.corptype":"0",
+    # 数据库信息
+    "emp.database.type":"oracle",
+    "emp.database.ip":"192.169.2.77",
+    "emp.database.port":"54321",
+    "emp.database.name":"umc",
+    "spring.datasource.druid.username":"emp",
+    "spring.datasource.druid.password":"123456",
+    "spring.datasource.druid.url":"jdbc:kingbase8://${emp.database.ip}:${emp.database.port}/${emp.database.name}?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull",
+    "spring.datasource.druid.driver-class-name":"com.kingbase8.Driver",
+    # redis
+    "spring.redis.cluster.nodes":"192.169.6.157:7003,192.169.6.157:7004,192.169.6.157:7005",
+    "spring.redis.cluster.max-redirects":"3",
+    # 文件服务器
+    "file.server.ip":"192.169.4.161",
     "file.server.port":"8080",
   },
   # 需要注释的配置项
