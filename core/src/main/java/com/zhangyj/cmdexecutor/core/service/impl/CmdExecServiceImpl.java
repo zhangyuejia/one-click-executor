@@ -51,26 +51,19 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
     }
 
     private String getExecFilePath() {
-        if(StringUtils.isNotBlank(config.getShellPath())){
-            if(new File(config.getShellPath()).exists()){
-                return config.getShellPath();
-            }else {
-                return FileUtils.getResourcePath(config.getShellPath());
-            }
+        if(StringUtils.isBlank(config.getShellPath())) {
+            throw new IllegalArgumentException("执行" + config.getDesc() + "报错，配置项[shellPath]不能为空");
+        }
+        if(new File(config.getShellPath()).exists()){
+            return config.getShellPath();
         }else {
-            if(cmdExecConfig.getBootLoad()){
-                return FileUtils.getResourcePath("cmd.sh");
-            }else {
-                throw new IllegalArgumentException("执行" + config.getDesc() + "报错，配置项[shellPath]不能为空");
-            }
+            return FileUtils.getResourcePath(config.getShellPath());
         }
     }
 
     private void initConfig() {
-        if (!Boolean.TRUE.equals(config.getBootLoad())) {
-            if (StringUtils.isBlank(config.getDir())) {
-                config.setDir(cmdExecConfig.getDir());
-            }
+        if (StringUtils.isBlank(config.getDir())) {
+            config.setDir(cmdExecConfig.getDir());
         }
         // 默认utf-8编码
         if (config.getCharset() == null) {
