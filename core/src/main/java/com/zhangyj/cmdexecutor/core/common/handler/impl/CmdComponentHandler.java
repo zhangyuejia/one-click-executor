@@ -41,7 +41,7 @@ public class CmdComponentHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) throws Exception {
-        log.info("执行组件:" + cmdLine);
+        log.info("解析命令:" + cmdLine);
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         CmdService<?> cmdService = getCmdService(cmdLinePo);
         AbstractCmdConfig cmdConfig = getCmdConfig(cmdLinePo);
