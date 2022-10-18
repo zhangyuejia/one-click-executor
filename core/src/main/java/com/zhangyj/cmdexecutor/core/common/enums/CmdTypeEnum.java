@@ -27,7 +27,7 @@ public enum CmdTypeEnum {
     COMMENT("#"),
 
     /**
-     * 初始化变量
+     * 自定义变量命令
      */
     PARAM("param");
 
