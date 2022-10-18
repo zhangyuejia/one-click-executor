@@ -20,7 +20,7 @@ public class CmdShellHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) throws Exception {
-        log.info("解析命令:" + cmdLine);
+        log.info("解析命令：" + cmdLine);
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         if(cmdLinePo.getDir() == null){
             cmdLinePo.setDir(config.getDir());
