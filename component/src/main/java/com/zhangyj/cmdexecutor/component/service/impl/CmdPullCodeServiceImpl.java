@@ -1,6 +1,5 @@
 package com.zhangyj.cmdexecutor.component.service.impl;
 
-import cn.hutool.core.util.CharsetUtil;
 import com.zhangyj.cmdexecutor.component.common.config.CmdPullCodeConfig;
 import com.zhangyj.cmdexecutor.component.entity.bo.ModulePropertiesBO;
 import com.zhangyj.cmdexecutor.core.common.handler.impl.CheckStringHandler;
@@ -89,8 +88,8 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService<CmdPullCodeConfig
         }
 
         String modulePath = getModulePath(moduleProperties, modulesParam);
-        CommandUtils.execCommand(CharsetUtil.CHARSET_GBK, "git remote -vv", modulePath, log::info);
-        List<String> commandOutput = CommandUtils.execCommand(CharsetUtil.CHARSET_GBK, "git branch -a", modulePath);
+        CommandUtils.execCommand(cmdExecConfig.getCharset(), "git remote -vv", modulePath, log::info);
+        List<String> commandOutput = CommandUtils.execCommand(cmdExecConfig.getCharset(), "git branch -a", modulePath);
         String currentBranch = commandOutput.stream().filter(v -> v.startsWith(CURRENT_BRANCH_FLAG)).collect(Collectors.toList()).get(0).substring(CURRENT_BRANCH_FLAG.length());
         String localBranch = modulesParam.getLocalBranch().trim();
         if(currentBranch.equals(localBranch)){
@@ -110,7 +109,7 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService<CmdPullCodeConfig
 
     private void logExecCmdOutput(ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam, String cmdArr) throws Exception {
         String modulePath = getModulePath(moduleProperties, modulesParam);
-        CommandUtils.execCommand(CharsetUtil.CHARSET_GBK, cmdArr, modulePath, new CheckStringHandler(config));
+        CommandUtils.execCommand(cmdExecConfig.getCharset(), cmdArr, modulePath, new CheckStringHandler(config));
     }
 
     private String getModulePath(ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam){

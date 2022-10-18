@@ -17,17 +17,17 @@ import java.util.concurrent.CountDownLatch;
 @Slf4j
 public class CommandUtils {
 
-    public static void execCommand(Charset charset, String command, String dir, StringHandler handler) throws Exception{
+    public static void execCommand(String charset, String command, String dir, StringHandler handler) throws Exception{
         handleExecCommand(charset, exec(command, dir), handler);
     }
 
-    public static List<String> execCommand(Charset charset, String command, String dir) throws Exception {
+    public static List<String> execCommand(String charset, String command, String dir) throws Exception {
         List<String> list = new ArrayList<>();
         handleExecCommand(charset, exec(command, dir), list::add);
         return list;
     }
 
-    private static void handleExecCommand(Charset charset, Process process, StringHandler handler) throws InterruptedException {
+    private static void handleExecCommand(String charset, Process process, StringHandler handler) throws InterruptedException {
         if(handler == null){
             // 此处是为了执行cmd -c start弹出cmd黑框,不等待不会弹出
             process.waitFor();

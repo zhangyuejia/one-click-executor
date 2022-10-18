@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,7 +63,7 @@ public class CmdSpliceFileServiceImpl extends AbstractCmdService<CmdSpliceFileCo
             return;
         }
         log.info("执行命令：{} 执行路径：{}", command, config.getPath());
-        CommandUtils.execCommand(StandardCharsets.UTF_8, command, config.getPath(), new CheckStringHandler(config));
+        CommandUtils.execCommand(cmdExecConfig.getCharset(), command, config.getPath(), new CheckStringHandler(config));
     }
 
     private void deleteGenFile() throws IOException {

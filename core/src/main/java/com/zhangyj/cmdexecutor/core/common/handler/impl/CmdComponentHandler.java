@@ -36,7 +36,7 @@ public class CmdComponentHandler implements CmdHandler {
     static {
         // 扫描的根目录包（com.xxx）
         String aPackage = ClassUtil.getPackage(CmdComponentHandler.class);
-        BASE_PACKAGE  = aPackage.substring(0, aPackage.indexOf(".", aPackage.indexOf(".")));
+        BASE_PACKAGE  = aPackage.substring(0, aPackage.indexOf(".", aPackage.indexOf(".") + 1));
     }
 
     @Override

@@ -10,8 +10,6 @@ import com.zhangyj.cmdexecutor.core.entity.bo.CmdLinePO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.Charset;
-
 /**
  * shell命令handler
  * @author zhangyj
@@ -31,7 +29,7 @@ public class CmdShellHandler implements CmdHandler {
         if(cmdLinePo.getCmdType().getCmdTypeParameter().getOutput()){
             stringHandler = new CheckStringHandler(config);
         }
-        CommandUtils.execCommand(Charset.forName(config.getCharset()), cmdLinePo.getCmd(), cmdLinePo.getDir(), stringHandler);
+        CommandUtils.execCommand(config.getCharset(), cmdLinePo.getCmd(), cmdLinePo.getDir(), stringHandler);
     }
 
     @Override
