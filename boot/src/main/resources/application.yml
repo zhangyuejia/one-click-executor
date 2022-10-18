@@ -4,7 +4,7 @@ cmd-executor:
 #  dir: J:\umc-portal
   dir: E:\mw_project_new\umc_git\umc-portal-refactoring
   # 执行编码，避免日志输出乱码
-  charset: "gbk"
+  charset: "utf-8"
   # 日志错误关键词（判断是否命令是否成功执行）
   errorLogWords: ["abort", "error", "fail", "unable", "Could not"]
 
