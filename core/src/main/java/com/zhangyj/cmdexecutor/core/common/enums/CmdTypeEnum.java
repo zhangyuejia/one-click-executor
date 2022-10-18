@@ -20,10 +20,16 @@ public enum CmdTypeEnum {
      * 组件命令
      */
     COMPONENT("component"),
+
     /**
      * 注释命令
      */
-    COMMENT("#");
+    COMMENT("#"),
+
+    /**
+     * 初始化变量
+     */
+    PARAM("param");
 
     private final String flag;
 }

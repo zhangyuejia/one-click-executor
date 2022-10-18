@@ -16,13 +16,8 @@ import java.util.Map;
  */
 public class CmdLinePoFactory {
 
-    private final static int LENGTH = 3;
-
     public static CmdLinePO newInstance(String cmdLine){
-        String[] cmdArr = cmdLine.split(",");
-        if(cmdArr.length != LENGTH){
-            throw new RuntimeException("非法命令,格式为 [类型],[命令],[路径]:" + cmdLine);
-        }
+        String[] cmdArr = Arrays.copyOf(cmdLine.split(","), 3);
         CmdLinePO po = new CmdLinePO();
         po.setCmdType(getCmdType(cmdArr[0]));
         po.setCmd(cmdArr[1]);

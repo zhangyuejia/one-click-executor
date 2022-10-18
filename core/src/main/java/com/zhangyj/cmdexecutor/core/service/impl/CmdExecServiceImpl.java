@@ -1,10 +1,10 @@
 package com.zhangyj.cmdexecutor.core.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
 import com.zhangyj.cmdexecutor.core.common.util.FileUtils;
 import com.zhangyj.cmdexecutor.core.common.util.StrUtils;
-import com.zhangyj.cmdexecutor.core.entity.bo.CmdParameterPO;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import com.zhangyj.cmdexecutor.core.service.CmdExecService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangyj
@@ -42,7 +43,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
             while ((line = reader.readLine()) != null){
                 for (CmdHandler cmdHandler : cmdHandlers) {
                     if (cmdHandler.match(line)) {
-                        String content = StrUtils.parseTplContent(line, cmdParameter);
+                        String content = StrUtils.parseTplContent(line, cmdExecConfig.getParamMap());
                         cmdHandler.handle(config, content);
                     }
                 }
@@ -80,9 +81,9 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
     }
 
     private void initParameter() {
-        CmdParameterPO cmdParameter = new CmdParameterPO();
-        cmdParameter.setDir(config.getDir());
-        cmdParameter.setClasspath(FileUtils.getResourcePath());
-        this.cmdParameter = cmdParameter;
+        Map<String, String> paramMap = cmdExecConfig.getParamMap();
+        paramMap.put("dir", config.getDir());
+        paramMap.put("classpath", FileUtils.getResourcePath());
+        log.info("初始化变量：{}", JSON.toJSONString(paramMap));
     }
 }

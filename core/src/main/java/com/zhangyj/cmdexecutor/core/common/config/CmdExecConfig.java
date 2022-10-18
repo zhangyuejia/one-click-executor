@@ -3,8 +3,12 @@ package com.zhangyj.cmdexecutor.core.common.config;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 命令执行功能
@@ -15,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @ConfigurationProperties(prefix = "cmd-executor")
-public class CmdExecConfig extends AbstractCmdConfig {
+public class CmdExecConfig extends AbstractCmdConfig implements InitializingBean {
 
     private String dir;
 
@@ -23,8 +27,17 @@ public class CmdExecConfig extends AbstractCmdConfig {
 
     private String shellPath;
 
+    private Map<String, String> paramMap;
+
     @Override
     public String getDesc() {
         return "命令执行功能";
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        if(this.paramMap == null){
+            this.paramMap = new HashMap<>(2);
+        }
     }
 }
