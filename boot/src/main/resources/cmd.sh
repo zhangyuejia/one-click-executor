@@ -3,6 +3,8 @@
 #component,splice-file,#{[classpath]}component\config\splice-file.yml
 ##############################【功能】打印文件大小功能###################################
 #component,print-file-size,#{[classpath]}component\config\print-file-size.yml
+##############################【功能】刷新DNS功能###################################
+#component,flush-dns,#{[classpath]}component\config\flush-dns.yml
 
 ##############################【功能】检出源码并检出为指定分支功能########################
 ## clone代码
