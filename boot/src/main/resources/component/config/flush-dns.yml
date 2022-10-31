@@ -1,4 +1,4 @@
 # 网络hosts文件
 hosts: [{name: "github", url: "https://raw.hellogithub.com/hosts"}]
 # 本地hosts文件地址
-hostsPath: G:\Windows\System32\drivers\etc\hosts
+hostsPath: C:\Windows\System32\drivers\etc\hosts

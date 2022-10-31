@@ -4,11 +4,11 @@
 ##############################【功能】打印文件大小功能###################################
 #component,print-file-size,#{[classpath]}component\config\print-file-size.yml
 ##############################【功能】刷新DNS功能###################################
-#component,flush-dns,#{[classpath]}component\config\flush-dns.yml
+component,flush-dns,#{[classpath]}component\config\flush-dns.yml
 
 ##############################【功能】检出源码并检出为指定分支功能########################
 ## clone代码
-#component,exec,#{[classpath]}component\config\exec.yml
+component,exec,#{[classpath]}component\config\exec.yml
 ### 更新代码
 #component,pull-code,#{[classpath]}component\config\pull-code.yml
 ### 挂载audit模块代码到business
@@ -17,13 +17,13 @@
 #component,replace-properties,#{[classpath]}component\config\replace-properties.yml
 
 ##############################【功能】更新后端代码########################################
-component,pull-code,#{[classpath]}component\config\pull-code.yml
+#component,pull-code,#{[classpath]}component\config\pull-code.yml
 
 ##############################【功能】替换本地properties配置##############################
 #component,replace-properties,#{[classpath]}component\config\replace-properties.yml
 
 ##############################【功能】更新前端代码########################################
-component,exec,#{[classpath]}component\config\exec-pull-web.yml
+#component,exec,#{[classpath]}component\config\exec-pull-web.yml
 
 ##############################【功能】更新前端代码并启动###################################
 #component,exec,#{[classpath]}component\config\exec-start-web.yml
