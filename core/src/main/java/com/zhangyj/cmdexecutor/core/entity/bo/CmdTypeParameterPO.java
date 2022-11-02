@@ -13,5 +13,5 @@ public class CmdTypeParameterPO {
     /**
      * 直接执行shell时，是否打印输出
      */
-    private Boolean output = true;
+    private Boolean enableOutput = true;
 }

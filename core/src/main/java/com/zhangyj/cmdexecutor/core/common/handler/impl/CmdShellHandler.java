@@ -26,7 +26,7 @@ public class CmdShellHandler implements CmdHandler {
             cmdLinePo.setDir(config.getDir());
         }
         StringHandler stringHandler = null;
-        if(cmdLinePo.getCmdType().getCmdTypeParameter().getOutput()){
+        if(cmdLinePo.getCmdType().getCmdTypeParameter().getEnableOutput()){
             stringHandler = new CheckStringHandler(config);
         }
         CommandUtils.execCommand(config.getCharset(), cmdLinePo.getCmd(), cmdLinePo.getDir(), stringHandler);
