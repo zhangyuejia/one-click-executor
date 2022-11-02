@@ -1,5 +1,5 @@
 # 打印文件大小功能
 # 命令执行根目录，此处可以为空，为空会被替换为 cmd-executor.dir
-dir: E:\mw_zhangyj\项目
+dir: C:\
 # 日志错误关键词（判断是否命令是否成功执行）
 errorLogWords: ["abort", "error", "fail", "unable", "Could not"]
