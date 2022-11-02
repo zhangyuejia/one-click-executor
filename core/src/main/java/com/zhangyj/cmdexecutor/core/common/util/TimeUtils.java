@@ -1,5 +1,7 @@
 package com.zhangyj.cmdexecutor.core.common.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
@@ -15,7 +17,8 @@ public class TimeUtils {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");//初始化Formatter的转换格式。
         formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
         String[] split = formatter.format(interval).split(":");
-        return getTimeDesc(split[0], "小时") + getTimeDesc(split[1], "分") + getTimeDesc(split[2], "秒");
+        String timeDesc = getTimeDesc(split[0], "小时") + getTimeDesc(split[1], "分") + getTimeDesc(split[2], "秒");
+        return StringUtils.isBlank(timeDesc)? "0秒": timeDesc;
     }
 
     private static String getTimeDesc(String time, String timeUnitStr){

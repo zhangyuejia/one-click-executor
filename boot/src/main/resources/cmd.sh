@@ -1,14 +1,17 @@
 ## !!!变量说明：dir:指application.yml中dir resourceDir:指本项目resource绝对路径
+##############################【变量】增加自定义变量p1#################################
+#param,set p1=123
+#shell,cmd /c echo #{[p1]},#{[dir]}
 ##############################【功能】合并文件夹下的文件################################
 #component,splice-file,#{[classpath]}component\config\splice-file.yml
-##############################【功能】打印文件大小功能###################################
+##############################【功能】打印文件大小功能##################################
 #component,print-file-size,#{[classpath]}component\config\print-file-size.yml
-##############################【功能】刷新DNS功能###################################
-component,flush-dns,#{[classpath]}component\config\flush-dns.yml
+##############################【功能】刷新DNS功能#####################################
+#component,flush-dns,#{[classpath]}component\config\flush-dns.yml
 
 ##############################【功能】检出源码并检出为指定分支功能########################
 ## clone代码
-component,exec,#{[classpath]}component\config\exec.yml
+#component,exec,#{[classpath]}component\config\exec.yml
 ### 更新代码
 #component,pull-code,#{[classpath]}component\config\pull-code.yml
 ### 挂载audit模块代码到business
