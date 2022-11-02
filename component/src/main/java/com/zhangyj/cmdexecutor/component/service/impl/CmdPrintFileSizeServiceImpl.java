@@ -32,12 +32,8 @@ public class CmdPrintFileSizeServiceImpl extends AbstractCmdService<CmdPrintFile
     private final Map<String, Long> fileSizeMap = new HashMap<>();
 
     private final ExecutorService executorService  = new ThreadPoolExecutor(
-            0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
-            new SynchronousQueue<>(), r -> {
-        Thread thread = new Thread(r);
-        thread.setName("print-file-size-");
-        return thread;
-    });
+            10, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<>(), Executors.defaultThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
 
     private List<FileInfoBO> fileInfoList;
 
