@@ -31,4 +31,6 @@
 ##############################【功能】更新前端代码并启动###################################
 #component,exec,#{[classpath]}component\config\exec-start-web.yml
 
+component,read-pdf,#{[classpath]}component\config\read-pdf.yml
+
 
