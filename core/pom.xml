@@ -76,5 +76,45 @@
         <artifactId>fastjson</artifactId>
         <version>1.2.83</version>
     </dependency>
+
+    <!-- 处理pdf库：pdfbox -->
+    <dependency>
+        <groupId>org.apache.pdfbox</groupId>
+        <artifactId>pdfbox</artifactId>
+        <version>1.8.8</version>
+    </dependency>
+    <!-- 处理pdf库：itext -->
+    <dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>itextpdf</artifactId>
+        <version>5.0.6</version>
+    </dependency>
+
+    <!-- 处理pdf库：spire.pdf 免费只能读取前3页 -->
+    <dependency>
+        <groupId>e-iceblue</groupId>
+        <artifactId>spire.pdf.free</artifactId>
+        <version>5.1.0</version>
+        <!--system，类似provided，需要显式提供依赖的jar以后，Maven就不会在Repository中查找它-->
+        <scope>system</scope>
+        <!--项目根目录下的lib文件夹下-->
+        <systemPath>${project.basedir}/../lib/spire.pdf.free-5.1.0.jar</systemPath>
+    </dependency>
+
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <version>3.9</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>3.9</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml-schemas</artifactId>
+        <version>3.9</version>
+    </dependency>
 </dependencies>
 </project>

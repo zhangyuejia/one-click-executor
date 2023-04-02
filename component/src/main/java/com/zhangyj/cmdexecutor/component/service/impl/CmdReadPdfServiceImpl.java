@@ -3,12 +3,11 @@ package com.zhangyj.cmdexecutor.component.service.impl;
 import cn.hutool.core.collection.ListUtil;
 import com.alibaba.excel.util.StringUtils;
 import com.google.common.collect.Lists;
-import com.spire.pdf.PdfDocument;
-import com.spire.pdf.PdfPageBase;
 import com.zhangyj.cmdexecutor.component.business.readpdf.BasePdfRule;
 import com.zhangyj.cmdexecutor.component.common.config.CmdReadPdfConfig;
 import com.zhangyj.cmdexecutor.component.entity.bo.ExpenseBO;
 import com.zhangyj.cmdexecutor.core.common.util.FileUtils;
+import com.zhangyj.cmdexecutor.core.common.util.PdfUtils;
 import com.zhangyj.cmdexecutor.core.common.util.StrUtils;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,7 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
     public void exec() throws Exception {
         List<ExpenseBO> data = new ArrayList<>();
         for (String pdfPath : config.getPdfPaths()) {
-            String pdfContent = getPdfContent(pdfPath);
+            String pdfContent = PdfUtils.getPdfContentUseIText(pdfPath);
             List<String> pdfContentList = Lists.newArrayList(pdfContent.split("\r\n")).stream()
                     .filter(StringUtils::isNotBlank).map(s -> s.replaceAll(" +", " ").trim()).collect(Collectors.toList());
             for (BasePdfRule pdfRule : pdfRules) {
@@ -53,7 +52,6 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
     }
 
     private void generateWord(List<ExpenseBO> list) throws Exception{
-        System.out.println(FileUtils.getResourcePath() + "\\component\\file\\交通明细模板.docx");
         XWPFDocument document = new XWPFDocument(new FileInputStream(FileUtils.getResourcePath() + "\\component\\file\\交通明细模板.docx"));
         XWPFTable table = document.getTables().get(0);
         int tmplRowNum = 5;
@@ -71,22 +69,5 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
         try (FileOutputStream outputStream = new FileOutputStream(config.getDocOutPath())){
             document.write(outputStream);
         }
-    }
-
-    /**
-     * 读取pdf内容
-     * @param pdfPath pdf地址
-     * @return pdf内容
-     */
-    private static String getPdfContent(String pdfPath) {
-        PdfDocument doc = new PdfDocument();
-        doc.loadFromFile(pdfPath);
-        StringBuilder sb = new StringBuilder();
-        for(int i= 0;i<doc.getPages().getCount();i++){
-            PdfPageBase page = doc.getPages().get(i);
-            String extractText = page.extractText(true);
-            sb.append(extractText);
-        }
-        return sb.toString();
     }
 }
