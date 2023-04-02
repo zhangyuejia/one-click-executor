@@ -40,7 +40,7 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
         List<ExpenseBO> data = new ArrayList<>();
         for (String pdfPath : config.getPdfPaths()) {
             String pdfContent = PdfUtils.getPdfContentUseIText(pdfPath);
-            List<String> pdfContentList = Lists.newArrayList(pdfContent.split("\r\n")).stream()
+            List<String> pdfContentList = Lists.newArrayList(pdfContent.split("\n")).stream()
                     .filter(StringUtils::isNotBlank).map(s -> s.replaceAll(" +", " ").trim()).collect(Collectors.toList());
             for (BasePdfRule pdfRule : pdfRules) {
                 if(pdfRule.match(pdfContentList)){
