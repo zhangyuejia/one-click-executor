@@ -18,6 +18,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -37,9 +38,13 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
 
     @Override
     public void exec() throws Exception {
+        File[] files = new File(config.getPdfDir()).listFiles();
+        if(files == null){
+            return;
+        }
         List<ExpenseBO> data = new ArrayList<>();
-        for (String pdfPath : config.getPdfPaths()) {
-            String pdfContent = PdfUtils.getPdfContentUseIText(pdfPath);
+        for (File file : files) {
+            String pdfContent = PdfUtils.getPdfContentUseSpire(file.getCanonicalPath());
             List<String> pdfContentList = Lists.newArrayList(pdfContent.split("\n")).stream()
                     .filter(StringUtils::isNotBlank).map(s -> s.replaceAll(" +", " ").trim()).collect(Collectors.toList());
             for (BasePdfRule pdfRule : pdfRules) {

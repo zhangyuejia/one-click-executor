@@ -5,6 +5,7 @@ import com.zhangyj.cmdexecutor.component.entity.bo.ExpenseBO;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -37,11 +38,17 @@ public interface BasePdfRule {
         }
         List<ExpenseBO> result = Lists.newArrayList();
         boolean start = false;
+        int index = 0;
         for (String content : contents) {
             if(start) {
-                if(Pattern.matches("[0-9].*", content)){
+                Pattern p = Pattern.compile("\\d+");
+                Matcher m = p.matcher(content);
+                if (m.find() && Integer.parseInt(m.group()) == ++index) {
                     result.add(getTargetContent(content));
                 }
+//                if(Pattern.matches("[0-9].*", content)){
+//                    result.add(getTargetContent(content));
+//                }
             }else {
                 if(content.startsWith(getStartSign())){
                     start = true;

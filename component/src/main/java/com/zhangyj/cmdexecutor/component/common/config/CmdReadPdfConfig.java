@@ -15,9 +15,9 @@ import java.util.List;
 @Slf4j
 public class CmdReadPdfConfig extends AbstractCmdConfig {
     /**
-     * 输入pdf路径
+     * 输入pdf目录
      */
-    private List<String> pdfPaths;
+    private String pdfDir;
 
     /**
      * 输出的docx

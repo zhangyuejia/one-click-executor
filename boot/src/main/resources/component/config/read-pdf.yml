@@ -4,6 +4,6 @@
 #           E:\个人\出差报销\202303出差报销\发票\滴滴出行行程报销单B (1).pdf]
 
 #pdfPaths: [D:\test\滴滴出行行程报销单.pdf,D:\test\滴滴出行行程报销单(1)_4-5.pdf]
-pdfPaths: [D:\test\xiao滴滴出行行程报销单(1).pdf]
+pdfDir: E:\个人\出差报销\202304出差报销\行程单
 
 docOutPath: D:\test\1.docx
