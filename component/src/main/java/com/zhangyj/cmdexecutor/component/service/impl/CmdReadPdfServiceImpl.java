@@ -36,7 +36,7 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
     /**
      * 变量映射 key:变量名
      */
-    private Map<String, Object> paramMap = new HashMap<>();
+    private final Map<String, Object> paramMap = new HashMap<>();
 
     @Override
     public void exec() throws Exception {
