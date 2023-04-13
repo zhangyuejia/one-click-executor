@@ -46,9 +46,6 @@ public interface BasePdfRule {
                 if (m.find() && Integer.parseInt(m.group()) == ++index) {
                     result.add(getTargetContent(content));
                 }
-//                if(Pattern.matches("[0-9].*", content)){
-//                    result.add(getTargetContent(content));
-//                }
             }else {
                 if(content.startsWith(getStartSign())){
                     start = true;

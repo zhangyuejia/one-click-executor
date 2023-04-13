@@ -15,19 +15,19 @@ import java.util.List;
 @Slf4j
 public class CmdReadPdfConfig extends AbstractCmdConfig {
     /**
-     * 输入pdf目录
+     * 行程单pdf目录（支持高德和滴滴）
      */
     private String pdfDir;
 
     /**
-     * 输出的docx
+     * 市内交通word输出地址
      */
     private String docOutPath;
 
     /**
-     * 输出的txt
+     * 报销人
      */
-    private String txtOutPath;
+    private String myName;
 
     @Override
     public String getDesc() {

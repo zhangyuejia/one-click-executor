@@ -11,18 +11,15 @@ import com.zhangyj.cmdexecutor.core.common.util.PdfUtils;
 import com.zhangyj.cmdexecutor.core.common.util.StrUtils;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +32,11 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
 
     @Resource
     private List<BasePdfRule> pdfRules;
+
+    /**
+     * 变量映射 key:变量名
+     */
+    private Map<String, Object> paramMap = new HashMap<>();
 
     @Override
     public void exec() throws Exception {
@@ -59,6 +61,7 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
     private void generateWord(List<ExpenseBO> list) throws Exception{
         XWPFDocument document = new XWPFDocument(new FileInputStream(FileUtils.getResourcePath() + "\\component\\file\\交通明细模板.docx"));
         XWPFTable table = document.getTables().get(0);
+
         int tmplRowNum = 5;
         XWPFTableRow tmplRow = table.getRow(tmplRowNum);
         for (ExpenseBO expenseBO : list) {
@@ -71,8 +74,35 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
             }
         }
         table.removeRow(tmplRowNum);
+        
+        initParamMap(list);
+        // 填充变量
+        for (XWPFTableRow tableRow : table.getRows()) {
+            for (XWPFTableCell tableCell : tableRow.getTableCells()) {
+                String cellText = tableCell.getText();
+                if(StringUtils.isNotBlank(cellText) && cellText.contains("#")){
+                    tableCell.removeParagraph(0);
+                    XWPFParagraph newPara = tableCell.addParagraph();
+                    newPara.createRun().setText(StrUtils.parseTplContent(cellText, paramMap));
+                }
+            }
+        }
+
         try (FileOutputStream outputStream = new FileOutputStream(config.getDocOutPath())){
             document.write(outputStream);
         }
+    }
+
+    private void initParamMap(List<ExpenseBO> list) {
+        // 合计
+        double sum = 0;
+        for (ExpenseBO expenseBO : list) {
+            sum += Double.parseDouble(expenseBO.getMoney());
+        }
+        this.paramMap.put("sum", sum);
+        // 报销人
+        this.paramMap.put("myName", config.getMyName());
+        this.paramMap.put("today", DateFormatUtils.format(new Date(), "yyyy年MM月dd日"));
+
     }
 }
