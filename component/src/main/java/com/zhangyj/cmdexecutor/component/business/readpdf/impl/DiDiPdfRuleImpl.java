@@ -43,11 +43,7 @@ public class DiDiPdfRuleImpl implements BasePdfRule {
         // 结束时间
         expenseBO.setEndTime(DateUtils.addMinutes(expenseBO.getDate(), 40 + RandomUtil.getRandom().nextInt(-5, 5)));
         // 金额
-        try{
-            expenseBO.setMoney(split[split.length - 1]);
-        }catch (Exception e){
-            System.out.println();
-        }
+        expenseBO.setMoney(split[split.length - 1]);
 
         return expenseBO;
     }
