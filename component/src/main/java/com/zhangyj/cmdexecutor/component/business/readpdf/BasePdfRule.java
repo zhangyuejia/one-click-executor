@@ -2,6 +2,7 @@ package com.zhangyj.cmdexecutor.component.business.readpdf;
 
 import com.google.common.collect.Lists;
 import com.zhangyj.cmdexecutor.component.entity.bo.ExpenseBO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -41,10 +42,16 @@ public interface BasePdfRule {
         int index = 0;
         for (String content : contents) {
             if(start) {
-                Pattern p = Pattern.compile("\\d+");
+                Pattern p = Pattern.compile("^\\d+");
                 Matcher m = p.matcher(content);
                 if (m.find() && Integer.parseInt(m.group()) == ++index) {
-                    result.add(getTargetContent(content));
+                    System.out.println(content);
+                    try {
+                        result.add(getTargetContent(content));
+                    }catch (Exception e){
+                        System.err.println("解析pdf文本对象异常：" + content);
+                        throw e;
+                    }
                 }
             }else {
                 if(content.startsWith(getStartSign())){

@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
         }
         List<ExpenseBO> data = new ArrayList<>();
         for (File file : files) {
-            String pdfContent = PdfUtils.getPdfContentUseSpire(file.getCanonicalPath());
+            String pdfContent = PdfUtils.getPdfContentUseIText(file.getCanonicalPath());
             List<String> pdfContentList = Lists.newArrayList(pdfContent.split("\n")).stream()
                     .filter(StringUtils::isNotBlank).map(s -> s.replaceAll(" +", " ").trim()).collect(Collectors.toList());
             for (BasePdfRule pdfRule : pdfRules) {
@@ -95,11 +96,11 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
 
     private void initParamMap(List<ExpenseBO> list) {
         // 合计
-        double sum = 0;
-        for (ExpenseBO expenseBO : list) {
-            sum += Double.parseDouble(expenseBO.getMoney());
+        BigDecimal sum = new BigDecimal("0");
+        for (ExpenseBO bo : list) {
+            sum = sum.add(new BigDecimal(bo.getMoney()));
         }
-        this.paramMap.put("sum", sum);
+        this.paramMap.put("sum", sum.doubleValue());
         // 报销人
         this.paramMap.put("myName", config.getMyName());
         this.paramMap.put("today", DateFormatUtils.format(new Date(), "yyyy年MM月dd日"));
