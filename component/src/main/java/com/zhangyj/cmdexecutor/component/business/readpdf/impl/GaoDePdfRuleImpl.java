@@ -14,8 +14,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 @Slf4j
 @Service
 public class GaoDePdfRuleImpl implements BasePdfRule {
@@ -65,15 +63,5 @@ public class GaoDePdfRuleImpl implements BasePdfRule {
             }
         }
         return null;
-    }
-
-    public static void main(String[] args) {
-        String a = "fdjsl发动机老司机";
-        Pattern p = Pattern.compile("\\d+");
-        Matcher m = p.matcher(a);
-        if (m.find()) {
-            int currentWind = Integer.parseInt(m.group());
-            System.out.println(currentWind);
-        }
     }
 }

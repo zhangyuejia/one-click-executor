@@ -5,6 +5,7 @@ import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import lombok.extern.slf4j.Slf4j;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -30,10 +31,16 @@ public class CmdCompressFileServiceImpl extends AbstractCmdService<CmdCompressFi
         ZipParameters parameters =new ZipParameters();
         parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
         parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
-        parameters.setEncryptFiles(true);
-        parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
-        parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
-        parameters.setPassword(password);
-        zipFile.addFolder(file, parameters);
+        if(StringUtils.isNotBlank(password)){
+            parameters.setEncryptFiles(true);
+            parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
+            parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
+            parameters.setPassword(password);
+        }
+        if(file.isFile()){
+            zipFile.addFile(file, parameters);
+        }else {
+            zipFile.addFolder(file, parameters);
+        }
     }
 }
