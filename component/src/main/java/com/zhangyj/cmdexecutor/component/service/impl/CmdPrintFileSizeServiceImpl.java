@@ -74,7 +74,7 @@ public class CmdPrintFileSizeServiceImpl extends AbstractCmdService<CmdPrintFile
         if(!file.exists()){
             throw new RuntimeException("文件路径不存在，" + config.getDir());
         }
-        File[] files = file.listFiles();
+        File[] files = file.listFiles(File::exists);
         if(files == null){
             throw new RuntimeException("文件路径内容为空，" + config.getDir());
         }

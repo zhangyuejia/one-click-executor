@@ -41,7 +41,12 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
 
     @Override
     public void exec() throws Exception {
-        File[] files = new File(config.getPdfDir()).listFiles();
+        File pdfFile = new File(config.getPdfDir());
+        if(!pdfFile.exists()){
+            log.error("文件路径不存在{}", config.getPdfDir());
+            return;
+        }
+        File[] files = pdfFile.isFile()? new File[]{ pdfFile }: pdfFile.listFiles();
         if(files == null){
             return;
         }
@@ -60,6 +65,8 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
     }
 
     private void generateWord(List<ExpenseBO> list) throws Exception{
+        initParamMap(list);
+
         XWPFDocument document = new XWPFDocument(new FileInputStream(FileUtils.getResourcePath() + "\\component\\file\\交通明细模板.docx"));
         XWPFTable table = document.getTables().get(0);
 
@@ -69,14 +76,14 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
             XWPFTableRow xwpfTableRow = table.insertNewTableRow(tmplRowNum++);
             for (XWPFTableCell tableCell : tmplRow.getTableCells()) {
                 XWPFTableCell cell = xwpfTableRow.createCell();
-                String s = StrUtils.parseTplContent(tableCell.getText(), expenseBO);
+                String s = StrUtils.parseTplContent(tableCell.getText(), expenseBO, this.paramMap);
                 cell.setText(s);
                 cell.getCTTc().setTcPr(tableCell.getCTTc().getTcPr());
             }
         }
         table.removeRow(tmplRowNum);
         
-        initParamMap(list);
+
         // 填充变量
         for (XWPFTableRow tableRow : table.getRows()) {
             for (XWPFTableCell tableCell : tableRow.getTableCells()) {
@@ -102,8 +109,8 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
         }
         this.paramMap.put("sum", sum.doubleValue());
         // 报销人
-        this.paramMap.put("myName", config.getMyName());
         this.paramMap.put("today", DateFormatUtils.format(new Date(), "yyyy年MM月dd日"));
+        this.paramMap.putAll(config.getParams());
 
     }
 }

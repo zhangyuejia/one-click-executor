@@ -1,6 +1,6 @@
 # 行程单pdf目录（支持高德和滴滴）
-pdfDir: E:\个人\出差报销\202304出差报销\行程单-副本
+pdfDir: E:\个人\出差报销\202304出差报销\行程单
 # 市内交通word输出地址
 docOutPath: E:\个人\出差报销\202304出差报销\交通明细-章乐佳.docx
-# 报销人
-myName: 章乐佳
+# 参数
+params: {"myName": "章乐佳", "peopleNum": "2","peopleName": "肖祥成","reason": "宁德出差",}

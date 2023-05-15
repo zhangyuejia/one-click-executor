@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhagnyj
@@ -25,9 +25,9 @@ public class CmdReadPdfConfig extends AbstractCmdConfig {
     private String docOutPath;
 
     /**
-     * 报销人
+     * 参数
      */
-    private String myName;
+    private Map<String, String> params;
 
     @Override
     public String getDesc() {

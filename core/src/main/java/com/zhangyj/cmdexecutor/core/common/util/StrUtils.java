@@ -50,8 +50,13 @@ public class StrUtils extends StringUtils {
         return !isEmpty(msg);
     }
 
-    public static String parseTplContent(String tplContent, Object paramObj) {
-        Map<String, String> paramMap = JSON.parseObject(JSON.toJSONString(paramObj), new TypeReference<Map<String, String>>() {});
+    public static String parseTplContent(String tplContent, Object... paramObj) {
+        Map<String, String> paramMap = JSON.parseObject(JSON.toJSONString(paramObj[0]), new TypeReference<Map<String, String>>() {});
+        if(paramObj.length > 1){
+            for (int i = 1; i < paramObj.length; i++) {
+                paramMap.putAll(JSON.parseObject(JSON.toJSONString(paramObj[i]), new TypeReference<Map<String, String>>() {}));
+            }
+        }
         TemplateParserContext parserContext = new TemplateParserContext();
         return new SpelExpressionParser().parseExpression(tplContent, parserContext).getValue(paramMap, String.class);
     }
