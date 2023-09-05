@@ -1,5 +1,6 @@
 package com.zhangyj.cmdexecutor.core.common.handler.impl;
 
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -45,6 +46,7 @@ public class CmdComponentHandler implements CmdHandler {
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         CmdService<?> cmdService = getCmdService(cmdLinePo);
         AbstractCmdConfig cmdConfig = getCmdConfig(cmdLinePo);
+        Assert.notNull(cmdConfig, "配置文件至少需要包含一个配置项：" + cmdLinePo.getDir());
         ReflectUtil.invoke(cmdService, "setConfig", cmdConfig);
         ReflectUtil.invoke(cmdService, "exec");
     }
