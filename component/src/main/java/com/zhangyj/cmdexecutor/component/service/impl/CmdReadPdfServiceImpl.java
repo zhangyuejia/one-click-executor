@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -67,7 +69,7 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
     private void generateWord(List<ExpenseBO> list) throws Exception{
         initParamMap(list);
 
-        XWPFDocument document = new XWPFDocument(new FileInputStream(FileUtils.getResourcePath() + "\\component\\file\\交通明细模板.docx"));
+        XWPFDocument document = new XWPFDocument(Files.newInputStream(Paths.get(FileUtils.getResourcePath() + "\\component\\file\\交通明细模板.docx")));
         XWPFTable table = document.getTables().get(0);
 
         int tmplRowNum = 5;

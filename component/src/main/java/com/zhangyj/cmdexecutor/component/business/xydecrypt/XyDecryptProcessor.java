@@ -1,5 +1,7 @@
 package com.zhangyj.cmdexecutor.component.business.xydecrypt;
 
+import com.zhangyj.cmdexecutor.component.common.config.CmdXyDecryptConfig;
+
 import java.io.File;
 
 /**
@@ -17,8 +19,9 @@ public interface XyDecryptProcessor {
 
     /**
      * 处理
-     * @param file 原文件
+     * @param config 配置对象
+     * @param file   原文件
      */
-    void processDecrypt(File file);
+    void processDecrypt(CmdXyDecryptConfig config, File file);
 
 }

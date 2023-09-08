@@ -18,6 +18,8 @@ public class CmdXyDecryptConfig extends AbstractCmdConfig {
 
     private String path;
 
+    private String dataServerUrl;
+
     @Override
     public String getDesc() {
         return "解密功能";

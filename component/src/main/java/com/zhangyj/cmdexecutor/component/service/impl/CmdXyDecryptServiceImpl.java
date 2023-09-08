@@ -37,7 +37,7 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
             }
             for (XyDecryptProcessor xyDecryptProcessor : xyDecryptProcessors) {
                 if (xyDecryptProcessor.isMatch(file)) {
-                    xyDecryptProcessor.processDecrypt(file);
+                    xyDecryptProcessor.processDecrypt(config, file);
                 }
             }
         }
