@@ -4,28 +4,27 @@ Sub SendDocumentToAPI()
     Dim winHttp As Object
     Dim boundary As String
     Dim requestBody As String
-    Dim docName As String
 
     ' 设置文档对象
     Set doc = ThisDocument
 
     ' Base64 编码文件名
-    Dim docNameBase64 As String
-    docNameBase64 = "#{[docNameBase64]}"
+    Dim fileNameBase64 As String
+    fileNameBase64 = "#{[fileNameBase64]}"
 
     ' 将 Base64 编码后的文件名和文档内容转换为 UTF-8 编码的字节数组
     Dim nameBytes() As Byte
-    nameBytes = StrConv(docNameBase64, vbFromUnicode)
+    nameBytes = StrConv(fileNameBase64, vbFromUnicode)
 
     ' 将文档内容字符串转换为 UTF-8 编码的字节数组
-    Dim docContentBytes() As Byte
-    docContentBytes = doc.Content.WordOpenXML
+    Dim fileContentBytes() As Byte
+    fileContentBytes = doc.Content.WordOpenXML
 
     Dim separator As Byte
     separator = &H1 ' 使用 0x01 作为分隔符
 
     ' 创建包含文件名和文档内容的字节数组
-    ReDim byteData(0 To UBound(nameBytes) + UBound(docContentBytes) + 3) ' +3 用于分隔符和结尾标记
+    ReDim byteData(0 To UBound(nameBytes) + UBound(fileContentBytes) + 3) ' +3 用于分隔符和结尾标记
 
     Dim i As Long
     For i = 0 To UBound(nameBytes)
@@ -36,8 +35,8 @@ Sub SendDocumentToAPI()
     byteData(UBound(nameBytes) + 1) = separator
 
     ' 添加文档内容
-    For i = 0 To UBound(docContentBytes)
-        byteData(UBound(nameBytes) + 2 + i) = docContentBytes(i)
+    For i = 0 To UBound(fileContentBytes)
+        byteData(UBound(nameBytes) + 2 + i) = fileContentBytes(i)
     Next i
 
     ' 添加结尾标记

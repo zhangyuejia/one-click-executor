@@ -27,4 +27,8 @@ public class FileUtils {
     public static String getResourcePath() {
         return getResourcePath("");
     }
+
+    public static String getTempDir(String dirName){
+        return System.getProperty("java.io.tmpdir") + File.separator +  dirName;
+    }
 }

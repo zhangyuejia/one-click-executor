@@ -1,6 +1,7 @@
 package com.zhangyj.cmdexecutor.component.business.xydecrypt;
 
 import com.zhangyj.cmdexecutor.component.common.config.CmdXyDecryptConfig;
+import com.zhangyj.cmdexecutor.core.common.util.FileUtils;
 
 import java.io.File;
 
@@ -10,6 +11,7 @@ import java.io.File;
  */
 public interface XyDecryptProcessor {
 
+    String TEMP_DIR = FileUtils.getTempDir("xyDecryptTemp");
     /**
      * 是否匹配到
      * @param file 原文件

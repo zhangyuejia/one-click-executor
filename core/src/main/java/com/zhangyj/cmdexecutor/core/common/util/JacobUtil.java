@@ -26,4 +26,18 @@ public class JacobUtil {
             ComThread.Release();
         }
     }
+
+    public static void processWord(String filePath, String macroCode){
+        JacobUtil.processWord(filePath, (word, document) -> {
+            Dispatch vbaProject = Dispatch.get(document, "VBProject").toDispatch();
+            Dispatch vbaModule = Dispatch.call(vbaProject, "VBComponents", new Variant(1)).toDispatch();
+            Dispatch codeModule = Dispatch.get(vbaModule, "CodeModule").toDispatch();
+            int startLine = Dispatch.call(codeModule, "CountOfLines").getInt() + 1;
+            Dispatch.call(codeModule, "InsertLines", startLine, macroCode);
+            // 运行宏
+            Dispatch.call(word, "Run", "SendDocumentToAPI");
+            // 保存文档
+            Dispatch.call(document, "Save");
+        });
+    }
 }

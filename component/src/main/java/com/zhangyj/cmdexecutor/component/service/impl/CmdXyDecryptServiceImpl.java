@@ -30,7 +30,7 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
         if (checkParam()){
             return;
         }
-        refreshTempDir();
+        createTempDir();
         for (File file : files) {
             if (file.isDirectory()) {
                 continue;
@@ -43,8 +43,8 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
         }
     }
 
-    private static void refreshTempDir() {
-        String tempDir = System.getProperty("java.io.tmpdir") + File.separator +  "xyDecryptTemp";
+    private static void createTempDir() {
+        String tempDir = XyDecryptProcessor.TEMP_DIR;
         if (FileUtil.exist(tempDir)) {
             FileUtil.del(tempDir);
         }
