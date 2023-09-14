@@ -4,6 +4,7 @@ import com.zhangyj.cmdexecutor.component.common.config.CmdXyDecryptConfig;
 import com.zhangyj.cmdexecutor.core.common.util.FileUtils;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * xy处理器
@@ -25,5 +26,11 @@ public interface XyDecryptProcessor {
      * @param file   原文件
      */
     void processDecrypt(CmdXyDecryptConfig config, File file);
+
+    /**
+     * 支持的文件拓展类型
+     * @return 文件拓展类型
+     */
+    List<String> getFileExtensions();
 
 }

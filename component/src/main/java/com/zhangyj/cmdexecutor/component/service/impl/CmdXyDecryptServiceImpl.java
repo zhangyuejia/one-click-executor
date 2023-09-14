@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,8 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConfig> {
 
-    private File[] files;
-
     private final List<XyDecryptProcessor> xyDecryptProcessors;
 
     @Override
@@ -30,20 +29,40 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
         if (checkParam()){
             return;
         }
-        createTempDir();
+        printInfo();
+        mkTempDir();
+        processFiles(new File(config.getPath()));
+    }
+
+    private void printInfo() {
+        List<String> fileExtensions = new ArrayList<>();
+        for (XyDecryptProcessor xyDecryptProcessor : xyDecryptProcessors) {
+            fileExtensions.addAll(xyDecryptProcessor.getFileExtensions());
+        }
+        log.info("支持的文件类型：{}", String.join(",", fileExtensions));
+    }
+
+    private void processFiles(File dirFile) {
+        File[] files = dirFile.listFiles();
+        if(files == null){
+            return;
+        }
         for (File file : files) {
             if (file.isDirectory()) {
-                continue;
-            }
-            for (XyDecryptProcessor xyDecryptProcessor : xyDecryptProcessors) {
-                if (xyDecryptProcessor.isMatch(file)) {
-                    xyDecryptProcessor.processDecrypt(config, file);
+                processFiles(file);
+            }else {
+                for (XyDecryptProcessor xyDecryptProcessor : xyDecryptProcessors) {
+                    if (xyDecryptProcessor.isMatch(file)) {
+                        log.info("匹配到文件处理器：{}", file.getPath());
+                        xyDecryptProcessor.processDecrypt(config, file);
+                        break;
+                    }
                 }
             }
         }
     }
 
-    private static void createTempDir() {
+    private static void mkTempDir() {
         String tempDir = XyDecryptProcessor.TEMP_DIR;
         if (FileUtil.exist(tempDir)) {
             FileUtil.del(tempDir);
@@ -60,7 +79,6 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
             log.info("文件夹无文件：" + config.getPath());
             return true;
         }
-        this.files = files;
         return false;
     }
 }
