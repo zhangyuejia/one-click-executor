@@ -1,3 +1,3 @@
 @echo off
-echo 'start umc-web'
-npm run dev
+echo 'start sy-fts-web'
+npm run serve

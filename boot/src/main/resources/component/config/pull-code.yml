@@ -9,76 +9,20 @@ modulesProperties: [
 {
     refId: "umc3.15",
     # 远程仓库名称
-    remoteRepoName: "upstream",
+    remoteRepoName: "origin",
     # 命令执行根目录，此处可以为空，为空会被替换为 cmd-executor.dir
-    dir:,
+    dir: D:\Projects\shineyoung\sy-fts,
     # 是否需要切换到本地分支
     enableCheckoutLocalBranch: true,
     # 模块参数
     modulesParams: [
     {
-        name: "umc-portal",
+        name: "sy-fts-wms",
         # 本地分支
 #        localBranch: "umc-3.13-SP1",
         localBranch: "dev",
         # 远程分支
 #        remoteBranch: ["umc-3.13-SP1"]
-        remoteBranch: ["dev"]
-    },
-    {
-        name: "umc-portal-audit",
-        # 本地分支
-        localBranch: "dev",
-        # 远程分支
-        remoteBranch: ["dev"]
-    },
-    {
-        name: "umc-portal-boot",
-        # 本地分支
-        localBranch: "dev",
-        # 远程分支
-        remoteBranch: ["dev"]
-    },
-    {
-        name: "umc-portal-business",
-        # 本地分支
-        localBranch: "dev",
-        # 远程分支
-        remoteBranch: ["dev"]
-    },
-    {
-        name: "umc-portal-common",
-        # 本地分支
-        localBranch: "dev",
-        # 远程分支
-        remoteBranch: ["dev"]
-    },
-    {
-        name: "umc-portal-communication",
-        # 本地分支
-        localBranch: "dev",
-        # 远程分支
-        remoteBranch: ["dev"]
-    },
-    {
-        name: "umc-portal-dependencies",
-        # 本地分支
-        localBranch: "dev",
-        # 远程分支
-        remoteBranch: ["dev"]
-    },
-    {
-        name: "umc-portal-system",
-        # 本地分支
-        localBranch: "dev",
-        # 远程分支
-        remoteBranch: ["dev"]
-    },
-    {
-        name: "umc-portal-utils",
-        # 本地分支
-        localBranch: "dev",
-        # 远程分支
         remoteBranch: ["dev"]
     }
     ]
