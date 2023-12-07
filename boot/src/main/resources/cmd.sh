@@ -20,7 +20,7 @@
 #component,replace-properties,#{[classpath]}component\config\replace-properties.yml
 
 ##############################【功能】更新后端代码########################################
-component,pull-code,#{[classpath]}component\config\pull-code.yml
+#component,pull-code,#{[classpath]}component\config\pull-code.yml
 
 ##############################【功能】替换本地properties配置##############################
 #component,replace-properties,#{[classpath]}component\config\replace-properties.yml
@@ -29,8 +29,12 @@ component,pull-code,#{[classpath]}component\config\pull-code.yml
 #component,exec,#{[classpath]}component\config\exec-pull-web.yml
 
 ##############################【功能】更新前端代码并启动###################################
-component,exec,#{[classpath]}component\config\exec-start-web.yml
+# 启动fts
+#component,exec,#{[classpath]}component\config\exec-pull-web.yml
+#component,exec,#{[classpath]}component\config\exec-start-web.yml
 
+# 启动c-fts
+component,exec,#{[classpath]}component\config\exec-start-c-fts-web.yml
 #component,read-pdf,#{[classpath]}component\config\read-pdf.yml
 #component,xy-decrypt,#{[classpath]}component\config\xy-decrypt.yml
 #component,compress-file,#{[classpath]}component\config\compress-file.yml
