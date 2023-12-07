@@ -10,8 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -35,10 +35,9 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
     }
 
     private void printInfo() {
-        List<String> fileExtensions = new ArrayList<>();
-        for (XyDecryptProcessor xyDecryptProcessor : xyDecryptProcessors) {
-            fileExtensions.addAll(xyDecryptProcessor.getFileExtensions());
-        }
+        List<String> fileExtensions = xyDecryptProcessors.stream()
+                .map(XyDecryptProcessor::getFileExtensions)
+                .flatMap(List::stream).collect(Collectors.toList());
         log.info("支持的文件类型：{}", String.join(",", fileExtensions));
     }
 
@@ -80,5 +79,9 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
             return true;
         }
         return false;
+    }
+
+    public static void main(String[] args) {
+
     }
 }
