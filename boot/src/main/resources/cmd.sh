@@ -30,11 +30,12 @@
 
 ##############################【功能】更新前端代码并启动###################################
 # 启动fts
-#component,exec,#{[classpath]}component\config\exec-pull-web.yml
-#component,exec,#{[classpath]}component\config\exec-start-web.yml
+component,exec,#{[classpath]}component\config\exec-pull-web.yml
+component,exec,#{[classpath]}component\config\exec-start-web.yml
 
 # 启动c-fts
-component,exec,#{[classpath]}component\config\exec-start-c-fts-web.yml
+#component,exec,#{[classpath]}component\config\exec-start-c-fts-web.yml
+
 #component,read-pdf,#{[classpath]}component\config\read-pdf.yml
 #component,xy-decrypt,#{[classpath]}component\config\xy-decrypt.yml
 #component,compress-file,#{[classpath]}component\config\compress-file.yml
