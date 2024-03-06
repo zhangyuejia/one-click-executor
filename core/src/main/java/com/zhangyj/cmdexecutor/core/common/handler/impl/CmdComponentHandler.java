@@ -7,6 +7,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.setting.yaml.YamlUtil;
 import com.zhangyj.cmdexecutor.core.common.config.AbstractCmdConfig;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
+import com.zhangyj.cmdexecutor.core.common.constant.CoreConstant;
 import com.zhangyj.cmdexecutor.core.common.enums.CmdTypeEnum;
 import com.zhangyj.cmdexecutor.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
@@ -20,6 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
+
 
 /**
  * 组件命令handler
@@ -42,6 +44,7 @@ public class CmdComponentHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) {
+        log.info(CoreConstant.CMD_LOG_BEFORE);
         log.info("解析命令：" + cmdLine);
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         CmdService<?> cmdService = getCmdService(cmdLinePo);

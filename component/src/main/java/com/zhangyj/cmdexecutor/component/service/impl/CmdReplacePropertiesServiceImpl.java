@@ -1,12 +1,12 @@
 package com.zhangyj.cmdexecutor.component.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.zhangyj.cmdexecutor.component.common.config.CmdReplacePropertiesConfig;
 import com.zhangyj.cmdexecutor.component.entity.bo.ReplacePropertiesBO;
 import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -67,7 +67,11 @@ public class CmdReplacePropertiesServiceImpl extends AbstractCmdService<CmdRepla
     }
 
     private void init(ReplacePropertiesBO replaceProperties) {
-        List<String> uselessProperties = new ArrayList<>(replaceProperties.getUselessProperties());
+        List<String> uselessProperties = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(replaceProperties.getUselessProperties())) {
+            uselessProperties.addAll(replaceProperties.getUselessProperties());
+        }
+
         uselessProperties.addAll(config.getUselessProperties());
         this.currentUselessProperties = uselessProperties.stream().distinct().collect(Collectors.toList());
 
@@ -140,11 +144,15 @@ public class CmdReplacePropertiesServiceImpl extends AbstractCmdService<CmdRepla
 
     private String replaceProperty(String line) {
         // 替换关键字
+        String leftStr;
         for (String property : currentPropertiesMap.keySet()) {
-            if(line.startsWith(property + "=")){
-                log.info("修改配置项：{} 为{}", property, currentPropertiesMap.get(property));
-                propertiesLeftMap.remove(property);
-                return property + "=" + currentPropertiesMap.get(property);
+            if(line.startsWith(property)){
+                leftStr = line.substring(property.length()).trim();
+                if(leftStr.startsWith("=")){
+                    log.info("修改配置项：{} 为{}", property, currentPropertiesMap.get(property));
+                    propertiesLeftMap.remove(property);
+                    return property + "=" + currentPropertiesMap.get(property);
+                }
             }
         }
         return null;

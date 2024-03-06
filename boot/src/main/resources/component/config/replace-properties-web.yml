@@ -1,0 +1,29 @@
+# 命令执行根目录，此处可以为空，为空会被替换为 cmd-executor.dir
+dir: D:\Projects\shineyoung\sy-fts-front
+# 日志错误关键词（判断是否命令是否成功执行）
+errorLogWords: ["abort", "error", "fail", "unable", "Could not"]
+# 启用替换id
+enableRefId: [
+      "web",
+]
+# 替换配置文件相对地址
+filePaths: [
+   src\service\request\config.ts
+]
+# 配置项map，优先级最高
+propertiesMap: {
+  "tempBASE_URL":"'http://172.18.17.187:9501'"
+}
+# 需要注释的配置项，优先级最高
+uselessProperties: [
+]
+# 替换关键字描述
+replaceKeys: [
+  {
+    # web环境配置
+    refId: "web",
+    propertiesMap: {
+    }
+  }
+]
+

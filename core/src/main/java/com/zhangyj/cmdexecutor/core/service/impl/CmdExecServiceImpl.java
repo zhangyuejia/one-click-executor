@@ -73,8 +73,8 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         // 创建命令执行路径
         File file = new File(config.getDir());
         if(!file.exists()){
-            boolean mkdirs = file.mkdirs();
-            if(!mkdirs){
+            boolean mkdir = file.mkdirs();
+            if(!mkdir){
                 throw new RuntimeException("创建路径失败：" + config.getDir());
             }
         }
