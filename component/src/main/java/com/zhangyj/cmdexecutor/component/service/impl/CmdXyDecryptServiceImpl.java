@@ -81,7 +81,8 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
         return false;
     }
 
-    public static void main(String[] args) {
-
+    @Override
+    public String getDesc() {
+        return "解密功能";
     }
 }

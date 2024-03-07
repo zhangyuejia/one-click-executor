@@ -108,5 +108,8 @@ public class CmdPrintFileSizeServiceImpl extends AbstractCmdService<CmdPrintFile
         latch.await();
     }
 
-
+    @Override
+    public String getDesc() {
+        return "打印文件大小功能";
+    }
 }

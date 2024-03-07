@@ -28,9 +28,4 @@ public class CmdReadPdfConfig extends AbstractCmdConfig {
      * 参数
      */
     private Map<String, String> params;
-
-    @Override
-    public String getDesc() {
-        return "读取pdf功能";
-    }
 }

@@ -43,9 +43,4 @@ public class CmdSpliceFileConfig extends AbstractCmdConfig {
      * 生成文件之前，在path文件夹路径执行的cmd命令（如更新git或者svn）
      */
     private String command;
-
-    @Override
-    public String getDesc() {
-        return "文件拼接功能";
-    }
 }

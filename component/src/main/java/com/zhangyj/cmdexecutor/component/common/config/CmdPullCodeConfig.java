@@ -24,9 +24,4 @@ public class CmdPullCodeConfig extends AbstractCmdConfig {
      * 替换关键字
      */
     private List<ModulePropertiesBO> modulesProperties;
-
-    @Override
-    public String getDesc() {
-        return "多模块代码更新配置";
-    }
 }

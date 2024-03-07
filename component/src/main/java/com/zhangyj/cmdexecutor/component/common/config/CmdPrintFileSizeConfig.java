@@ -15,9 +15,4 @@ import lombok.extern.slf4j.Slf4j;
 public class CmdPrintFileSizeConfig extends AbstractCmdConfig {
 
     private String dir;
-
-    @Override
-    public String getDesc() {
-        return "打印文件大小功能";
-    }
 }

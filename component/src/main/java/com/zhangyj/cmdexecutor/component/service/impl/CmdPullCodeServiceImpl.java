@@ -116,5 +116,8 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService<CmdPullCodeConfig
         return moduleProperties.getDir() + File.separator + modulesParam.getName();
     }
 
-
+    @Override
+    public String getDesc() {
+        return "多模块代码更新配置";
+    }
 }

@@ -13,11 +13,4 @@ import java.util.List;
 public abstract class AbstractCmdConfig {
 
     private List<String> errorLogWords;
-
-
-    /**
-     * 获取描述
-     * @return 描述
-     */
-    public abstract String getDesc();
 }

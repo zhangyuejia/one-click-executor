@@ -46,4 +46,9 @@ public class CmdFlushDnsServiceImpl extends AbstractCmdService<CmdFlushDnsConfig
         // 刷新dns
         CommandUtils.execCommand(cmdExecConfig.getCharset(), "ipconfig /flushdns", null, new CheckStringHandler(config));
     }
+
+    @Override
+    public String getDesc() {
+        return "刷新dns配置功能";
+    }
 }

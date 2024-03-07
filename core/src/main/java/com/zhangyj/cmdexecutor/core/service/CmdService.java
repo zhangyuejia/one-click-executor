@@ -24,4 +24,10 @@ public interface CmdService<T extends AbstractCmdConfig> {
      * @throws Exception 异常
      */
     void exec() throws Exception;
+
+    /**
+     * 获取描述
+     * @return 描述
+     */
+    String getDesc();
 }

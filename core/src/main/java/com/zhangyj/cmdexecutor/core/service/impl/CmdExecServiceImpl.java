@@ -53,7 +53,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
 
     private String getExecFilePath() {
         if(StringUtils.isBlank(config.getShellPath())) {
-            throw new IllegalArgumentException("执行" + config.getDesc() + "报错，配置项[shellPath]不能为空");
+            throw new IllegalArgumentException("执行" + this.getDesc() + "报错，配置项[shellPath]不能为空");
         }
         if(new File(config.getShellPath()).exists()){
             return config.getShellPath();
@@ -85,5 +85,10 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         paramMap.put("dir", config.getDir());
         paramMap.put("classpath", FileUtils.getResourcePath());
         log.info("初始化变量：{}", JSON.toJSONString(paramMap));
+    }
+
+    @Override
+    public String getDesc() {
+        return "命令执行功能";
     }
 }

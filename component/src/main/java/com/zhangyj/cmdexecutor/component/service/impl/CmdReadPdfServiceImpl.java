@@ -113,6 +113,10 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
         // 报销人
         this.paramMap.put("today", DateFormatUtils.format(new Date(), "yyyy年MM月dd日"));
         this.paramMap.putAll(config.getParams());
+    }
 
+    @Override
+    public String getDesc() {
+        return "读取pdf功能";
     }
 }

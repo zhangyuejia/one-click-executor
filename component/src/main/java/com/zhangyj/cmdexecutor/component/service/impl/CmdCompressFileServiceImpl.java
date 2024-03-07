@@ -43,4 +43,9 @@ public class CmdCompressFileServiceImpl extends AbstractCmdService<CmdCompressFi
             zipFile.addFolder(file, parameters);
         }
     }
+
+    @Override
+    public String getDesc() {
+        return "压缩文件功能";
+    }
 }

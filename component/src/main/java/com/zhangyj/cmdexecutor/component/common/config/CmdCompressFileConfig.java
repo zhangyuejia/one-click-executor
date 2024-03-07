@@ -23,10 +23,4 @@ public class CmdCompressFileConfig extends AbstractCmdConfig {
      * 压缩密码
      */
     private String compressPassword;
-
-
-    @Override
-    public String getDesc() {
-        return "压缩文件功能";
-    }
 }

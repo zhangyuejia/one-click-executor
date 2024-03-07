@@ -17,6 +17,7 @@ import com.zhangyj.cmdexecutor.core.service.CmdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.helpers.MessageFormatter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -44,10 +45,11 @@ public class CmdComponentHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) {
-        log.info(CoreConstant.CMD_LOG_BEFORE);
         log.info("解析命令：" + cmdLine);
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         CmdService<?> cmdService = getCmdService(cmdLinePo);
+        log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, cmdService.getDesc()).getMessage());
+
         AbstractCmdConfig cmdConfig = getCmdConfig(cmdLinePo);
         Assert.notNull(cmdConfig, "配置文件至少需要包含一个配置项：" + cmdLinePo.getDir());
         ReflectUtil.invoke(cmdService, "setConfig", cmdConfig);

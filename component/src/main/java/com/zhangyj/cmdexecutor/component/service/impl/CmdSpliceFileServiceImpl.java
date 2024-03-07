@@ -136,4 +136,9 @@ public class CmdSpliceFileServiceImpl extends AbstractCmdService<CmdSpliceFileCo
         }
         return patterns;
     }
+
+    @Override
+    public String getDesc() {
+        return "文件拼接功能";
+    }
 }

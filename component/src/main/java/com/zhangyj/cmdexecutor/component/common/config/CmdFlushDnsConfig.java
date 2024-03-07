@@ -25,9 +25,4 @@ public class CmdFlushDnsConfig extends AbstractCmdConfig {
      * 本地hosts文件地址
      */
     private String hostsPath;
-
-    @Override
-    public String getDesc() {
-        return "刷新dns配置功能";
-    }
 }

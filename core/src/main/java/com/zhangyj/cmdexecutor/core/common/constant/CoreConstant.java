@@ -5,5 +5,5 @@ package com.zhangyj.cmdexecutor.core.common.constant;
  */
 public class CoreConstant {
 
-	public static final String CMD_LOG_BEFORE = "------------------------START-------------------------";
+	public static final String CMD_LOG_BEFORE = "------------------------{}-------------------------";
 }

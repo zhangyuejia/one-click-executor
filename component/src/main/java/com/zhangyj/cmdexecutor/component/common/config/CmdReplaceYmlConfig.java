@@ -11,6 +11,5 @@ import lombok.extern.slf4j.Slf4j;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Slf4j
-public class CmdReplacePropertiesConfig extends CmdReplaceConfig {
-
+public class CmdReplaceYmlConfig extends CmdReplaceConfig {
 }

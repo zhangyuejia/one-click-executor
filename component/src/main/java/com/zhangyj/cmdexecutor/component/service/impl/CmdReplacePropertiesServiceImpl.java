@@ -1,27 +1,19 @@
 package com.zhangyj.cmdexecutor.component.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.zhangyj.cmdexecutor.component.common.config.CmdReplacePropertiesConfig;
-import com.zhangyj.cmdexecutor.component.entity.bo.ReplacePropertiesBO;
-import com.zhangyj.cmdexecutor.core.service.AbstractCmdService;
+import com.zhangyj.cmdexecutor.component.service.AbstractCmdReplaceServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author zhangyj
@@ -29,98 +21,29 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CmdReplacePropertiesServiceImpl extends AbstractCmdService<CmdReplacePropertiesConfig> {
-
-    /**
-     * 剩下来没用到的，需要写入最后一个文件
-     */
-    private final Map<String, String> propertiesLeftMap = new HashMap<>(2);
-
-    private final Map<String, String> currentPropertiesMap = new HashMap<>(2);
-
-    private List<String> currentUselessProperties;
+public class CmdReplacePropertiesServiceImpl extends AbstractCmdReplaceServiceImpl<CmdReplacePropertiesConfig> {
 
     @Override
-    public void exec() throws Exception {
-        initConfig();
-        List<ReplacePropertiesBO> replacePropertiesList = config.getReplaceKeys();
-        // 是否检查只有一个replaceId
-        if(config.getEnableRefId().size() > 1){
-            throw new RuntimeException("配置项[properties-replace.enableReplaceId]配置个数不能大于1个");
-        }
-        for (ReplacePropertiesBO replaceProperties : replacePropertiesList) {
-            if(!config.getEnableRefId().contains(replaceProperties.getRefId())){
-                continue;
-            }
-            log.info("启用配置ID:{}", replaceProperties.getRefId());
-            init(replaceProperties);
-            replaceProperties();
-            writeLeftProperties();
-            clear();
-        }
-    }
+    protected void writePropertyFile(String filePath) throws IOException {
+        Path path = Paths.get(filePath);
 
-    private void initConfig() {
-        if (StringUtils.isBlank(config.getDir())) {
-            config.setDir(cmdExecConfig.getDir());
-        }
-    }
-
-    private void init(ReplacePropertiesBO replaceProperties) {
-        List<String> uselessProperties = new ArrayList<>();
-        if (CollectionUtil.isNotEmpty(replaceProperties.getUselessProperties())) {
-            uselessProperties.addAll(replaceProperties.getUselessProperties());
-        }
-
-        uselessProperties.addAll(config.getUselessProperties());
-        this.currentUselessProperties = uselessProperties.stream().distinct().collect(Collectors.toList());
-
-        this.currentPropertiesMap.putAll(replaceProperties.getPropertiesMap());
-        this.currentPropertiesMap.putAll(config.getPropertiesMap());
-        this.propertiesLeftMap.putAll(this.currentPropertiesMap);
-    }
-
-    private void clear() {
-        this.currentPropertiesMap.clear();
-        this.currentUselessProperties.clear();
-        this.propertiesLeftMap.clear();
-    }
-
-    private void replaceProperties() throws IOException {
-        List<String> filePaths = getAbsoluteFilePaths();
-        for (String filePath : filePaths) {
-            File file = new File(filePath);
-            if(file.isDirectory()) {
-                throw new RuntimeException("文件" + filePath + "不是文件，中止执行");
-            }
-            Path path = Paths.get(filePath);
-
-            List<String> lines = Files.readAllLines(path);
-            try (BufferedWriter writer = Files.newBufferedWriter(path)){
-                for (String line : lines) {
-                    line = line.trim();
-                    // 先判断是否需要注释，再判断是否需要替换配置项
-                    String newLine = replaceUselessProperty(line);
-                    if(newLine == null){
-                        newLine = replaceProperty(line);
-                    }
-                    writer.write(newLine == null? line: newLine);
-                    writer.newLine();
+        List<String> lines = Files.readAllLines(path);
+        try (BufferedWriter writer = Files.newBufferedWriter(path)){
+            for (String line : lines) {
+                line = line.trim();
+                // 先判断是否需要注释，再判断是否需要替换配置项
+                String newLine = replaceUselessProperty(line);
+                if(newLine == null){
+                    newLine = replaceProperty(line);
                 }
+                writer.write(newLine == null? line: newLine);
+                writer.newLine();
             }
         }
-
     }
 
-    private List<String> getAbsoluteFilePaths() {
-       return config.getFilePaths().stream().map(v -> config.getDir() + File.separator + v).collect(Collectors.toList());
-    }
-
-    private void writeLeftProperties() throws IOException {
-        if(CollectionUtils.isEmpty(propertiesLeftMap)){
-            return;
-        }
-        List<String> filePaths = getAbsoluteFilePaths();
+    @Override
+    protected void writeLeftPropertiesFile(List<String> filePaths) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePaths.get(filePaths.size() - 1)), StandardOpenOption.APPEND)){
             for (Map.Entry<String, String> entry : propertiesLeftMap.entrySet()) {
                 String line = entry.getKey() + "=" + entry.getValue();
@@ -156,5 +79,10 @@ public class CmdReplacePropertiesServiceImpl extends AbstractCmdService<CmdRepla
             }
         }
         return null;
+    }
+
+    @Override
+    public String getDesc() {
+        return "Properties配置项替换功能";
     }
 }

@@ -16,7 +16,7 @@
 
     <properties>
         <!--springboot2.1.0.RELEASE到springboot2.1.9使用Greenwich.SR2版本的springcloud,具体的版本匹配参考:(https://start.spring.io/actuator/info)-->
-        <spring-boot.version>2.6.7</spring-boot.version>
+        <spring-boot.version>2.7.18</spring-boot.version>
     </properties>
 
     <!--版本控制-->

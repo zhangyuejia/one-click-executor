@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 @Component
 @ConfigurationProperties(prefix = "cmd-executor")
-public class CmdExecConfig extends AbstractCmdConfig implements InitializingBean {
+public class CmdExecConfig extends AbstractCmdConfig {
 
     private String dir;
 
@@ -27,17 +27,5 @@ public class CmdExecConfig extends AbstractCmdConfig implements InitializingBean
 
     private String shellPath;
 
-    private Map<String, String> paramMap;
-
-    @Override
-    public String getDesc() {
-        return "命令执行功能";
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        if(this.paramMap == null){
-            this.paramMap = new HashMap<>(2);
-        }
-    }
+    private Map<String, String> paramMap = new HashMap<>();
 }
