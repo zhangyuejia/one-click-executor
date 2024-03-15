@@ -28,17 +28,25 @@
 ##############################【功能】更新前端代码########################################
 # component,exec,#{[classpath]}component\config\exec-pull-web.yml
 
+##############################【功能】启动xxl-job########################################
+# shell -enableOutput=false,cmd /c start #{[classpath]}component\file\start-xxl-job.bat,#{[dir]}
+
+##############################【功能】启动zkServer########################################
+
+# shell -enableOutput=false,cmd /c start #{[classpath]}component\file\start-zk-server.bat,#{[dir]}
+
+
 ##############################【功能】更新后端代码########################################
 # component,pull-code,#{[classpath]}component\config\pull-code.yml
-component,replace-str,#{[classpath]}component\config\replace-str.yml
-component,replace-yml,#{[classpath]}component\config\replace-yml.yml
-component,replace-str-back,#{[classpath]}component\config\replace-str.yml
+# component,replace-yml,#{[classpath]}component\config\replace-yml.yml
+# component,replace-str,#{[classpath]}component\config\replace-str.yml
+# component,replace-str-back,#{[classpath]}component\config\replace-str.yml
 
 ##############################【功能】更新前端代码并启动###################################
-# 启动fts前端
+# # 启动fts前端
 # component,exec,#{[classpath]}component\config\exec-pull-web.yml
 # shell,git push upstream master
-# # 服务端替换为本地地址
+# # # 服务端替换为本地地址
 # component,replace-properties,#{[classpath]}component\config\replace-properties-web.yml
 # component,exec,#{[classpath]}component\config\exec-start-web.yml
 

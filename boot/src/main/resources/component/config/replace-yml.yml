@@ -10,15 +10,16 @@ enableRefId: [
 filePaths: [
   sy-fts-gateway/src/main/resources/application.yml,
   sy-fts-system/sy-fts-system-service/src/main/resources/application.yml,
-  sy-fts-system/sy-fts-system-service/src/main/resources/application-dev-hc.yml,
   sy-fts-wcs/sy-fts-wcs-service/src/main/resources/application.yml,
-  sy-fts-wcs/sy-fts-wcs-service/src/main/resources/application-dev-hc.yml,
   sy-fts-wms/sy-fts-wms-service/src/main/resources/application.yml,
-  sy-fts-wms/sy-fts-wms-service/src/main/resources/application-dev-hc.yml
+
+#  sy-fts-system/sy-fts-system-service/src/main/resources/application-dev-hc.yml,
+#  sy-fts-wcs/sy-fts-wcs-service/src/main/resources/application-dev-hc.yml,
+#  sy-fts-wms/sy-fts-wms-service/src/main/resources/application-dev-hc.yml
 ]
 # 配置项map，优先级最高
 propertiesMap: {
-  "spring.profiles.active":"dev-hc",
+  "spring.profiles.active":"xm-hc",
   "xxl.job.admin.addresses":"http://172.18.16.104:9091/xxl-job-admin"
 }
 # 需要注释的配置项，优先级最高

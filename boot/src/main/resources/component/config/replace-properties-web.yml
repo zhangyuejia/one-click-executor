@@ -12,7 +12,7 @@ filePaths: [
 ]
 # 配置项map，优先级最高
 propertiesMap: {
-  "tempBASE_URL":"'http://172.18.17.187:9501'"
+  "tempBASE_URL":"'http://172.18.17.187:9500'"
 }
 # 需要注释的配置项，优先级最高
 uselessProperties: [
