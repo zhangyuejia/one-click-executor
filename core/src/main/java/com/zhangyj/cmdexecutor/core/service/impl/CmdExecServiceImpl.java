@@ -43,7 +43,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
             while ((line = reader.readLine()) != null){
                 for (CmdHandler cmdHandler : cmdHandlers) {
                     if (cmdHandler.match(line)) {
-                        String content = StrUtils.parseTplContent(line, cmdExecConfig.getParamMap());
+                        String content = StrUtils.parseTplContent(line, CmdExecConfig.PARAM_MAP);
                         cmdHandler.handle(config, content);
                     }
                 }
@@ -81,7 +81,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
     }
 
     private void initParameter() {
-        Map<String, String> paramMap = cmdExecConfig.getParamMap();
+        Map<String, String> paramMap = CmdExecConfig.PARAM_MAP;
         paramMap.put("dir", config.getDir());
         paramMap.put("classpath", FileUtils.getResourcePath());
         log.info("初始化变量：{}", JSON.toJSONString(paramMap));

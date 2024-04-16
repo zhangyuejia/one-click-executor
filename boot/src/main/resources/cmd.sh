@@ -5,7 +5,7 @@
 ##############################【功能】合并文件夹下的文件################################
 #component,splice-file,#{[classpath]}component\config\splice-file.yml
 ##############################【功能】打印文件大小功能##################################
-#component,print-file-size,#{[classpath]}component\config\print-file-size.yml
+# component,print-file-size,#{[classpath]}component\config\print-file-size.yml
 ##############################【功能】刷新DNS功能#####################################
 #component,flush-dns,#{[classpath]}component\config\flush-dns.yml
 
@@ -42,15 +42,23 @@
 # component,replace-str,#{[classpath]}component\config\replace-str.yml
 # component,replace-str-back,#{[classpath]}component\config\replace-str.yml
 
+##############################【功能】vmware虚拟机启停####################################
+# param,set vm_exe_path=D:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe
+# param,set vm_path=D:\VMware\Win10\Win10 x64.vmx
+# shell,#{[vm_exe_path]} start "#{[vm_path]}" nogui
+# shell,#{[vm_exe_path]} stop "#{[vm_path]}"
+
 ##############################【功能】更新前端代码并启动###################################
-# # 启动fts前端
-# component,exec,#{[classpath]}component\config\exec-pull-web.yml
-# shell,git push upstream master
-# # # 服务端替换为本地地址
-# component,replace-properties,#{[classpath]}component\config\replace-properties-web.yml
+# 启动fts前端
+component,exec,#{[classpath]}component\config\exec-pull-web.yml
+shell,git push upstream master
+# # 服务端替换为本地地址
+component,replace-properties,#{[classpath]}component\config\replace-properties-web.yml
 # component,exec,#{[classpath]}component\config\exec-start-web.yml
+param,set vm_path1=D:\VMware\Win10\Win10 x64.vmx
 
 # 启动c-fts
+# component,replace-properties,#{[classpath]}component\config\replace-properties-c-web.yml
 # component,exec,#{[classpath]}component\config\exec-start-c-fts-web.yml
 
 # component,read-pdf,#{[classpath]}component\config\read-pdf.yml

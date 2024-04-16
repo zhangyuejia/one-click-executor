@@ -1,6 +1,6 @@
 package com.zhangyj.cmdexecutor.core.common.handler.impl;
 
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSONUtil;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
 import com.zhangyj.cmdexecutor.core.common.enums.CmdTypeEnum;
 import com.zhangyj.cmdexecutor.core.common.factory.CmdLinePoFactory;
@@ -24,8 +24,8 @@ public class CmdParamHandler implements CmdHandler {
     public void handle(CmdExecConfig config, String cmdLine) {
         String[] split = CmdLinePoFactory.newInstance(cmdLine).getCmd().substring(SET.length()).split("=");
         log.info("新增变量：{}={}", split[0], split[1]);
-        config.getParamMap().put(split[0], split[1]);
-        log.info("全部变量：{}", JSON.toJSONString(config.getParamMap()));
+        CmdExecConfig.PARAM_MAP.put(split[0], split[1]);
+        log.info("全部变量：{}", JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
     }
 
     @Override
