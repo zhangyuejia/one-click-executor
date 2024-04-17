@@ -2,11 +2,13 @@ package com.zhangyj.cmdexecutor.core.common.handler.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.zhangyj.cmdexecutor.core.common.config.CmdExecConfig;
+import com.zhangyj.cmdexecutor.core.common.constant.CoreConstant;
 import com.zhangyj.cmdexecutor.core.common.enums.CmdTypeEnum;
 import com.zhangyj.cmdexecutor.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.cmdexecutor.core.common.handler.CmdHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.helpers.MessageFormatter;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,10 +24,10 @@ public class CmdParamHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) {
+        log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, "新增变量").getMessage());
         String[] split = CmdLinePoFactory.newInstance(cmdLine).getCmd().substring(SET.length()).split("=");
-        log.info("新增变量：{}={}", split[0], split[1]);
         CmdExecConfig.PARAM_MAP.put(split[0], split[1]);
-        log.info("全部变量：{}", JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
+        log.info("变量集合：{}", JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
     }
 
     @Override
