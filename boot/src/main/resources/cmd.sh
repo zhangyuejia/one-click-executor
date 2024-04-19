@@ -43,13 +43,13 @@
 # component,replace-str-back,#{[classpath]}component\config\replace-str.yml
 
 ##############################【功能】vmware虚拟机启停####################################
-# param,set vm_exe_path=D:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe
+param,set vm_exe_path=D:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe
 param,set vm_path=D:\VMware\Win10\Win10 x64.vmx
 # shell,#{[vm_exe_path]} start "#{[vm_path]}" nogui
 # shell,#{[vm_exe_path]} stop "#{[vm_path]}"
 
 ##############################【功能】一键远程WIN虚拟机####################################
-# shell -enableOutput=false,#{[classpath]}component/file/one-click-remote.bat
+shell -enableOutput=false,#{[classpath]}component/file/one-click-remote.bat
 # shell,taskkill /IM mstsc.exe
 
 ##############################【功能】更新前端代码并启动###################################

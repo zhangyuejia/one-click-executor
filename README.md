@@ -1,5 +1,5 @@
-# Cmd Executor V5.0.0
-+ cmd命令执行器
+# One Click Executor V5.0.0
++ 一键执行器
 ## 运行环境
 + JDK 1.8及以上
 ## 功能说明

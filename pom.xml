@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.zhangyj</groupId>
-    <artifactId>cmd-executor</artifactId>
+    <artifactId>one-click-executor</artifactId>
     <packaging>pom</packaging>
     <version>5.0.0</version>
     <modules>

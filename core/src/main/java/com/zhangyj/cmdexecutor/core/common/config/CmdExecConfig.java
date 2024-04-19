@@ -18,7 +18,7 @@ import java.util.Map;
 @Data
 @Slf4j
 @Component
-@ConfigurationProperties(prefix = "cmd-executor")
+@ConfigurationProperties(prefix = "one-click-executor")
 public class CmdExecConfig extends AbstractCmdConfig {
 
     private String dir;

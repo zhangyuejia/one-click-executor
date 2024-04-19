@@ -1,4 +1,4 @@
-# 命令执行根目录，此处可以为空，为空会被替换为 cmd-executor.dir
+# 命令执行根目录，此处可以为空，为空会被替换为 one-click-executor.dir
 dir:
 # shell文件路径
 #shellPath: classpath:component\file\exec-file.sh

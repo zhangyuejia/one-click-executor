@@ -26,7 +26,7 @@ public class CmdExecRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (StringUtils.isBlank(cmdExecConfig.getDir())) {
-            throw new IllegalArgumentException("配置项[cmd-executor.dir]不能为空");
+            throw new IllegalArgumentException("配置项[one-click-executor.dir]不能为空");
         }
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
