@@ -49,13 +49,13 @@ param,set vm_path=D:\VMware\Win10\Win10 x64.vmx
 # shell,#{[vm_exe_path]} stop "#{[vm_path]}"
 
 ##############################【功能】一键远程WIN虚拟机####################################
-shell -enableOutput=false,#{[classpath]}component/file/one-click-remote.bat
+# shell -enableOutput=false,#{[classpath]}component/file/one-click-remote.bat
 # shell,taskkill /IM mstsc.exe
 
 ##############################【功能】更新前端代码并启动###################################
 # 启动fts前端
-# component,exec,#{[classpath]}component\config\exec-pull-web.yml
-# shell,git push upstream master
+component,exec,#{[classpath]}component\config\exec-pull-web.yml
+shell,git push upstream master
 # # # 服务端替换为本地地址
 # component,replace-properties,#{[classpath]}component\config\replace-properties-web.yml
 # component,exec,#{[classpath]}component\config\exec-start-web.yml
@@ -67,6 +67,7 @@ shell -enableOutput=false,#{[classpath]}component/file/one-click-remote.bat
 # component,read-pdf,#{[classpath]}component\config\read-pdf.yml
 # component,xy-decrypt,#{[classpath]}component\config\xy-decrypt.yml
 #component,compress-file,#{[classpath]}component\config\compress-file.yml
+
 
 
 
