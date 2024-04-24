@@ -3,7 +3,7 @@ package com.zhangyj.oneclick.component.business.readpdf.impl;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.zhangyj.oneclick.component.business.readpdf.BasePdfRule;
+import com.zhangyj.oneclick.component.business.readpdf.AbstractTripTableHandler;
 import com.zhangyj.oneclick.component.entity.bo.ExpenseBO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,9 +14,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+/**
+ * @author zhangyj
+ */
 @Slf4j
 @Service
-public class GaoDePdfRuleImpl implements BasePdfRule {
+public class GaoDeTripTableHandlerImpl extends AbstractTripTableHandler {
 
     @Override
     public boolean match(List<String> contents) {
@@ -28,7 +31,6 @@ public class GaoDePdfRuleImpl implements BasePdfRule {
         return "序号";
     }
 
-    @SuppressWarnings("DuplicatedCode")
     @Override
     public ExpenseBO getTargetContent(String content) {
         // 1 及时用车 及时经济型 2023-03-22 17:06 宁德市 贵州习酒宁德体验馆(亿利城铂金公馆店)对面 增坂村(公交站) 30.0
@@ -53,7 +55,6 @@ public class GaoDePdfRuleImpl implements BasePdfRule {
 
     private String getDate(String[] split) {
         for (int i = 0; i < split.length; i++) {
-            String str = split[i];
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 dateFormat.parse(split[i]);

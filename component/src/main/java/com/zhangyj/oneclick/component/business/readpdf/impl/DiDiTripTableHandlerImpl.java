@@ -3,7 +3,7 @@ package com.zhangyj.oneclick.component.business.readpdf.impl;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.zhangyj.oneclick.component.business.readpdf.BasePdfRule;
+import com.zhangyj.oneclick.component.business.readpdf.AbstractTripTableHandler;
 import com.zhangyj.oneclick.component.entity.bo.ExpenseBO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -12,8 +12,11 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author zhangyj
+ */
 @Service
-public class DiDiPdfRuleImpl implements BasePdfRule {
+public class DiDiTripTableHandlerImpl extends AbstractTripTableHandler {
 
     @Override
     public boolean match(List<String> contents) {

@@ -8,6 +8,9 @@ import org.apache.pdfbox.util.PDFTextStripper;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * @author zhanglj
+ */
 public class PdfUtils {
 
     /**
@@ -15,14 +18,13 @@ public class PdfUtils {
      * @param pdfPath pdf地址
      * @return pdf内容
      */
-    public static String getPdfContentUseIText(String pdfPath) {
-        StringBuilder sb = new StringBuilder();
+    public static String getPdfContentUseItext(String pdfPath) {
+        StringBuilder builder = new StringBuilder();
         PdfReader reader = null;
         try {
             reader = new PdfReader(pdfPath);
-            int pages = reader.getNumberOfPages();
-            for (int i = 1; i <= pages; i++) {
-                sb.append(PdfTextExtractor.getTextFromPage(reader, i));
+            for (int i = 0; i < reader.getNumberOfPages(); i++) {
+                builder.append(PdfTextExtractor.getTextFromPage(reader, i + 1));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -31,7 +33,7 @@ public class PdfUtils {
                 reader.close();
             }
         }
-        return sb.toString();
+        return builder.toString();
     }
 
     /**
@@ -39,12 +41,19 @@ public class PdfUtils {
      * @param pdfPath pdf地址
      * @return pdf内容
      */
-    public static String getPdfContentUsePdfBox(String pdfPath) throws Exception{
-        File file = new File(pdfPath);
-        PDDocument document = PDDocument.load(file);
-        PDFTextStripper pdfStripper = new PDFTextStripper();
-        String text = pdfStripper.getText(document);
-        document.close();
-        return text;
-    }
+    public static String getPdfContentUsePdfBox(String pdfPath) throws Exception {
+        PDDocument document = null;
+        try {
+            File file = new File(pdfPath);
+            document = PDDocument.load(file);
+            PDFTextStripper pdfStripper = new PDFTextStripper();
+            return pdfStripper.getText(document);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            if (document != null) {
+                document.close();
+            }
+        }
+	}
 }

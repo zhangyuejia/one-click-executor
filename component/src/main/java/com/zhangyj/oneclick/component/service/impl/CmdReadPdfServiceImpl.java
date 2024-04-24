@@ -3,7 +3,7 @@ package com.zhangyj.oneclick.component.service.impl;
 import cn.hutool.core.collection.ListUtil;
 import com.alibaba.excel.util.StringUtils;
 import com.google.common.collect.Lists;
-import com.zhangyj.oneclick.component.business.readpdf.BasePdfRule;
+import com.zhangyj.oneclick.component.business.readpdf.ITripTableHandler;
 import com.zhangyj.oneclick.component.common.config.CmdReadPdfConfig;
 import com.zhangyj.oneclick.component.entity.bo.ExpenseBO;
 import com.zhangyj.oneclick.core.common.util.FileUtils;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> {
 
     @Resource
-    private List<BasePdfRule> pdfRules;
+    private List<ITripTableHandler> pdfRules;
 
     /**
      * 变量映射 key:变量名
@@ -53,10 +53,10 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
         }
         List<ExpenseBO> data = new ArrayList<>();
         for (File file : files) {
-            String pdfContent = PdfUtils.getPdfContentUseIText(file.getCanonicalPath());
+            String pdfContent = PdfUtils.getPdfContentUseItext(file.getCanonicalPath());
             List<String> pdfContentList = Lists.newArrayList(pdfContent.split("\n")).stream()
                     .filter(StringUtils::isNotBlank).map(s -> s.replaceAll(" +", " ").trim()).collect(Collectors.toList());
-            for (BasePdfRule pdfRule : pdfRules) {
+            for (ITripTableHandler pdfRule : pdfRules) {
                 if(pdfRule.match(pdfContentList)){
                     data.addAll(pdfRule.getTargetContents(pdfContentList));
                 }
