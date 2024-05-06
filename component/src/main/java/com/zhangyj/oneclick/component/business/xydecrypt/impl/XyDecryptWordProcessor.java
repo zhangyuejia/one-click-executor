@@ -16,6 +16,9 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author zhanglj
+ */
 @Component
 public class XyDecryptWordProcessor extends AbstractXyDecryptProcessor {
 
@@ -32,7 +35,7 @@ public class XyDecryptWordProcessor extends AbstractXyDecryptProcessor {
         String macrosCode = FileUtil.readString(FileUtils.getResourcePath("component/file/xydecrypt/macros-word.vb"), Charset.defaultCharset());
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("fileNameBase64", Base64Util.encode(name));
-        paramMap.put("dataServerUrl", config.getDataServerUrl());
+        paramMap.put("dataServerUrl", config.getDataServerUrl() + "/accept");
         return StrUtils.parseTplContent(macrosCode, paramMap);
     }
 

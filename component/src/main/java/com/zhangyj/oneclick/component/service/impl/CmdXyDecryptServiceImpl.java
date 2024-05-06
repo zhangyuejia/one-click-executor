@@ -42,22 +42,30 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
     }
 
     private void processFiles(File dirFile) {
+        if (dirFile.isDirectory()) {
+            processDir(dirFile);
+        }else {
+            processFile(dirFile);
+        }
+    }
+
+    private void processFile(File dirFile) {
+        for (XyDecryptProcessor xyDecryptProcessor : xyDecryptProcessors) {
+            if (xyDecryptProcessor.isMatch(dirFile)) {
+                log.info("匹配到文件处理器：{}", dirFile.getPath());
+                xyDecryptProcessor.processDecrypt(config, dirFile);
+                break;
+            }
+        }
+    }
+
+    private void processDir(File dirFile) {
         File[] files = dirFile.listFiles();
         if(files == null){
             return;
         }
         for (File file : files) {
-            if (file.isDirectory()) {
-                processFiles(file);
-            }else {
-                for (XyDecryptProcessor xyDecryptProcessor : xyDecryptProcessors) {
-                    if (xyDecryptProcessor.isMatch(file)) {
-                        log.info("匹配到文件处理器：{}", file.getPath());
-                        xyDecryptProcessor.processDecrypt(config, file);
-                        break;
-                    }
-                }
-            }
+            processFiles(file);
         }
     }
 
