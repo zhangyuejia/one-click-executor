@@ -7,7 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
+import java.util.zip.Deflater;
 
 /**
  * @author ZHANG
@@ -64,6 +67,25 @@ public class StrUtils extends StringUtils {
     public static String toCamel(String cmd) {
         String cmdCamelStr = CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, cmd);
         return cmdCamelStr.substring(0, 1).toUpperCase() + cmdCamelStr.substring(1);
+    }
+
+    public static byte[] compressString(String originalString) throws IOException {
+        byte[] inputData = originalString.getBytes();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Deflater compressor = new Deflater();
+        compressor.setInput(inputData);
+        compressor.finish();
+
+        byte[] buffer = new byte[1024];
+        while (!compressor.finished()) {
+            int count = compressor.deflate(buffer);
+            outputStream.write(buffer, 0, count);
+        }
+
+        outputStream.close();
+        compressor.end();
+
+        return outputStream.toByteArray();
     }
 
 }
