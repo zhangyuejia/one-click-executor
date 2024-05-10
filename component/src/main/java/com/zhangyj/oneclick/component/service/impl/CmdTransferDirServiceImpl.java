@@ -84,20 +84,6 @@ public class CmdTransferDirServiceImpl extends AbstractCmdService<CmdTransferDir
 
 	@Override
 	public String getDesc() {
-		return null;
+		return "迁移文件夹";
 	}
-
-	public static void main(String[] args) {
-		String dir = "D:\\Projects\\shineyoung\\sy-fts-deploy-docs-new\\upload";
-		List<String> list = new ArrayList<>();
-		list.add("C:\\Users\\zhanglj\\Downloads\\sql-log\\xm-hc-c-20240320.sql");
-//		list.add("D:\\Projects\\zhang\\spring-study\\business\\src\\main\\java\\com\\zhangyj\\spring\\business\\newcontroller\\controller\\DocumentController.java");
-		for (String string : list) {
-			File file = new File(string);
-			String content = FileUtil.readString(string, Charset.defaultCharset());
-			System.out.println(content);
-//			FileUtil.writeString(content, dir + "\\" + file.getName() + ".log", Charset.defaultCharset());
-		}
-	}
-
 }

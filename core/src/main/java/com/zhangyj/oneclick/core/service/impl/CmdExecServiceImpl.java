@@ -42,6 +42,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
             String line;
             while ((line = reader.readLine()) != null){
                 for (CmdHandler cmdHandler : cmdHandlers) {
+                    line = line.trim();
                     if (cmdHandler.match(line)) {
                         String content = StrUtils.parseTplContent(line, CmdExecConfig.PARAM_MAP);
                         cmdHandler.handle(config, content);
