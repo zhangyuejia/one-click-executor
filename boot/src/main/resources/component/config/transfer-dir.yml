@@ -1,0 +1,13 @@
+# 行程单pdf目录（支持高德和滴滴）
+path: D:\Projects\zhang\one-click-executor-new
+# 市内交通word输出地址
+ignoreRegex: [
+    # 以.git\开头
+    ^\.git\\,
+    # 以.class结尾
+#    \.class$,
+    # 二级target目录
+    ^(\w+)\\target\\
+]
+# 参数
+dataServerUrl: http://192.168.226.100:9091
