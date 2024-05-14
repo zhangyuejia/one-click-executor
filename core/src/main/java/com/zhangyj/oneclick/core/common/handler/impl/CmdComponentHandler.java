@@ -1,5 +1,6 @@
 package com.zhangyj.oneclick.core.common.handler.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
@@ -21,6 +22,7 @@ import org.slf4j.helpers.MessageFormatter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Set;
 
 
@@ -52,6 +54,12 @@ public class CmdComponentHandler implements CmdHandler {
 
         AbstractCmdConfig cmdConfig = getCmdConfig(cmdLinePo);
         Assert.notNull(cmdConfig, "配置文件至少需要包含一个配置项：" + cmdLinePo.getDir());
+
+        if (CollectionUtil.isNotEmpty(cmdLinePo.getConfigPropertyMap())) {
+            for (Map.Entry<String, Object> entry : cmdLinePo.getConfigPropertyMap().entrySet()) {
+                ReflectUtil.setFieldValue(cmdConfig, entry.getKey(), entry.getValue());
+            }
+        }
         ReflectUtil.invoke(cmdService, "setConfig", cmdConfig);
         ReflectUtil.invoke(cmdService, "exec");
     }

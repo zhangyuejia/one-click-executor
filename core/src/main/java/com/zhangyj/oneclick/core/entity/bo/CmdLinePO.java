@@ -3,6 +3,8 @@ package com.zhangyj.oneclick.core.entity.bo;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Map;
+
 /**
  * 命令行解析对象
  * @author zhangyj
@@ -24,4 +26,8 @@ public class CmdLinePO {
      */
     private String dir;
 
+    /**
+     * 配置属性映射
+     */
+    private Map<String, Object> configPropertyMap;
 }

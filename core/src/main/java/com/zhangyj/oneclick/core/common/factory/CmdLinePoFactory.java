@@ -1,7 +1,9 @@
 package com.zhangyj.oneclick.core.common.factory;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zhangyj.oneclick.core.common.enums.CmdTypeEnum;
 import com.zhangyj.oneclick.core.entity.bo.CmdLinePO;
 import com.zhangyj.oneclick.core.entity.bo.CmdTypePO;
 import com.zhangyj.oneclick.core.entity.bo.CmdTypeParameterPO;
@@ -17,12 +19,34 @@ import java.util.Map;
 public class CmdLinePoFactory {
 
     public static CmdLinePO newInstance(String cmdLine){
-        String[] cmdArr = Arrays.copyOf(cmdLine.split(","), 3);
+        String[] cmdLineArr = Arrays.copyOf(cmdLine.split(","), 3);
+        CmdTypePO cmdType = getCmdType(cmdLineArr[0]);
+
+
         CmdLinePO po = new CmdLinePO();
-        po.setCmdType(getCmdType(cmdArr[0]));
-        po.setCmd(cmdArr[1]);
-        po.setDir(cmdArr[2]);
-        return po;
+        po.setCmdType(cmdType);
+        po.setDir(cmdLineArr[2]);
+
+        String[] cmdArr = cmdLineArr[1].split(" ");
+        if (CmdTypeEnum.COMPONENT.getFlag().equalsIgnoreCase(cmdType.getType())) {
+            po.setCmd(cmdArr[0]);
+        }else {
+            po.setCmd(cmdLineArr[1]);
+        }
+
+        if (cmdArr.length == 1 || !CmdTypeEnum.COMPONENT.getFlag().equalsIgnoreCase(po.getCmdType().getType())) {
+            return po;
+        }
+		Map<String, Object> configPropertyMap = new HashMap<>();
+		for (int i = 1; i < cmdArr.length; i++) {
+			String[] propertyArr = Arrays.copyOf(cmdArr[i].substring(1).split(":"), 2);
+            if (StrUtil.isBlank(propertyArr[0])) {
+                continue;
+            }
+			configPropertyMap.put(propertyArr[0], propertyArr[1]);
+		}
+		po.setConfigPropertyMap(configPropertyMap);
+		return po;
     }
 
     private static CmdTypePO getCmdType(String str){
