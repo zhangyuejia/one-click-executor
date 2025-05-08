@@ -12,5 +12,8 @@ import java.util.List;
 @Getter
 public abstract class AbstractCmdConfig {
 
+    private String dir;
+
     private List<String> errorLogWords;
+
 }

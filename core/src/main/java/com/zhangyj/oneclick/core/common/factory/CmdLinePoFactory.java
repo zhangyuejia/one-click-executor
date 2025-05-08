@@ -29,24 +29,11 @@ public class CmdLinePoFactory {
         po.setDir(cmdLineArr[2]);
         po.setIsAsync(CoreConstant.ASYNC.equals(cmdLineArr[3]));
         String[] cmdArr = cmdLineArr[1].split(" ");
-        if (CmdTypeEnum.COMPONENT.getFlag().equalsIgnoreCase(cmdType.getType())) {
+        if (CmdTypeEnum.COMPONENT.getValue().equalsIgnoreCase(cmdType.getType())) {
             po.setCmd(cmdArr[0]);
         }else {
             po.setCmd(cmdLineArr[1]);
         }
-
-        if (cmdArr.length == 1 || !CmdTypeEnum.COMPONENT.getFlag().equalsIgnoreCase(po.getCmdType().getType())) {
-            return po;
-        }
-		Map<String, Object> configPropertyMap = new HashMap<>(cmdArr.length);
-		for (int i = 1; i < cmdArr.length; i++) {
-			String[] propertyArr = Arrays.copyOf(cmdArr[i].substring(1).split(":"), 2);
-            if (StrUtil.isBlank(propertyArr[0])) {
-                continue;
-            }
-			configPropertyMap.put(propertyArr[0], propertyArr[1]);
-		}
-		po.setConfigPropertyMap(configPropertyMap);
 		return po;
     }
 

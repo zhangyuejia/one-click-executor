@@ -6,6 +6,7 @@ import com.zhangyj.oneclick.core.common.enums.CmdTypeEnum;
 import com.zhangyj.oneclick.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.oneclick.core.common.handler.CmdHandler;
 import com.zhangyj.oneclick.core.common.handler.StringHandler;
+import com.zhangyj.oneclick.core.common.runner.CmdExecRunner;
 import com.zhangyj.oneclick.core.common.util.CommandUtils;
 import com.zhangyj.oneclick.core.entity.bo.CmdLinePO;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class CmdShellHandler implements CmdHandler {
         log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, "执行SHELL功能").getMessage());
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         if(cmdLinePo.getDir() == null){
-            cmdLinePo.setDir(config.getDir());
+            cmdLinePo.setDir(CmdExecConfig.PARAM_MAP.get(CoreConstant.PARAM_DIR));
         }
         StringHandler stringHandler = null;
         if(cmdLinePo.getCmdType().getCmdTypeParameter().getEnableOutput()){

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum CmdTypeEnum {
+public enum CmdTypeEnum implements ValueEnum<String> {
 
     /**
      * shell命令
@@ -31,6 +31,6 @@ public enum CmdTypeEnum {
      */
     PARAM("param");
 
-    private final String flag;
+    private final String value;
 
 }

@@ -7,7 +7,9 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.json.JSONUtil;
 import cn.hutool.setting.yaml.YamlUtil;
 import com.zhangyj.oneclick.core.common.config.AbstractCmdConfig;
 import com.zhangyj.oneclick.core.common.config.CmdExecConfig;
@@ -34,6 +36,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+
+import static com.zhangyj.oneclick.core.common.constant.CoreConstant.PARAM_DIR;
 
 
 /**
@@ -64,11 +68,10 @@ public class CmdComponentHandler implements CmdHandler {
 
         AbstractCmdConfig cmdConfig = getCmdConfig(cmdLinePo);
         Assert.notNull(cmdConfig, "配置文件至少需要包含一个配置项：" + cmdLinePo.getDir());
-
-        if (CollectionUtil.isNotEmpty(cmdLinePo.getConfigPropertyMap())) {
-            for (Map.Entry<String, Object> entry : cmdLinePo.getConfigPropertyMap().entrySet()) {
-                ReflectUtil.setFieldValue(cmdConfig, entry.getKey(), entry.getValue());
-            }
+        if (StrUtil.isNotBlank(cmdConfig.getDir())) {
+            String value = cmdConfig.getDir().trim();
+            CmdExecConfig.PARAM_MAP.put(PARAM_DIR, value);
+            log.info("更新变量：{}={}, 变量集合：{}", PARAM_DIR, value, JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
         }
         ReflectUtil.invoke(cmdService, "setConfig", cmdConfig);
         Runnable exec = () -> ReflectUtil.invoke(cmdService, "exec");

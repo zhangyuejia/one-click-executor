@@ -14,7 +14,7 @@ public interface CmdHandler {
      * @return 匹配是否成功
      */
     default boolean match(String cmd){
-        return cmd.startsWith(getCmdType().getFlag());
+        return cmd.startsWith(getCmdType().getValue());
     }
 
     /**
