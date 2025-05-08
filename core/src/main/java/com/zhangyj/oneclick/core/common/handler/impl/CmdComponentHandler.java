@@ -77,7 +77,6 @@ public class CmdComponentHandler implements CmdHandler {
         }else {
             exec.run();
         }
-        exec.run();
     }
 
     private AbstractCmdConfig getCmdConfig(CmdLinePO cmdLinePo) {

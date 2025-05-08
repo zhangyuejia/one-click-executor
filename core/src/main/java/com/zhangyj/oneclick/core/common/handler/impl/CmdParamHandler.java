@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.helpers.MessageFormatter;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 /**
  * 处理set命令，初始化自定义变量
  * @author zhangyj
@@ -26,10 +28,13 @@ public class CmdParamHandler implements CmdHandler {
     @Override
     public void handle(CmdExecConfig config, String cmdLine) {
         log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, "新增变量").getMessage());
+
         String[] split = CmdLinePoFactory.newInstance(cmdLine).getCmd().substring(SET.length()).split("=");
-        String value = split.length > 1? split[1]: StrUtil.EMPTY;
-        CmdExecConfig.PARAM_MAP.put(split[0], value);
-        log.info("变量集合：{}", JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
+        String[] paramCmdSplit = Arrays.copyOf(split, 2);
+        String param = split[0].trim();
+        String value = (paramCmdSplit[1] != null ? split[1]: StrUtil.EMPTY).trim();
+        CmdExecConfig.PARAM_MAP.put(param, value);
+        log.info("新增变量：{}={}, 变量集合：{}", param, value, JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
     }
 
     @Override

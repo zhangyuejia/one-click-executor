@@ -38,7 +38,7 @@ public class CmdLinePoFactory {
         if (cmdArr.length == 1 || !CmdTypeEnum.COMPONENT.getFlag().equalsIgnoreCase(po.getCmdType().getType())) {
             return po;
         }
-		Map<String, Object> configPropertyMap = new HashMap<>();
+		Map<String, Object> configPropertyMap = new HashMap<>(cmdArr.length);
 		for (int i = 1; i < cmdArr.length; i++) {
 			String[] propertyArr = Arrays.copyOf(cmdArr[i].substring(1).split(":"), 2);
             if (StrUtil.isBlank(propertyArr[0])) {
