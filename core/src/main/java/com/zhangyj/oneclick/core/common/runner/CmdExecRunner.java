@@ -1,5 +1,6 @@
 package com.zhangyj.oneclick.core.common.runner;
 
+import cn.hutool.core.collection.CollUtil;
 import com.zhangyj.oneclick.core.common.config.CmdExecConfig;
 import com.zhangyj.oneclick.core.common.util.FileUtils;
 import com.zhangyj.oneclick.core.common.util.TimeUtils;
@@ -10,6 +11,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author zhangyj
@@ -23,6 +29,8 @@ public class CmdExecRunner implements CommandLineRunner {
 
     private final CmdExecConfig cmdExecConfig;
 
+    public static final List<CompletableFuture<Void>> FUTURE_LIST = Collections.synchronizedList(new ArrayList<>());
+
     @Override
     public void run(String... args) throws Exception {
         if (StringUtils.isBlank(cmdExecConfig.getDir())) {
@@ -34,6 +42,10 @@ public class CmdExecRunner implements CommandLineRunner {
         cmdExecConfig.setShellPath(FileUtils.getResourcePath("cmd.sh"));
         cmdExecService.setConfig(cmdExecConfig);
         cmdExecService.exec();
+
+        if (CollUtil.isNotEmpty(FUTURE_LIST)) {
+            CompletableFuture.allOf(FUTURE_LIST.toArray(new CompletableFuture[0])).join();
+        }
         stopWatch.stop();
         log.info("总耗时：{}", TimeUtils.formatInterval(stopWatch.getTotalTimeMillis()));
 

@@ -29,9 +29,9 @@ public abstract class AbstractCmdReplaceServiceImpl<T extends CmdReplaceConfig> 
     /**
      * 剩下来没用到的，需要写入最后一个文件
      */
-    protected final Map<String, String> propertiesLeftMap = new HashMap<>(2);
+    protected final Map<String, Object> propertiesLeftMap = new HashMap<>(2);
 
-    protected final Map<String, String> currentPropertiesMap = new HashMap<>(2);
+    protected final Map<String, Object> currentPropertiesMap = new HashMap<>(2);
 
     protected List<String> currentUselessProperties;
 

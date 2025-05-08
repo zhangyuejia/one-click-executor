@@ -98,9 +98,9 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService<CmdPullCodeConfig
             log.info("{}仓库处于其他分支{}，需要切换为{}", modulesParam.getName(), currentBranch, modulesParam.getLocalBranch());
             String command = "git checkout " + localBranch;
             logExecCmdOutput(moduleProperties, modulesParam, command);
-        }else if(commandOutput.contains(REMOTE_BRANCH_FLAG + moduleProperties.getRemoteRepoName() + BRANCH_SP + localBranch)){
-            log.info("{}仓库从远程仓库{}检出新分支{}", modulesParam.getName(), moduleProperties.getRemoteRepoName(), modulesParam.getLocalBranch());
-            String command = "git checkout -b " + localBranch + " " + moduleProperties.getRemoteRepoName() + BRANCH_SP + modulesParam.getLocalBranch();
+        }else if(commandOutput.contains(REMOTE_BRANCH_FLAG + moduleProperties.getCheckoutRemoteRepoName() + BRANCH_SP + localBranch)){
+            log.info("{}仓库从远程仓库{}检出新分支{}", modulesParam.getName(), moduleProperties.getCheckoutRemoteRepoName(), modulesParam.getLocalBranch());
+            String command = "git checkout -b " + localBranch + " " + moduleProperties.getCheckoutRemoteRepoName() + BRANCH_SP + modulesParam.getLocalBranch();
             logExecCmdOutput(moduleProperties, modulesParam, command);
         }else {
             throw new RuntimeException("远程仓库不存在分支" + modulesParam.getLocalBranch() + ",无法进行检出");

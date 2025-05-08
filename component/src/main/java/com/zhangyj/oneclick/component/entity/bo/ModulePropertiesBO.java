@@ -28,6 +28,10 @@ public class ModulePropertiesBO {
      * 是否需要切换到本地分支
      */
     private Boolean enableCheckoutLocalBranch;
+    /**
+     * 检出本地分支指定的远程仓库
+     */
+    private String checkoutRemoteRepoName;
 
     private List<ModulesParam> modulesParams;
 

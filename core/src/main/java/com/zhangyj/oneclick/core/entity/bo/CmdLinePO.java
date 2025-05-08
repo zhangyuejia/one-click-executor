@@ -25,6 +25,10 @@ public class CmdLinePO {
      * 命令执行路径
      */
     private String dir;
+    /**
+     * 是否异步
+     */
+    private Boolean isAsync;
 
     /**
      * 配置属性映射

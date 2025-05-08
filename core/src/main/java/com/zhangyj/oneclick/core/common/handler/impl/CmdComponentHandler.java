@@ -1,6 +1,9 @@
 package com.zhangyj.oneclick.core.common.handler.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
@@ -12,6 +15,8 @@ import com.zhangyj.oneclick.core.common.constant.CoreConstant;
 import com.zhangyj.oneclick.core.common.enums.CmdTypeEnum;
 import com.zhangyj.oneclick.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.oneclick.core.common.handler.CmdHandler;
+import com.zhangyj.oneclick.core.common.runner.CmdExecRunner;
+import com.zhangyj.oneclick.core.common.util.FileUtils;
 import com.zhangyj.oneclick.core.common.util.StrUtils;
 import com.zhangyj.oneclick.core.entity.bo.CmdLinePO;
 import com.zhangyj.oneclick.core.service.CmdService;
@@ -22,8 +27,13 @@ import org.slf4j.helpers.MessageFormatter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.Charset;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 
 /**
@@ -47,7 +57,7 @@ public class CmdComponentHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) {
-        log.info("解析命令：" + cmdLine);
+        log.info("解析命令：{}", cmdLine);
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         CmdService<?> cmdService = getCmdService(cmdLinePo);
         log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, cmdService.getDesc()).getMessage());
@@ -61,11 +71,23 @@ public class CmdComponentHandler implements CmdHandler {
             }
         }
         ReflectUtil.invoke(cmdService, "setConfig", cmdConfig);
-        ReflectUtil.invoke(cmdService, "exec");
+        Runnable exec = () -> ReflectUtil.invoke(cmdService, "exec");
+        if (cmdLinePo.getIsAsync()) {
+            CmdExecRunner.FUTURE_LIST.add(CompletableFuture.runAsync(exec));
+        }else {
+            exec.run();
+        }
+        exec.run();
     }
 
     private AbstractCmdConfig getCmdConfig(CmdLinePO cmdLinePo) {
-        return (AbstractCmdConfig) YamlUtil.loadByPath(cmdLinePo.getDir(), getConfigClass(cmdLinePo.getCmd()));
+        List<String> list = FileUtil.readLines(cmdLinePo.getDir(), Charset.defaultCharset());
+        String tmpFilePath = FileUtils.getFilePath() + cmdLinePo.getCmd() + "\\" + cmdLinePo.getCmd() + DateUtil.format(new Date(), DatePattern.PURE_DATETIME_PATTERN) + ".yaml";
+        log.info("解析Yaml文件路径：{}", tmpFilePath);
+        FileUtil.writeLines(list.stream().map(v ->
+                        StrUtils.parseTplContent(v, CmdExecConfig.PARAM_MAP)).collect(Collectors.toList()),
+                tmpFilePath, Charset.defaultCharset());
+        return (AbstractCmdConfig) YamlUtil.loadByPath(tmpFilePath, getConfigClass(cmdLinePo.getCmd()));
     }
 
     private Class<?> getConfigClass(String cmd) {

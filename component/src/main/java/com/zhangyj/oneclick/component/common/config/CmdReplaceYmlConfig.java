@@ -12,4 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @Slf4j
 public class CmdReplaceYmlConfig extends CmdReplaceConfig {
+
+    /**
+     * 是否不存在时添加配置
+     */
+    private Boolean enableAddItemIfNotExists;
 }

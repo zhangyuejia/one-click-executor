@@ -45,7 +45,7 @@ public class CmdReplacePropertiesServiceImpl extends AbstractCmdReplaceServiceIm
     @Override
     protected void writeLeftPropertiesFile(List<String> filePaths) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePaths.get(filePaths.size() - 1)), StandardOpenOption.APPEND)){
-            for (Map.Entry<String, String> entry : propertiesLeftMap.entrySet()) {
+            for (Map.Entry<String, Object> entry : propertiesLeftMap.entrySet()) {
                 String line = entry.getKey() + "=" + entry.getValue();
                 log.info("写入配置项：{}", line);
                 writer.write(line);

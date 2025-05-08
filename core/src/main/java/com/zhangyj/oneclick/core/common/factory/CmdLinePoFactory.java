@@ -3,6 +3,7 @@ package com.zhangyj.oneclick.core.common.factory;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zhangyj.oneclick.core.common.constant.CoreConstant;
 import com.zhangyj.oneclick.core.common.enums.CmdTypeEnum;
 import com.zhangyj.oneclick.core.entity.bo.CmdLinePO;
 import com.zhangyj.oneclick.core.entity.bo.CmdTypePO;
@@ -19,14 +20,14 @@ import java.util.Map;
 public class CmdLinePoFactory {
 
     public static CmdLinePO newInstance(String cmdLine){
-        String[] cmdLineArr = Arrays.copyOf(cmdLine.split(","), 3);
+        String[] cmdLineArr = Arrays.copyOf(cmdLine.split(","), 4);
         CmdTypePO cmdType = getCmdType(cmdLineArr[0]);
 
 
         CmdLinePO po = new CmdLinePO();
         po.setCmdType(cmdType);
         po.setDir(cmdLineArr[2]);
-
+        po.setIsAsync(CoreConstant.ASYNC.equals(cmdLineArr[3]));
         String[] cmdArr = cmdLineArr[1].split(" ");
         if (CmdTypeEnum.COMPONENT.getFlag().equalsIgnoreCase(cmdType.getType())) {
             po.setCmd(cmdArr[0]);

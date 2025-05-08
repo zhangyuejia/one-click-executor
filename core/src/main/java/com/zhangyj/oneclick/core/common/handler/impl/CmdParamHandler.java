@@ -1,5 +1,6 @@
 package com.zhangyj.oneclick.core.common.handler.impl;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.zhangyj.oneclick.core.common.config.CmdExecConfig;
 import com.zhangyj.oneclick.core.common.constant.CoreConstant;
@@ -26,7 +27,8 @@ public class CmdParamHandler implements CmdHandler {
     public void handle(CmdExecConfig config, String cmdLine) {
         log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, "新增变量").getMessage());
         String[] split = CmdLinePoFactory.newInstance(cmdLine).getCmd().substring(SET.length()).split("=");
-        CmdExecConfig.PARAM_MAP.put(split[0], split[1]);
+        String value = split.length > 1? split[1]: StrUtil.EMPTY;
+        CmdExecConfig.PARAM_MAP.put(split[0], value);
         log.info("变量集合：{}", JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
     }
 

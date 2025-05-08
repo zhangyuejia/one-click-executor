@@ -2,29 +2,111 @@
 errorLogWords: ["abort", "error", "fail", "unable", "Could not"]
 # 启用id
 enableRefId: [
-    "umc3.15",
+    "#{[enableRefId]}",
 ]
 # 模块参数
 modulesProperties: [
 {
-    refId: "server",
+    refId: "wms2.0_dev",
     # 远程仓库名称
-    remoteRepoName: "origin",
+    remoteRepoName: "upstream",
     # 命令执行根目录，此处可以为空，为空会被替换为 one-click-executor.dir
-    dir: D:\Projects\shineyoung,
+    dir: D:\Projects\wms_2.0\dev,
     # 是否需要切换到本地分支
     enableCheckoutLocalBranch: false,
     # 模块参数
     modulesParams: [
     {
-        name: "server",
+        name: "wms2",
         # 本地分支
-        localBranch: "dev",
+        localBranch: "dev_v2.0",
         # 远程分支
+        remoteBranch: ["dev_v2.0"]
+    },
+    {
+        name: "wms-service",
+      # 本地分支
+        localBranch: "dev_v2.0",
+      # 远程分支
+        remoteBranch: [ "dev_v2.0" ]
+    },
+    {
+        name: "wms-common",
+      # 本地分支
+        localBranch: "dev",
+      # 远程分支
         remoteBranch: ["dev"]
     }
     ]
-}
+},
+{
+    refId: "wms2.0_test",
+  # 远程仓库名称
+    remoteRepoName: "upstream",
+  # 命令执行根目录，此处可以为空，为空会被替换为 one-click-executor.dir
+    dir: D:\Projects\wms_2.0\test,
+  # 是否需要切换到本地分支
+    enableCheckoutLocalBranch: false,
+  # 模块参数
+    modulesParams: [
+        {
+            name: "wms2",
+          # 本地分支
+            localBranch: "test_v2.0",
+          # 远程分支
+            remoteBranch: [ "test_v2.0" ]
+        },
+        {
+            name: "wms-service",
+          # 本地分支
+            localBranch: "test_v2.0",
+          # 远程分支
+            remoteBranch: [ "test_v2.0" ]
+        },
+        {
+            name: "wms-common",
+          # 本地分支
+            localBranch: "test",
+          # 远程分支
+            remoteBranch: [ "test" ]
+        }
+    ]
+},
+  {
+    refId: "wms2.0_prod",
+    # 远程仓库名称
+    remoteRepoName: "upstream",
+    # 命令执行根目录，此处可以为空，为空会被替换为 one-click-executor.dir
+    dir: D:\Projects\wms_2.0\prod,
+    # 是否需要切换到本地分支
+    enableCheckoutLocalBranch: true,
+    # 检出本地分支指定的远程仓库
+    checkoutRemoteRepoName: "origin",
+    # 模块参数
+    modulesParams: [
+      {
+        name: "wms2",
+        # 本地分支
+        localBranch: "releases#{[jd]}_v2.0",
+        # 远程分支
+        remoteBranch: [ "releases#{[jd]}_v2.0" ]
+      },
+      {
+        name: "wms-service",
+        # 本地分支
+        localBranch: "releases#{[jd]}_v2.0",
+        # 远程分支
+        remoteBranch: [ "releases#{[jd]}_v2.0" ]
+      },
+      {
+        name: "wms-common",
+        # 本地分支
+        localBranch: "releases",
+        # 远程分支
+        remoteBranch: [ "releases" ]
+      }
+    ]
+  }
 ]
 
 

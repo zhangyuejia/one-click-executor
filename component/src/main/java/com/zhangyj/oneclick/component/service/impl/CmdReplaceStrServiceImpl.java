@@ -33,12 +33,12 @@ public class CmdReplaceStrServiceImpl extends AbstractCmdReplaceServiceImpl<CmdR
                 String line = lines.get(i);
                 String placedLine = line;
                 boolean isMatch = false;
-                for (Map.Entry<String, String> entry : this.currentPropertiesMap.entrySet()) {
+                for (Map.Entry<String, Object> entry : this.currentPropertiesMap.entrySet()) {
                     String key = entry.getKey();
                     if (placedLine.contains(key)) {
                         isMatch = true;
-                        String value = entry.getValue();
-                        placedLine = placedLine.replace(key, value);
+                        Object value = entry.getValue();
+                        placedLine = placedLine.replace(key, value.toString());
                     }
                 }
                 if (isMatch && !line.equals(placedLine)) {

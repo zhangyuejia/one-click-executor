@@ -6,4 +6,6 @@ package com.zhangyj.oneclick.core.common.constant;
 public class CoreConstant {
 
 	public static final String CMD_LOG_BEFORE = "------------------------{}-------------------------";
+
+    public static final String ASYNC = "async";
 }
