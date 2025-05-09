@@ -68,15 +68,16 @@ public class CmdComponentHandler implements CmdHandler {
 
         AbstractCmdConfig cmdConfig = getCmdConfig(cmdLinePo);
         Assert.notNull(cmdConfig, "配置文件至少需要包含一个配置项：" + cmdLinePo.getDir());
-        if (CollectionUtil.isNotEmpty(cmdLinePo.getConfigPropertyMap())) {
-            for (Map.Entry<String, Object> entry : cmdLinePo.getConfigPropertyMap().entrySet()) {
+        if (CollectionUtil.isNotEmpty(cmdLinePo.getCmdName().getParamMap())) {
+            for (Map.Entry<String, Object> entry : cmdLinePo.getCmdName().getParamMap().entrySet()) {
+                log.info("更新命令参数：{}={}", entry.getKey(), entry.getValue());
                 ReflectUtil.setFieldValue(cmdConfig, entry.getKey(), entry.getValue());
             }
         }
         if (StrUtil.isNotBlank(cmdConfig.getDir())) {
             String value = cmdConfig.getDir().trim();
             CmdExecConfig.PARAM_MAP.put(PARAM_DIR, value);
-            log.info("更新变量：{}={}, 变量集合：{}", PARAM_DIR, value, JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
+            log.info("更新全局变量：{}={}, 变量集合：{}", PARAM_DIR, value, JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
         }
         ReflectUtil.invoke(cmdService, "setConfig", cmdConfig);
         Runnable exec = () -> ReflectUtil.invoke(cmdService, "exec");

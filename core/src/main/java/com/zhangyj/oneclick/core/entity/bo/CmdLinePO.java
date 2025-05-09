@@ -29,9 +29,4 @@ public class CmdLinePO {
      * 是否异步
      */
     private Boolean isAsync;
-
-    /**
-     * 配置属性映射
-     */
-    private Map<String, Object> configPropertyMap;
 }
