@@ -20,7 +20,7 @@ public class CmdLinePO {
     /**
      * shell命令
      */
-    private String cmd;
+    private CmdNamePO cmdName;
     /**
      * 命令执行路径
      */

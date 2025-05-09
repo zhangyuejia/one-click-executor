@@ -2,6 +2,7 @@ package com.zhangyj.oneclick.core.common.handler.impl;
 
 import com.zhangyj.oneclick.core.common.config.CmdExecConfig;
 import com.zhangyj.oneclick.core.common.constant.CoreConstant;
+import com.zhangyj.oneclick.core.common.enums.CmdShellParamaterEnum;
 import com.zhangyj.oneclick.core.common.enums.CmdTypeEnum;
 import com.zhangyj.oneclick.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.oneclick.core.common.handler.CmdHandler;
@@ -27,13 +28,14 @@ public class CmdShellHandler implements CmdHandler {
         log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, "执行SHELL功能").getMessage());
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         if(cmdLinePo.getDir() == null){
-            cmdLinePo.setDir(CmdExecConfig.PARAM_MAP.get(CoreConstant.PARAM_DIR));
+            cmdLinePo.setDir(CmdExecConfig.PARAM_MAP.get(CoreConstant.PARAM_DIR).toString());
         }
         StringHandler stringHandler = null;
-        if(cmdLinePo.getCmdType().getCmdTypeParameter().getEnableOutput()){
+        Object enableOutputObj = cmdLinePo.getCmdType().getParamMap().get(CmdShellParamaterEnum.ENABLE_OUTPUT.getValue());
+        if(Boolean.TRUE.toString().equals(enableOutputObj)){
             stringHandler = new CheckStringHandler(config);
         }
-        CommandUtils.execCommand(config.getCharset(), cmdLinePo.getCmd(), cmdLinePo.getDir(), stringHandler);
+        CommandUtils.execCommand(config.getCharset(), cmdLinePo.getCmdName().getValue(), cmdLinePo.getDir(), stringHandler);
     }
 
     @Override

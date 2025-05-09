@@ -26,5 +26,5 @@ public class CmdExecConfig extends AbstractCmdConfig {
 
     private String shellPath;
 
-    public static final Map<String, String> PARAM_MAP = new HashMap<>();
+    public static final Map<String, Object> PARAM_MAP = new HashMap<>();
 }

@@ -15,4 +15,13 @@ public class EnumUtils {
         }
         throw new IllegalArgumentException("枚举" + enumClass.getSimpleName() + "非法枚举值: " + value);
     }
+
+    public static boolean equalsAny(Object obj, ValueEnum... values) {
+        for (ValueEnum<?> value : values) {
+            if (value.getValue().equals(obj)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

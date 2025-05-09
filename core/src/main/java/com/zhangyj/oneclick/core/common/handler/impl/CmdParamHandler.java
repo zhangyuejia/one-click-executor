@@ -7,6 +7,7 @@ import com.zhangyj.oneclick.core.common.constant.CoreConstant;
 import com.zhangyj.oneclick.core.common.enums.CmdTypeEnum;
 import com.zhangyj.oneclick.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.oneclick.core.common.handler.CmdHandler;
+import com.zhangyj.oneclick.core.entity.bo.CmdNamePO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.helpers.MessageFormatter;
@@ -28,13 +29,11 @@ public class CmdParamHandler implements CmdHandler {
     @Override
     public void handle(CmdExecConfig config, String cmdLine) {
         log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, "新增变量").getMessage());
-
-        String[] split = CmdLinePoFactory.newInstance(cmdLine).getCmd().substring(SET.length()).split("=");
-        String[] paramCmdSplit = Arrays.copyOf(split, 2);
-        String param = split[0].trim();
-        String value = (paramCmdSplit[1] != null ? split[1]: StrUtil.EMPTY).trim();
-        CmdExecConfig.PARAM_MAP.put(param, value);
-        log.info("新增变量：{}={}, 变量集合：{}", param, value, JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
+        CmdNamePO cmdName = CmdLinePoFactory.newInstance(cmdLine).getCmdName();
+        cmdName.getParamMap().forEach((param, value) -> {
+            CmdExecConfig.PARAM_MAP.put(param, value);
+            log.info("新增变量：{}={}, 变量集合：{}", param, value, JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
+        });
     }
 
     @Override

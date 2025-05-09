@@ -6,15 +6,15 @@ import lombok.Setter;
 import java.util.Map;
 
 /**
- * 命令类型解析对象
+ * 命令名对象
  * @author zhangyj
  */
 @Getter
 @Setter
-public class CmdTypePO {
+public class CmdNamePO {
 
     /**
-     * 命令类型
+     * 命令名
      */
     private String value;
 

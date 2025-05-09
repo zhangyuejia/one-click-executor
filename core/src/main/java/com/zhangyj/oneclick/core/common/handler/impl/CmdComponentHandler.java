@@ -68,6 +68,11 @@ public class CmdComponentHandler implements CmdHandler {
 
         AbstractCmdConfig cmdConfig = getCmdConfig(cmdLinePo);
         Assert.notNull(cmdConfig, "配置文件至少需要包含一个配置项：" + cmdLinePo.getDir());
+        if (CollectionUtil.isNotEmpty(cmdLinePo.getConfigPropertyMap())) {
+            for (Map.Entry<String, Object> entry : cmdLinePo.getConfigPropertyMap().entrySet()) {
+                ReflectUtil.setFieldValue(cmdConfig, entry.getKey(), entry.getValue());
+            }
+        }
         if (StrUtil.isNotBlank(cmdConfig.getDir())) {
             String value = cmdConfig.getDir().trim();
             CmdExecConfig.PARAM_MAP.put(PARAM_DIR, value);
@@ -84,12 +89,13 @@ public class CmdComponentHandler implements CmdHandler {
 
     private AbstractCmdConfig getCmdConfig(CmdLinePO cmdLinePo) {
         List<String> list = FileUtil.readLines(cmdLinePo.getDir(), Charset.defaultCharset());
-        String tmpFilePath = FileUtils.getFilePath() + cmdLinePo.getCmd() + "\\" + cmdLinePo.getCmd() + DateUtil.format(new Date(), DatePattern.PURE_DATETIME_PATTERN) + ".yaml";
+        String cmdNameValue = cmdLinePo.getCmdName().getValue();
+        String tmpFilePath = FileUtils.getFilePath() + cmdNameValue + "\\" + cmdNameValue + DateUtil.format(new Date(), DatePattern.PURE_DATETIME_PATTERN) + ".yaml";
         log.info("解析Yaml文件路径：{}", tmpFilePath);
         FileUtil.writeLines(list.stream().map(v ->
                         StrUtils.parseTplContent(v, CmdExecConfig.PARAM_MAP)).collect(Collectors.toList()),
                 tmpFilePath, Charset.defaultCharset());
-        return (AbstractCmdConfig) YamlUtil.loadByPath(tmpFilePath, getConfigClass(cmdLinePo.getCmd()));
+        return (AbstractCmdConfig) YamlUtil.loadByPath(tmpFilePath, getConfigClass(cmdNameValue));
     }
 
     private Class<?> getConfigClass(String cmd) {
@@ -103,7 +109,7 @@ public class CmdComponentHandler implements CmdHandler {
     }
 
     private CmdService<?> getCmdService(CmdLinePO cmdLinePo) {
-        String beanName = getBeanName(StrUtils.toCamel(cmdLinePo.getCmd()));
+        String beanName = getBeanName(StrUtils.toCamel(cmdLinePo.getCmdName().getValue()));
         if(!context.containsBean(beanName)){
             beanName = beanName + "Impl";
         }

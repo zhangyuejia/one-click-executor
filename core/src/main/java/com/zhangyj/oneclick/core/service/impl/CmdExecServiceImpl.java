@@ -82,7 +82,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
     }
 
     private void initParameter() {
-        Map<String, String> paramMap = CmdExecConfig.PARAM_MAP;
+        Map<String, Object> paramMap = CmdExecConfig.PARAM_MAP;
         paramMap.put("dir", config.getDir());
         paramMap.put("classpath", FileUtils.getResourcePath());
         log.info("初始化变量：{}", JSON.toJSONString(paramMap));
