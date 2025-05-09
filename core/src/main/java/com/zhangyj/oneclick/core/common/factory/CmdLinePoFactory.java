@@ -45,13 +45,14 @@ public class CmdLinePoFactory {
     private static CmdNamePO getCmdName(CmdTypePO cmdType, String str) {
         String[] split = str.split(" ");
         CmdNamePO po = new CmdNamePO();
-        po.setValue(split[0].trim());
         if (split.length == 1 || !EnumUtils.equalsAny(cmdType.getValue(), CmdTypeEnum.PARAM, CmdTypeEnum.COMPONENT)) {
+            po.setValue(str);
             return po;
         }
         String[] paramsArr = new String[split.length - 1];
         System.arraycopy(split, 1, paramsArr, 0, split.length - 1);
         po.setParamMap(paramArrToMap(paramsArr));
+        po.setValue(split[0].trim());
         return po;
     }
 

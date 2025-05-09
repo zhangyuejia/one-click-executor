@@ -27,8 +27,8 @@
 #component,replace-yml,#{[classpath]}component\config\replace-yml.yml
 
 param,set --directionMode=from
-component,dir-to-text --textPath=kkk,#{[classpath]}component\config\dir-to-text.yml
-#shell,git checkout .
+component,dir-to-text,#{[classpath]}component\config\dir-to-text.yml
+shell,git checkout .
 
 
 

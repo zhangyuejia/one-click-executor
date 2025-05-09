@@ -1,5 +1,6 @@
 package com.zhangyj.oneclick.component.service.impl;
 
+import cn.hutool.core.util.IdUtil;
 import com.zhangyj.oneclick.component.common.config.CmdDirToTextConfig;
 import com.zhangyj.oneclick.core.common.enums.DirectionModeEnum;
 import com.zhangyj.oneclick.core.common.util.EnumUtils;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,7 +28,9 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class CmdDirToTextServiceImpl extends AbstractCmdService<CmdDirToTextConfig> {
 
-    private static final String SEPARATOR = "::BASE64::";
+    private static final String SEPARATOR = "::836E42B338674024B91CA5BE56CF747A::";
+
+    private static final int PREFIX_LENGTH = IdUtil.fastSimpleUUID().length();
 
     @Override
     public void exec() throws Exception {
@@ -55,11 +60,13 @@ public class CmdDirToTextServiceImpl extends AbstractCmdService<CmdDirToTextConf
         try {
             // 获取相对路径
             String relativePath = fromDirPath.relativize(path).toString();
+            String pathEncoded = Base64.getEncoder().encodeToString(relativePath.getBytes(StandardCharsets.UTF_8));
             byte[] fileContent = Files.readAllBytes(path);
             // Base64编码
-            String encoded = Base64.getEncoder().encodeToString(fileContent);
+            String contextEncoded = Base64.getEncoder().encodeToString(fileContent);
             // 写入格式：路径|编码内容
-            writer.write(relativePath + SEPARATOR + encoded);
+
+            writer.write(IdUtil.fastSimpleUUID().toUpperCase() + pathEncoded + SEPARATOR + IdUtil.fastSimpleUUID().toUpperCase() + contextEncoded);
             writer.newLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -73,9 +80,12 @@ public class CmdDirToTextServiceImpl extends AbstractCmdService<CmdDirToTextConf
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(SEPARATOR, 2);
                 if (parts.length == 2) {
-                    Path target = toDirPath.resolve(parts[0]);
+                    parts[0] = parts[0].substring(PREFIX_LENGTH);
+                    String path = new String(Base64.getDecoder().decode(parts[0]), StandardCharsets.UTF_8);
+                    Path target = toDirPath.resolve(path);
                     Files.createDirectories(target.getParent());
 
+                    parts[1] = parts[1].substring(PREFIX_LENGTH);
                     byte[] decoded = Base64.getDecoder().decode(parts[1]);
                     Files.write(target, decoded);
                 }
