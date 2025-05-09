@@ -24,7 +24,7 @@ public class CheckStringHandler implements StringHandler {
         }
         for (String errorWord : cmdConfig.getErrorLogWords()) {
             if(StringUtils.containsIgnoreCase(str, errorWord)){
-                log.error("输出日志包含错误关键词{}，请检查是否正常", errorWord);
+                log.error("输出日志包含错误关键词{}，请检查是否正常:{}", errorWord, str);
                 System.exit(0);
             }
         }

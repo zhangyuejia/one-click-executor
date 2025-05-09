@@ -61,7 +61,6 @@ public class CmdComponentHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) {
-        log.info("解析命令：{}", cmdLine);
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         CmdService<?> cmdService = getCmdService(cmdLinePo);
         log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, cmdService.getDesc()).getMessage());
@@ -70,14 +69,18 @@ public class CmdComponentHandler implements CmdHandler {
         Assert.notNull(cmdConfig, "配置文件至少需要包含一个配置项：" + cmdLinePo.getDir());
         if (CollectionUtil.isNotEmpty(cmdLinePo.getCmdName().getParamMap())) {
             for (Map.Entry<String, Object> entry : cmdLinePo.getCmdName().getParamMap().entrySet()) {
-                log.info("更新命令参数：{}={}", entry.getKey(), entry.getValue());
+                Object fieldValue = ReflectUtil.getFieldValue(cmdConfig, entry.getKey());
+                if (fieldValue.equals(entry.getValue())) {
+                    continue;
+                }
                 ReflectUtil.setFieldValue(cmdConfig, entry.getKey(), entry.getValue());
+                log.info("更新组件配置参数[{}]：{}->{}", entry.getKey(), fieldValue, entry.getValue());
             }
         }
         if (StrUtil.isNotBlank(cmdConfig.getDir())) {
             String value = cmdConfig.getDir().trim();
             CmdExecConfig.PARAM_MAP.put(PARAM_DIR, value);
-            log.info("更新全局变量：{}={}, 变量集合：{}", PARAM_DIR, value, JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
+            log.info("更新全局变量[{}]：{}, 变量集合：{}", PARAM_DIR, value, JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
         }
         ReflectUtil.invoke(cmdService, "setConfig", cmdConfig);
         Runnable exec = () -> ReflectUtil.invoke(cmdService, "exec");
@@ -91,7 +94,7 @@ public class CmdComponentHandler implements CmdHandler {
     private AbstractCmdConfig getCmdConfig(CmdLinePO cmdLinePo) {
         List<String> list = FileUtil.readLines(cmdLinePo.getDir(), Charset.defaultCharset());
         String cmdNameValue = cmdLinePo.getCmdName().getValue();
-        String tmpFilePath = FileUtils.getFilePath() + cmdNameValue + "\\" + cmdNameValue + DateUtil.format(new Date(), DatePattern.PURE_DATETIME_PATTERN) + ".yaml";
+        String tmpFilePath = FileUtils.getFilePath() + cmdNameValue + "\\" + cmdNameValue + "-" + System.currentTimeMillis() + ".yaml";
         log.info("解析Yaml文件路径：{}", tmpFilePath);
         FileUtil.writeLines(list.stream().map(v ->
                         StrUtils.parseTplContent(v, CmdExecConfig.PARAM_MAP)).collect(Collectors.toList()),

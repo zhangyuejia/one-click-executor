@@ -1,6 +1,5 @@
 package com.zhangyj.oneclick.core.common.handler.impl;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.zhangyj.oneclick.core.common.config.CmdExecConfig;
 import com.zhangyj.oneclick.core.common.constant.CoreConstant;
@@ -13,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.helpers.MessageFormatter;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 /**
  * 处理set命令，初始化自定义变量
  * @author zhangyj
@@ -24,11 +21,9 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class CmdParamHandler implements CmdHandler {
 
-    private final static String SET = "set ";
-
     @Override
     public void handle(CmdExecConfig config, String cmdLine) {
-        log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, "新增变量").getMessage());
+
         CmdNamePO cmdName = CmdLinePoFactory.newInstance(cmdLine).getCmdName();
         cmdName.getParamMap().forEach((param, value) -> {
             CmdExecConfig.PARAM_MAP.put(param, value);

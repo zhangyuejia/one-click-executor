@@ -9,15 +9,6 @@ import com.zhangyj.oneclick.core.common.enums.CmdTypeEnum;
 public interface CmdHandler {
 
     /**
-     * 是否匹配到本执行器
-     * @param cmd 命令
-     * @return 匹配是否成功
-     */
-    default boolean match(String cmd){
-        return cmd.startsWith(getCmdType().getValue());
-    }
-
-    /**
      * 执行命令
      * @param config 配置
      * @param cmdLine 命令

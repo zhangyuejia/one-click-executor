@@ -1,8 +1,12 @@
 package com.zhangyj.oneclick.core.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.zhangyj.oneclick.core.common.config.CmdExecConfig;
+import com.zhangyj.oneclick.core.common.constant.CoreConstant;
+import com.zhangyj.oneclick.core.common.enums.CmdTypeEnum;
 import com.zhangyj.oneclick.core.common.handler.CmdHandler;
+import com.zhangyj.oneclick.core.common.util.EnumUtils;
 import com.zhangyj.oneclick.core.common.util.FileUtils;
 import com.zhangyj.oneclick.core.common.util.StrUtils;
 import com.zhangyj.oneclick.core.service.AbstractCmdService;
@@ -10,6 +14,7 @@ import com.zhangyj.oneclick.core.service.CmdExecService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.helpers.MessageFormatter;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -18,6 +23,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,25 +35,26 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implements CmdExecService {
 
-    private final List<CmdHandler> cmdHandlers;
+    private final Map<CmdTypeEnum, CmdHandler> cmdTypeHandlerMap;
 
     @Override
     public void exec() throws Exception {
         // 初始化
         initConfig();
-        // CMD变量
+        // cmd变量
         initParameter();
         String filePath = getExecFilePath();
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())){
             String line;
             while ((line = reader.readLine()) != null){
-                for (CmdHandler cmdHandler : cmdHandlers) {
-                    line = line.trim();
-                    if (cmdHandler.match(line)) {
-                        String content = StrUtils.parseTplContent(line, CmdExecConfig.PARAM_MAP);
-                        cmdHandler.handle(config, content);
-                    }
+                if (StrUtil.isBlank(line) || line.startsWith("#")) {
+                    continue;
                 }
+                String cmdType = line.substring(0, line.indexOf(","));
+                CmdHandler cmdHandler = cmdTypeHandlerMap.get(EnumUtils.getByValue(CmdTypeEnum.class, cmdType));
+                String content = StrUtils.parseTplContent(line, CmdExecConfig.PARAM_MAP);
+                log.info("命令处理器[{}]开始执行：{}", cmdHandler.getCmdType().getValue(), content);
+                cmdHandler.handle(config, content);
             }
         }
     }

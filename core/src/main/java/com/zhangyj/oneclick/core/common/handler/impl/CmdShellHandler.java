@@ -24,8 +24,6 @@ public class CmdShellHandler implements CmdHandler {
 
     @Override
     public void handle(CmdExecConfig config, String cmdLine) throws Exception {
-        log.info("解析命令：{}", cmdLine);
-        log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, "执行SHELL功能").getMessage());
         CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
         if(cmdLinePo.getDir() == null){
             cmdLinePo.setDir(CmdExecConfig.PARAM_MAP.get(CoreConstant.PARAM_DIR).toString());
