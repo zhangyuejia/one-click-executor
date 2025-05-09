@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class CmdDirToTextServiceImpl extends AbstractCmdService<CmdDirToTextConfig> {
 
-    private static final String SEPARATOR = "::836E42B338674024B91CA5BE56CF747A::";
+    private static final String SEPARATOR = ":#E";
 
     private static final int PREFIX_LENGTH = IdUtil.fastSimpleUUID().length();
 

@@ -26,7 +26,7 @@
 #param,set --jd=_ss
 #component,replace-yml,#{[classpath]}component\config\replace-yml.yml
 
-param,set --directionMode=from
+param,set --directionMode=to
 component,dir-to-text,#{[classpath]}component\config\dir-to-text.yml
 shell,git checkout .
 
