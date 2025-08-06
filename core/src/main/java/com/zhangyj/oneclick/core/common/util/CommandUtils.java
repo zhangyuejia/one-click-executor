@@ -1,10 +1,14 @@
 package com.zhangyj.oneclick.core.common.util;
 
 import cn.hutool.core.thread.ThreadUtil;
-import com.zhangyj.oneclick.core.common.handler.StringHandler;
+import com.zhangyj.oneclick.core.common.handler.CmdOutputHandler;
+import com.zhangyj.oneclick.core.entity.bo.CmdProcessBo;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -16,17 +20,19 @@ import java.util.concurrent.CountDownLatch;
 @Slf4j
 public class CommandUtils {
 
-    public static void execCommand(String charset, String command, String dir, StringHandler handler) throws Exception{
+    public static void execCommand(String charset, String command, String dir, CmdOutputHandler handler) throws Exception{
         handleExecCommand(charset, exec(command, dir), handler);
     }
 
     public static List<String> execCommand(String charset, String command, String dir) throws Exception {
         List<String> list = new ArrayList<>();
-        handleExecCommand(charset, exec(command, dir), list::add);
+        CmdProcessBo cmdProcessBo = exec(command, dir);
+        handleExecCommand(charset, cmdProcessBo, (cmdProcess, str) -> list.add(str));
         return list;
     }
 
-    private static void handleExecCommand(String charset, Process process, StringHandler handler) throws InterruptedException {
+    private static void handleExecCommand(String charset, CmdProcessBo cmdProcessBo, CmdOutputHandler handler) throws InterruptedException {
+        Process process = cmdProcessBo.getProcess();
         if(handler == null){
             // 此处是为了执行cmd -c start弹出cmd黑框,不等待不会弹出
             process.waitFor();
@@ -41,7 +47,7 @@ public class CommandUtils {
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, charset))){
                     String line;
                     while ((line = reader.readLine()) != null){
-                        handler.handle(line);
+                        handler.handle(cmdProcessBo, line);
                     }
                 }catch (Exception e){
                     throw new RuntimeException(e);
@@ -54,13 +60,13 @@ public class CommandUtils {
         countDownLatch.await();
     }
 
-    private static Process exec(String command, String dir) throws Exception {
-        log.info("执行命令：{}" + (dir != null? " 地址：" + dir: ""), command);
+    private static CmdProcessBo exec(String command, String dir) throws Exception {
+        log.info("执行命令：{}{}", command, dir != null ? " 地址：" + dir : "");
         Runtime runtime = Runtime.getRuntime();
         final Process process = dir == null? runtime.exec(command): runtime.exec(command, null, new File(dir));
         //noinspection AlibabaAvoidManuallyCreateThread
         runtime.addShutdownHook(new Thread(process::destroy));
-        return process;
+        return new CmdProcessBo(command, dir, process);
     }
 
 }

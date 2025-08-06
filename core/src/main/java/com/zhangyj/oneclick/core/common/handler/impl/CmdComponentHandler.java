@@ -1,8 +1,7 @@
 package com.zhangyj.oneclick.core.common.handler.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ClassUtil;
@@ -15,12 +14,11 @@ import com.zhangyj.oneclick.core.common.config.AbstractCmdConfig;
 import com.zhangyj.oneclick.core.common.config.CmdExecConfig;
 import com.zhangyj.oneclick.core.common.constant.CoreConstant;
 import com.zhangyj.oneclick.core.common.enums.CmdTypeEnum;
-import com.zhangyj.oneclick.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.oneclick.core.common.handler.CmdHandler;
 import com.zhangyj.oneclick.core.common.runner.CmdExecRunner;
 import com.zhangyj.oneclick.core.common.util.FileUtils;
 import com.zhangyj.oneclick.core.common.util.StrUtils;
-import com.zhangyj.oneclick.core.entity.bo.CmdLinePO;
+import com.zhangyj.oneclick.core.entity.bo.CmdLineBo;
 import com.zhangyj.oneclick.core.service.CmdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +27,12 @@ import org.slf4j.helpers.MessageFormatter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.lang.reflect.Field;
 import java.nio.charset.Charset;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static com.zhangyj.oneclick.core.common.constant.CoreConstant.PARAM_DIR;
@@ -60,20 +58,19 @@ public class CmdComponentHandler implements CmdHandler {
     }
 
     @Override
-    public void handle(CmdExecConfig config, String cmdLine) {
-        CmdLinePO cmdLinePo = CmdLinePoFactory.newInstance(cmdLine);
-        CmdService<?> cmdService = getCmdService(cmdLinePo);
+    public void handle(CmdExecConfig config) {
+        CmdLineBo cmdLineBo = config.getCmdLineBo();
+        CmdService<?> cmdService = getCmdService(cmdLineBo);
         log.info(MessageFormatter.format(CoreConstant.CMD_LOG_BEFORE, cmdService.getDesc()).getMessage());
 
-        AbstractCmdConfig cmdConfig = getCmdConfig(cmdLinePo);
-        Assert.notNull(cmdConfig, "配置文件至少需要包含一个配置项：" + cmdLinePo.getDir());
-        if (CollectionUtil.isNotEmpty(cmdLinePo.getCmdName().getParamMap())) {
-            for (Map.Entry<String, Object> entry : cmdLinePo.getCmdName().getParamMap().entrySet()) {
-                Object fieldValue = ReflectUtil.getFieldValue(cmdConfig, entry.getKey());
-                if (fieldValue.equals(entry.getValue())) {
-                    continue;
-                }
-                ReflectUtil.setFieldValue(cmdConfig, entry.getKey(), entry.getValue());
+        AbstractCmdConfig cmdConfig = getCmdConfig(cmdLineBo);
+        Assert.notNull(cmdConfig, "配置文件至少需要包含一个配置项：" + cmdLineBo.getDir());
+        if (CollectionUtil.isNotEmpty(cmdLineBo.getCmdName().getParamMap())) {
+            for (Map.Entry<String, Object> entry : cmdLineBo.getCmdName().getParamMap().entrySet()) {
+                Field field = ReflectUtil.getField(cmdConfig.getClass(), entry.getKey());
+                Assert.notNull(field, "类"  + cmdConfig.getClass() + "不存在属性" + entry.getKey());
+                Object fieldValue = ReflectUtil.getFieldValue(cmdConfig, field);
+                ReflectUtil.setFieldValue(cmdConfig, entry.getKey(), getValueAsType(entry.getValue().toString(), field));
                 log.info("更新组件配置参数[{}]：{}->{}", entry.getKey(), fieldValue, entry.getValue());
             }
         }
@@ -82,24 +79,32 @@ public class CmdComponentHandler implements CmdHandler {
             CmdExecConfig.PARAM_MAP.put(PARAM_DIR, value);
             log.info("更新全局变量[{}]：{}, 变量集合：{}", PARAM_DIR, value, JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
         }
+        cmdConfig.setCmdLineBo(cmdLineBo);
         ReflectUtil.invoke(cmdService, "setConfig", cmdConfig);
-        Runnable exec = () -> ReflectUtil.invoke(cmdService, "exec");
-        if (cmdLinePo.getIsAsync()) {
-            CmdExecRunner.FUTURE_LIST.add(CompletableFuture.runAsync(exec));
+        log.info("开始执行组件[{}]，配置：{}", cmdLineBo.getCmdName().getValue(), JSONUtil.toJsonStr(cmdConfig));
+        CmdExecRunner.execTask(cmdLineBo.getIsAsync(), () -> ReflectUtil.invoke(cmdService, "exec"));
+    }
+
+    private Object getValueAsType(String value, Field field) {
+        if (value.startsWith("{") && value.endsWith("}")) {
+            return BeanUtil.toBean(value, field.getType());
+        }else if(value.startsWith("[") && value.endsWith("]")) {
+            return JSONUtil.toBean(value, field.getGenericType(), false);
         }else {
-            exec.run();
+            return value;
         }
     }
 
-    private AbstractCmdConfig getCmdConfig(CmdLinePO cmdLinePo) {
-        List<String> list = FileUtil.readLines(cmdLinePo.getDir(), Charset.defaultCharset());
-        String cmdNameValue = cmdLinePo.getCmdName().getValue();
-        String tmpFilePath = FileUtils.getFilePath() + cmdNameValue + "\\" + cmdNameValue + "-" + System.currentTimeMillis() + ".yaml";
-        log.info("解析Yaml文件路径：{}", tmpFilePath);
+    private AbstractCmdConfig getCmdConfig(CmdLineBo cmdLineBo) {
+        List<String> list = FileUtil.readLines(cmdLineBo.getDir(), Charset.defaultCharset());
+        String cmdNameValue = cmdLineBo.getCmdName().getValue();
+        String tmpFilePath = FileUtils.getTempDir("tmpYml") + File.separator + cmdNameValue + "-" + System.currentTimeMillis() + ".yaml";
         FileUtil.writeLines(list.stream().map(v ->
                         StrUtils.parseTplContent(v, CmdExecConfig.PARAM_MAP)).collect(Collectors.toList()),
                 tmpFilePath, Charset.defaultCharset());
-        return (AbstractCmdConfig) YamlUtil.loadByPath(tmpFilePath, getConfigClass(cmdNameValue));
+        AbstractCmdConfig cmdConfig = (AbstractCmdConfig) YamlUtil.loadByPath(tmpFilePath, getConfigClass(cmdNameValue));
+        FileUtil.del(tmpFilePath);
+        return cmdConfig;
     }
 
     private Class<?> getConfigClass(String cmd) {
@@ -112,8 +117,8 @@ public class CmdComponentHandler implements CmdHandler {
         return null;
     }
 
-    private CmdService<?> getCmdService(CmdLinePO cmdLinePo) {
-        String beanName = getBeanName(StrUtils.toCamel(cmdLinePo.getCmdName().getValue()));
+    private CmdService<?> getCmdService(CmdLineBo cmdLineBo) {
+        String beanName = getBeanName(StrUtils.toCamel(cmdLineBo.getCmdName().getValue()));
         if(!context.containsBean(beanName)){
             beanName = beanName + "Impl";
         }

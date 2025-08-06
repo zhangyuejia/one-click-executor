@@ -1,0 +1,4 @@
+# 停止时间
+stopTime: "20:15:00"
+# 睡眠间隙
+sleepInterval: 30

@@ -3,7 +3,7 @@ package com.zhangyj.oneclick.component.service.impl;
 import cn.hutool.core.io.FileUtil;
 import com.zhangyj.oneclick.component.common.config.CmdFlushDnsConfig;
 import com.zhangyj.oneclick.component.entity.bo.HostsInfoBO;
-import com.zhangyj.oneclick.core.common.handler.impl.CheckStringHandler;
+import com.zhangyj.oneclick.core.common.handler.impl.CheckCmdOutputHandler;
 import com.zhangyj.oneclick.core.common.util.CommandUtils;
 import com.zhangyj.oneclick.core.service.AbstractCmdService;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +44,7 @@ public class CmdFlushDnsServiceImpl extends AbstractCmdService<CmdFlushDnsConfig
             }
         }
         // 刷新dns
-        CommandUtils.execCommand(cmdExecConfig.getCharset(), "ipconfig /flushdns", null, new CheckStringHandler(config));
+        CommandUtils.execCommand(cmdExecConfig.getCharset(), "ipconfig /flushdns", null, new CheckCmdOutputHandler(config));
     }
 
     @Override

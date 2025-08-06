@@ -2,6 +2,7 @@ package com.zhangyj.oneclick.core.common.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
  * 命令类型枚举
@@ -9,7 +10,8 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum CmdTypeEnum implements ValueEnum<String> {
+@ToString
+public enum CmdTypeEnum implements CodeEnum<String> {
 
     /**
      * shell命令
@@ -26,5 +28,5 @@ public enum CmdTypeEnum implements ValueEnum<String> {
      */
     PARAM("param");
 
-    private final String value;
+    private final String code;
 }

@@ -1,6 +1,8 @@
 package com.zhangyj.oneclick.component.service.impl;
 
-import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.zhangyj.oneclick.component.common.config.CmdDirToTextConfig;
 import com.zhangyj.oneclick.core.common.enums.DirectionModeEnum;
 import com.zhangyj.oneclick.core.common.util.EnumUtils;
@@ -12,25 +14,28 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 /**
- * @author zhangyj
+ * @author zhang.yuejia1
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CmdDirToTextServiceImpl extends AbstractCmdService<CmdDirToTextConfig> {
 
-    private static final String SEPARATOR = ":#E";
-
-    private static final int PREFIX_LENGTH = IdUtil.fastSimpleUUID().length();
+    private static final String PATH_PREFIX = "#P#";
+    private static final String ENCRYPT_KEY = "ThisIsASecretKey";
+    private static final int BUFFER_SIZE = 4096 * 64;
+    private static Path targetPath;
+    private final SymmetricCrypto symmetricCrypto = SecureUtil.aes(ENCRYPT_KEY.getBytes(StandardCharsets.UTF_8));
 
     @Override
     public void exec() throws Exception {
@@ -46,7 +51,7 @@ public class CmdDirToTextServiceImpl extends AbstractCmdService<CmdDirToTextConf
         }
     }
 
-    private static void exportToText(String fromDir, String outputFile) throws IOException {
+    private void exportToText(String fromDir, String outputFile) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFile))) {
             Path fromDirPath = Paths.get(fromDir);
             try (Stream<Path> paths = Files.walk(fromDirPath)) {
@@ -56,38 +61,43 @@ public class CmdDirToTextServiceImpl extends AbstractCmdService<CmdDirToTextConf
         }
     }
 
-    private static void processFile(Path fromDirPath, Path path, BufferedWriter writer) {
-        try {
-            // 获取相对路径
-            String relativePath = fromDirPath.relativize(path).toString();
-            String pathEncoded = Base64.getEncoder().encodeToString(relativePath.getBytes(StandardCharsets.UTF_8));
-            byte[] fileContent = Files.readAllBytes(path);
-            // Base64编码
-            String contextEncoded = Base64.getEncoder().encodeToString(fileContent);
-            // 写入格式：路径|编码内容
+    private void processFile(Path fromDirPath, Path path, BufferedWriter writer) {
+        try (InputStream is = Files.newInputStream(path)) {
+            // 处理相对路径
+            writeLine(writer, PATH_PREFIX, fromDirPath.relativize(path).toString().getBytes(StandardCharsets.UTF_8));
 
-            writer.write(IdUtil.fastSimpleUUID().toUpperCase() + pathEncoded + SEPARATOR + IdUtil.fastSimpleUUID().toUpperCase() + contextEncoded);
-            writer.newLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                if (bytesRead < BUFFER_SIZE) {
+                    buffer = Arrays.copyOf(buffer, bytesRead);
+                }
+                writeLine(writer, StrUtil.EMPTY, buffer);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("文件处理失败: " + path, e);
         }
     }
 
-    private static void restoreFromText(String toDir, String inputFile) throws IOException {
+    private void writeLine(BufferedWriter writer, String prefix, byte[] data) throws Exception{
+        writer.write(prefix + symmetricCrypto.encryptBase64(data));
+        writer.newLine();
+    }
+
+    private void restoreFromText(String toDir, String inputFile) throws Exception {
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(inputFile))) {
             String line;
             Path toDirPath = Paths.get(toDir);
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(SEPARATOR, 2);
-                if (parts.length == 2) {
-                    parts[0] = parts[0].substring(PREFIX_LENGTH);
-                    String path = new String(Base64.getDecoder().decode(parts[0]), StandardCharsets.UTF_8);
-                    Path target = toDirPath.resolve(path);
+                if (line.startsWith(PATH_PREFIX)) {
+                    line = line.substring(PATH_PREFIX.length());
+                    String relativePath = new String(symmetricCrypto.decrypt(line), StandardCharsets.UTF_8);
+                    Path target = toDirPath.resolve(relativePath);
                     Files.createDirectories(target.getParent());
-
-                    parts[1] = parts[1].substring(PREFIX_LENGTH);
-                    byte[] decoded = Base64.getDecoder().decode(parts[1]);
-                    Files.write(target, decoded);
+                    targetPath = target;
+                }else {
+                    byte[] decoded = symmetricCrypto.decrypt(line);
+                    Files.write(targetPath, decoded, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
                 }
             }
         }
@@ -95,6 +105,6 @@ public class CmdDirToTextServiceImpl extends AbstractCmdService<CmdDirToTextConf
 
     @Override
     public String getDesc() {
-        return "文件夹文本互转";
+        return "大文件友好的文件夹文本互转";
     }
 }

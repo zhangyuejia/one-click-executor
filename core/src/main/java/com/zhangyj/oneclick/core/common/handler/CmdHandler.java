@@ -11,10 +11,9 @@ public interface CmdHandler {
     /**
      * 执行命令
      * @param config 配置
-     * @param cmdLine 命令
      * @throws Exception 异常
      */
-    void handle(CmdExecConfig config, String cmdLine) throws Exception;
+    void handle(CmdExecConfig config) throws Exception;
 
     /**
      * 获取命令类型

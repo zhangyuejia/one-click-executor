@@ -9,8 +9,11 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Map;
+import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 /**
  * @author ZHANG
@@ -87,5 +90,54 @@ public class StrUtils extends StringUtils {
 
         return outputStream.toByteArray();
     }
+
+    /**
+     * 压缩字符串（最佳压缩级别）
+     */
+    public static String compress(String data) throws IOException {
+        if (data == null || data.isEmpty()) {
+            return data;
+        }
+        Deflater deflater = new Deflater(Deflater.BEST_COMPRESSION);
+        deflater.setInput(data.getBytes("UTF-8"));
+        deflater.finish();
+
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            while (!deflater.finished()) {
+                int count = deflater.deflate(buffer);
+                bos.write(buffer, 0, count);
+            }
+            return Base64.getEncoder().encodeToString(bos.toByteArray());
+        } finally {
+            deflater.end();
+        }
+    }
+
+    /**
+     * 解压字符串
+     */
+    public static String decompress(String compressedStr)
+            throws DataFormatException, IOException {
+        if (compressedStr == null || compressedStr.isEmpty()) {
+            return compressedStr;
+        }
+
+        byte[] decoded = Base64.getDecoder().decode(compressedStr);
+        Inflater inflater = new Inflater();
+        inflater.setInput(decoded);
+
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            while (!inflater.finished()) {
+                int count = inflater.inflate(buffer);
+                bos.write(buffer, 0, count);
+            }
+            return new String(bos.toByteArray(), "UTF-8");
+        } finally {
+            inflater.end();
+        }
+    }
+
 
 }

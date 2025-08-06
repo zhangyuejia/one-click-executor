@@ -2,7 +2,7 @@ package com.zhangyj.oneclick.component.service.impl;
 
 import com.zhangyj.oneclick.component.common.config.CmdSpliceFileConfig;
 import com.zhangyj.oneclick.component.common.enums.GenModeEnum;
-import com.zhangyj.oneclick.core.common.handler.impl.CheckStringHandler;
+import com.zhangyj.oneclick.core.common.handler.impl.CheckCmdOutputHandler;
 import com.zhangyj.oneclick.core.common.util.CommandUtils;
 import com.zhangyj.oneclick.core.service.AbstractCmdService;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +63,7 @@ public class CmdSpliceFileServiceImpl extends AbstractCmdService<CmdSpliceFileCo
             return;
         }
         log.info("执行命令：{} 执行路径：{}", command, config.getPath());
-        CommandUtils.execCommand(cmdExecConfig.getCharset(), command, config.getPath(), new CheckStringHandler(config));
+        CommandUtils.execCommand(cmdExecConfig.getCharset(), command, config.getPath(), new CheckCmdOutputHandler(config));
     }
 
     private void deleteGenFile() throws IOException {

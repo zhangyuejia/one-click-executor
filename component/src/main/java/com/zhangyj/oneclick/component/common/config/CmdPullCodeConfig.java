@@ -17,7 +17,12 @@ import java.util.List;
 @Slf4j
 public class CmdPullCodeConfig extends AbstractCmdConfig {
 
-    private List<String> enableRefId;
+    private String currentRefId;
+
+    /**
+     * 异步拉取模块的代码，默认false
+     */
+    private Boolean enablePullAsync;
 
     /**
      * 替换关键字

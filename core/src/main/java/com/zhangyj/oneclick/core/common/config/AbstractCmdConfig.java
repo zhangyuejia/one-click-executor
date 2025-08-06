@@ -1,5 +1,6 @@
 package com.zhangyj.oneclick.core.common.config;
 
+import com.zhangyj.oneclick.core.entity.bo.CmdLineBo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +17,7 @@ public abstract class AbstractCmdConfig {
 
     private List<String> errorLogWords;
 
+    private List<String> skipKeyWords;
+
+    private transient CmdLineBo cmdLineBo;
 }

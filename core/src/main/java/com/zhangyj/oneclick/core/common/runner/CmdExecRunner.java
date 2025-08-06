@@ -50,4 +50,12 @@ public class CmdExecRunner implements CommandLineRunner {
         log.info("总耗时：{}", TimeUtils.formatInterval(stopWatch.getTotalTimeMillis()));
 
     }
+
+    public static void execTask(Boolean isAsync, Runnable exec) {
+        if (isAsync) {
+            CmdExecRunner.FUTURE_LIST.add(CompletableFuture.runAsync(exec));
+        }else {
+            exec.run();
+        }
+    }
 }

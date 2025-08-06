@@ -2,14 +2,11 @@ package com.zhangyj.oneclick.core.common.handler.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.zhangyj.oneclick.core.common.config.CmdExecConfig;
-import com.zhangyj.oneclick.core.common.constant.CoreConstant;
 import com.zhangyj.oneclick.core.common.enums.CmdTypeEnum;
-import com.zhangyj.oneclick.core.common.factory.CmdLinePoFactory;
 import com.zhangyj.oneclick.core.common.handler.CmdHandler;
-import com.zhangyj.oneclick.core.entity.bo.CmdNamePO;
+import com.zhangyj.oneclick.core.entity.bo.CmdNameBO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.helpers.MessageFormatter;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,9 +19,8 @@ import org.springframework.stereotype.Component;
 public class CmdParamHandler implements CmdHandler {
 
     @Override
-    public void handle(CmdExecConfig config, String cmdLine) {
-
-        CmdNamePO cmdName = CmdLinePoFactory.newInstance(cmdLine).getCmdName();
+    public void handle(CmdExecConfig config) {
+        CmdNameBO cmdName = config.getCmdLineBo().getCmdName();
         cmdName.getParamMap().forEach((param, value) -> {
             CmdExecConfig.PARAM_MAP.put(param, value);
             log.info("新增变量：{}={}, 变量集合：{}", param, value, JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));

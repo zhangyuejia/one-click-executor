@@ -1,9 +1,10 @@
 # 日志错误关键词（判断是否命令是否成功执行）
 errorLogWords: ["abort", "error", "fail", "unable", "Could not"]
+skipKeyWords: [".java", ".js", ".css", ".html", ".yml", ".xml", ".ftl"]
 # 启用id
-enableRefId: [
-    "#{[enableRefId]}",
-]
+currentRefId: "wms2.0_dev"
+# 异步拉取模块的代码
+enablePullAsync: false
 # 模块参数
 modulesProperties: [
 {
@@ -11,9 +12,11 @@ modulesProperties: [
     # 远程仓库名称
     remoteRepoName: "upstream",
     # 命令执行根目录，此处可以为空，为空会被替换为 one-click-executor.dir
-    dir: D:\Projects\wms_2.0\dev,
+    dir: D:\Projects\wms\wms2.0\dev2,
     # 是否需要切换到本地分支
-    enableCheckoutLocalBranch: false,
+    enableCheckoutLocalBranch: true,
+  # 检出本地分支指定的远程仓库
+    checkoutRemoteRepoName: "origin",
     # 模块参数
     modulesParams: [
     {
@@ -44,9 +47,11 @@ modulesProperties: [
   # 远程仓库名称
     remoteRepoName: "upstream",
   # 命令执行根目录，此处可以为空，为空会被替换为 one-click-executor.dir
-    dir: D:\Projects\wms_2.0\test,
+    dir: D:\Projects\wms\wms2.0\test2,
   # 是否需要切换到本地分支
-    enableCheckoutLocalBranch: false,
+    enableCheckoutLocalBranch: true,
+  # 检出本地分支指定的远程仓库
+    checkoutRemoteRepoName: "origin",
   # 模块参数
     modulesParams: [
         {
@@ -77,7 +82,7 @@ modulesProperties: [
     # 远程仓库名称
     remoteRepoName: "upstream",
     # 命令执行根目录，此处可以为空，为空会被替换为 one-click-executor.dir
-    dir: D:\Projects\wms_2.0\prod,
+    dir: D:\Projects\wms\wms2.0\prod2,
     # 是否需要切换到本地分支
     enableCheckoutLocalBranch: true,
     # 检出本地分支指定的远程仓库
@@ -104,9 +109,86 @@ modulesProperties: [
         localBranch: "releases",
         # 远程分支
         remoteBranch: [ "releases" ]
+      },
+#        {
+#            name: "sap-service",
+#          # 本地分支
+#            localBranch: "master",
+#          # 远程分支
+#            remoteBranch: [ "master" ]
+#        }
+    ]
+  },
+  {
+    refId: "wms2.0_dev_mybatisplus",
+    # 远程仓库名称
+    remoteRepoName: "upstream",
+    # 命令执行根目录，此处可以为空，为空会被替换为 one-click-executor.dir
+    dir: D:\Projects\wms_2.0\prod,
+    # 是否需要切换到本地分支
+    enableCheckoutLocalBranch: true,
+    # 检出本地分支指定的远程仓库
+    checkoutRemoteRepoName: "origin",
+    # 模块参数
+    modulesParams: [
+      {
+        name: "wms2",
+        # 本地分支
+        localBranch: "dev_v2.0_mybatisplus",
+        # 远程分支
+        remoteBranch: [ "dev_v2.0_mybatisplus" ]
+      },
+      {
+        name: "wms-service",
+        # 本地分支
+        localBranch: "dev_v2.0_mybatisplus",
+        # 远程分支
+        remoteBranch: [ "dev_v2.0_mybatisplus" ]
+      },
+      {
+        name: "wms-common",
+        # 本地分支
+        localBranch: "dev_mybatisplus",
+        # 远程分支
+        remoteBranch: [ "dev_mybatisplus" ]
+      },
+      {
+        name: "wms-kd",
+        # 本地分支
+        localBranch: "dev_mybatisplus",
+        # 远程分支
+        remoteBranch: [ "dev_mybatisplus" ]
       }
     ]
-  }
+  },
+    {
+        refId: "wms2.0_master",
+      # 远程仓库名称
+        remoteRepoName: "upstream",
+      # 命令执行根目录，此处可以为空，为空会被替换为 one-click-executor.dir
+        dir: D:\Projects\wms_2.0\prod,
+      # 是否需要切换到本地分支
+        enableCheckoutLocalBranch: true,
+      # 检出本地分支指定的远程仓库
+        checkoutRemoteRepoName: "origin",
+      # 模块参数
+        modulesParams: [
+            {
+                name: "wms2",
+              # 本地分支
+                localBranch: "master_v2.0",
+              # 远程分支
+                remoteBranch: [ "master_v2.0" ]
+            },
+            {
+                name: "wms-service",
+              # 本地分支
+                localBranch: "master_v2.0",
+              # 远程分支
+                remoteBranch: [ "master_v2.0" ]
+            }
+        ]
+    }
 ]
 
 
