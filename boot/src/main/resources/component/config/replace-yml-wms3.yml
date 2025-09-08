@@ -19,7 +19,7 @@ filePaths: [
 ]
 # 配置项map，优先级最高
 propertiesMap: {
-  "spring.config.location":"file:D:/zyj/resource/config/config_wms3/#{[mode]}/${spring.application.name}.yaml,file:D:/zyj/resource/config/config_wms3/common/common.yaml"
+  "spring.config.location":"file:D:/zyj/resource/config/config_wms3/#{[mode]}_default/${spring.application.name}.yaml,file:D:/zyj/resource/config/config_wms3/common/common.yaml,file:D:/zyj/resource/config/config_wms3/#{[mode]}/${spring.application.name}.yaml"
 }
 # 需要注释的配置项，优先级最高
 uselessProperties: [

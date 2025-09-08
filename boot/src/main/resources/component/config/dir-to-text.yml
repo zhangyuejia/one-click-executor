@@ -2,7 +2,7 @@ dir: C:\Users\zhang.yuejia1\Desktop\test\test\
 # 方向模式（from or to）
 directionMode: from
 # 源目录路径
-fromDir: D:\Projects\one-click-executor\.git
+fromDir: D:\Projects\zhang\one-click-executor\.git
 # txt文件路径
 textPath: ram
 # 还原的目录路径

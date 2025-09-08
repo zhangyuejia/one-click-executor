@@ -85,6 +85,8 @@ component;transfer-dir
 #component;dir-to-text --directionMode=to --textPath=ram4
 #shell;git checkout .
 
+#component;move-pointer-keyboard
+
 
 
 
