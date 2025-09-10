@@ -44,19 +44,23 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         initParameter();
         String filePath = getExecFilePath();
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())){
-            String line;
-            while ((line = reader.readLine()) != null){
-                if (StrUtil.isBlank(line) || line.startsWith("#")) {
+            String fileLine;
+            while ((fileLine = reader.readLine()) != null){
+                if (StrUtil.isBlank(fileLine) || fileLine.startsWith("#")) {
                     continue;
                 }
-                String cmdType = line.substring(0, line.indexOf(config.getCmdSeparator())).split(" ")[0];
-                CmdHandler cmdHandler = cmdTypeHandlerMap.get(EnumUtils.getByValue(CmdTypeEnum.class, cmdType));
-                String cmdLine = StrUtils.parseTplContent(line, CmdExecConfig.PARAM_MAP);
-                log.info("命令处理器[{}]开始执行：{}", cmdHandler.getCmdType().getCode(), cmdLine);
-                CmdLineBo cmdLineBo = CmdLinePoFactory.newInstance(config, cmdLine);
-                log.info("命令解析完毕：{}", JSONUtil.toJsonStr(cmdLineBo));
-                config.setCmdLineBo(cmdLineBo);
-                cmdHandler.handle(config);
+                String[] lineSplit = fileLine.split("&&");
+                for (String line : lineSplit) {
+                    line = line.trim();
+                    String cmdType = line.substring(0, line.indexOf(config.getCmdSeparator())).split(" ")[0];
+                    CmdHandler cmdHandler = cmdTypeHandlerMap.get(EnumUtils.getByValue(CmdTypeEnum.class, cmdType));
+                    String cmdLine = StrUtils.parseTplContent(line, CmdExecConfig.PARAM_MAP);
+                    log.info("命令处理器[{}]开始执行：{}", cmdHandler.getCmdType().getCode(), cmdLine);
+                    CmdLineBo cmdLineBo = CmdLinePoFactory.newInstance(config, cmdLine);
+                    log.info("命令解析完毕：{}", JSONUtil.toJsonStr(cmdLineBo));
+                    config.setCmdLineBo(cmdLineBo);
+                    cmdHandler.handle(config);
+                }
             }
         }
     }
