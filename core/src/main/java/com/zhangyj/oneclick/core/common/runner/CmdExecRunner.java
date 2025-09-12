@@ -1,7 +1,8 @@
 package com.zhangyj.oneclick.core.common.runner;
 
-import cn.hutool.core.collection.CollUtil;
 import com.zhangyj.oneclick.core.common.config.CmdExecConfig;
+import com.zhangyj.oneclick.core.common.task.AsyncTaskGroup;
+import com.zhangyj.oneclick.core.common.task.VirtualThreadTaskGroup;
 import com.zhangyj.oneclick.core.common.util.FileUtils;
 import com.zhangyj.oneclick.core.common.util.TimeUtils;
 import com.zhangyj.oneclick.core.service.CmdExecService;
@@ -11,11 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * @author zhangyj
@@ -29,7 +25,7 @@ public class CmdExecRunner implements CommandLineRunner {
 
     private final CmdExecConfig cmdExecConfig;
 
-    public static final List<CompletableFuture<Void>> FUTURE_LIST = Collections.synchronizedList(new ArrayList<>());
+    public static final AsyncTaskGroup asyncTaskGroup = new VirtualThreadTaskGroup();
 
     @Override
     public void run(String... args) throws Exception {
@@ -43,17 +39,15 @@ public class CmdExecRunner implements CommandLineRunner {
         cmdExecService.setConfig(cmdExecConfig);
         cmdExecService.exec();
 
-        if (CollUtil.isNotEmpty(FUTURE_LIST)) {
-            CompletableFuture.allOf(FUTURE_LIST.toArray(new CompletableFuture[0])).join();
-        }
+        asyncTaskGroup.join();
         stopWatch.stop();
         log.info("总耗时：{}", TimeUtils.formatInterval(stopWatch.getTotalTimeMillis()));
 
     }
 
-    public static void execTask(Boolean isAsync, Runnable exec) {
+    public static void execTask(boolean isAsync, Runnable exec) {
         if (isAsync) {
-            CmdExecRunner.FUTURE_LIST.add(CompletableFuture.runAsync(exec));
+            asyncTaskGroup.execAsync(exec);
         }else {
             exec.run();
         }

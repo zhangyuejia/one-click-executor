@@ -5,14 +5,17 @@ import cn.hutool.core.util.ObjectUtil;
 import com.zhangyj.oneclick.component.common.config.CmdPrintFileSizeConfig;
 import com.zhangyj.oneclick.component.entity.bo.FileInfoBO;
 import com.zhangyj.oneclick.core.common.handler.ChainHandler;
+import com.zhangyj.oneclick.core.common.task.AsyncTaskGroup;
+import com.zhangyj.oneclick.core.common.task.VirtualThreadTaskGroup;
 import com.zhangyj.oneclick.core.service.AbstractCmdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.*;
@@ -30,15 +33,11 @@ public class CmdPrintFileSizeServiceImpl extends AbstractCmdService<CmdPrintFile
 
     private final Map<String, Long> fileSizeMap = new HashMap<>();
 
-    private final ExecutorService executorService  = new ThreadPoolExecutor(
-            10, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(), Executors.defaultThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
-
     private List<FileInfoBO> fileInfoList;
 
     private int depth;
 
-    @Resource
+    @Autowired
     private ChainHandler<Long, String> fileSizeHandler;
 
     @Override
@@ -56,7 +55,6 @@ public class CmdPrintFileSizeServiceImpl extends AbstractCmdService<CmdPrintFile
             loadFileInfoList();
             printFileInfoList();
         }
-        executorService.shutdownNow();
     }
 
     private void initConfig() {
@@ -110,15 +108,14 @@ public class CmdPrintFileSizeServiceImpl extends AbstractCmdService<CmdPrintFile
 
     private void calculateFileSize(File[] files) throws InterruptedException {
         // 多线程计算文件大小
-        CountDownLatch latch = new CountDownLatch(files.length);
+        AsyncTaskGroup taskGroup = new VirtualThreadTaskGroup();
         for (File file : files) {
-            executorService.execute(() -> {
+            taskGroup.execAsync(() -> {
                 long fileSize = file.isFile() ? file.length() : FileUtils.sizeOfDirectory(file);
                 fileSizeMap.put(file.getName(), fileSize);
-                latch.countDown();
             });
         }
-        latch.await();
+        taskGroup.join();
     }
 
     @Override

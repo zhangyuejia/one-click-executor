@@ -20,7 +20,7 @@ filePaths: [
 ]
 # 配置项map，优先级最高
 propertiesMap: {
-  "spring.config.location":"file:D:/zyj/resource/config/config_wms2/default/${spring.application.name}.yaml,file:D:/zyj/resource/config/config_wms2/common/${spring.application.name}.yaml,file:D:/zyj/resource/config/config_wms2/#{[configMode]}/${spring.application.name}.yaml",
+  "spring.config.location":"file:D:/zyj/resource/config/config_wms2/default/#{[configMode]}/${spring.application.name}.yaml,file:D:/zyj/resource/config/config_wms2/common/#{[configMode]}/common.yaml,file:D:/zyj/resource/config/config_wms2/rewrite/#{[configMode]}/${spring.application.name}.yaml",
  "nacosConfig.delayTime":1
 }
 # 需要注释的配置项，优先级最高

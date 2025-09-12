@@ -13,9 +13,9 @@ import com.zhangyj.oneclick.core.service.AbstractCmdService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.xwpf.usermodel.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Service
 public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> {
 
-    @Resource
+    @Autowired
     private List<ITripTableHandler> pdfRules;
 
     /**

@@ -4,6 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.zhangyj.oneclick.component.common.config.CmdPullCodeConfig;
 import com.zhangyj.oneclick.component.entity.bo.ModulePropertiesBO;
 import com.zhangyj.oneclick.core.common.handler.impl.CheckCmdOutputHandler;
+import com.zhangyj.oneclick.core.common.task.AsyncTaskGroup;
+import com.zhangyj.oneclick.core.common.task.VirtualThreadTaskGroup;
 import com.zhangyj.oneclick.core.common.util.CommandUtils;
 import com.zhangyj.oneclick.core.common.util.StrUtils;
 import com.zhangyj.oneclick.core.service.AbstractCmdService;
@@ -36,8 +38,6 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService<CmdPullCodeConfig
 
     private final static String REMOTE_BRANCH_FLAG = LOCAL_BRANCH_FLAG + "remotes" + BRANCH_SP;
 
-    private final List<CompletableFuture<Void>> futureList = Collections.synchronizedList(new ArrayList<>());
-
     @Override
     public void exec() throws Exception {
         initConfig();
@@ -47,31 +47,22 @@ public class CmdPullCodeServiceImpl extends AbstractCmdService<CmdPullCodeConfig
             }
 
             log.info("启用配置ID:{}", moduleProperties.getRefId());
-            if (Boolean.TRUE.equals(config.getEnablePullAsync())) {
-                pullModuleCodeAsync(moduleProperties);
-            }else {
-                pullModuleCodeSync(moduleProperties);
-            }
+            pullModuleCodeAsync(moduleProperties);
         }
     }
 
-    private void pullModuleCodeAsync(ModulePropertiesBO moduleProperties) {
+    private void pullModuleCodeAsync(ModulePropertiesBO moduleProperties) throws InterruptedException {
+        AsyncTaskGroup asyncTaskGroup = new VirtualThreadTaskGroup();
         for (ModulePropertiesBO.ModulesParam modulesParam : moduleProperties.getModulesParams()) {
-            futureList.add(CompletableFuture.runAsync(() -> {
+            asyncTaskGroup.execAsync(() -> {
                 try {
                     pullModuleCode(moduleProperties, modulesParam);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            }));
+            });
         }
-        CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0])).join();
-    }
-
-    private void pullModuleCodeSync(ModulePropertiesBO moduleProperties) throws Exception{
-        for (ModulePropertiesBO.ModulesParam modulesParam : moduleProperties.getModulesParams()) {
-            pullModuleCode(moduleProperties, modulesParam);
-        }
+        asyncTaskGroup.join();
     }
 
     private void pullModuleCode(ModulePropertiesBO moduleProperties, ModulePropertiesBO.ModulesParam modulesParam) throws Exception {
