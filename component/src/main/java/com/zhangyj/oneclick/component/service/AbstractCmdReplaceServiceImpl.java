@@ -36,8 +36,8 @@ public abstract class AbstractCmdReplaceServiceImpl<T extends CmdReplaceConfig> 
     protected List<String> currentUselessProperties;
 
     @Override
-    public void exec() throws Exception {
-        initConfig();
+    public void exec(CmdReplaceConfig config) throws Exception {
+        initConfig(config);
         List<ReplacePropertiesBO> replacePropertiesList = config.getReplaceKeys();
         // 是否检查只有一个replaceId
         if(config.getEnableRefId().size() > 1){
@@ -48,20 +48,20 @@ public abstract class AbstractCmdReplaceServiceImpl<T extends CmdReplaceConfig> 
                 continue;
             }
             log.info("启用配置ID:{}", replaceProperties.getRefId());
-            init(replaceProperties);
-            replaceProperties();
-            writeLeftProperties();
+            init(config, replaceProperties);
+            replaceProperties(config);
+            writeLeftProperties(config);
             clear();
         }
     }
 
-    private void initConfig() {
+    private void initConfig(CmdReplaceConfig config) {
         if (StringUtils.isBlank(config.getDir())) {
             config.setDir(cmdExecConfig.getDir());
         }
     }
 
-    private void init(ReplacePropertiesBO replaceProperties) {
+    private void init(CmdReplaceConfig config, ReplacePropertiesBO replaceProperties) {
         List<String> uselessProperties = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(replaceProperties.getUselessProperties())) {
             uselessProperties.addAll(replaceProperties.getUselessProperties());
@@ -81,29 +81,29 @@ public abstract class AbstractCmdReplaceServiceImpl<T extends CmdReplaceConfig> 
         this.propertiesLeftMap.clear();
     }
 
-    private void replaceProperties() throws IOException {
-        List<String> filePaths = getAbsoluteFilePaths();
+    private void replaceProperties(CmdReplaceConfig config) throws IOException {
+        List<String> filePaths = getAbsoluteFilePaths(config);
         for (String filePath : filePaths) {
             File file = new File(filePath);
             if(file.isDirectory()) {
                 throw new RuntimeException("文件" + filePath + "不是文件，中止执行");
             }
-            writePropertyFile(filePath);
+            writePropertyFile(config, filePath);
         }
 
     }
 
-    protected abstract void writePropertyFile(String filePath) throws IOException;
+    protected abstract void writePropertyFile(CmdReplaceConfig config, String filePath) throws IOException;
 
-    private List<String> getAbsoluteFilePaths() {
+    private List<String> getAbsoluteFilePaths(CmdReplaceConfig config) {
         return config.getFilePaths().stream().map(v -> config.getDir() + File.separator + v).collect(Collectors.toList());
     }
 
-    private void writeLeftProperties() throws IOException {
+    private void writeLeftProperties(CmdReplaceConfig config) throws IOException {
         if(CollectionUtils.isEmpty(propertiesLeftMap)){
             return;
         }
-        List<String> filePaths = getAbsoluteFilePaths();
+        List<String> filePaths = getAbsoluteFilePaths(config);
         writeLeftPropertiesFile(filePaths);
     }
 

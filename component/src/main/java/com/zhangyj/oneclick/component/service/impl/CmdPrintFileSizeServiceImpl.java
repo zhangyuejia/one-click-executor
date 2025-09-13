@@ -4,9 +4,9 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.zhangyj.oneclick.component.common.config.CmdPrintFileSizeConfig;
 import com.zhangyj.oneclick.component.entity.bo.FileInfoBO;
+import com.zhangyj.oneclick.core.common.factory.TaskGroupFactory;
 import com.zhangyj.oneclick.core.common.handler.ChainHandler;
 import com.zhangyj.oneclick.core.common.task.AsyncTaskGroup;
-import com.zhangyj.oneclick.core.common.task.VirtualThreadTaskGroup;
 import com.zhangyj.oneclick.core.service.AbstractCmdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,23 +40,23 @@ public class CmdPrintFileSizeServiceImpl extends AbstractCmdService<CmdPrintFile
     private ChainHandler<Long, String> fileSizeHandler;
 
     @Override
-    public void exec() throws Exception {
-        initConfig();
+    public void exec(CmdPrintFileSizeConfig config) throws Exception {
+        initConfig(config);
         for (int i = 0; i < this.depth; i++) {
             if (CollectionUtil.isNotEmpty(fileInfoList)) {
                 Optional<FileInfoBO> firstFolderOp = fileInfoList.stream().filter(v -> !v.getIsFile()).findFirst();
                 if (!firstFolderOp.isPresent()) {
                     break;
                 }
-                this.config.setDir(firstFolderOp.get().getFileName());
+                config.setDir(firstFolderOp.get().getFileName());
             }
-            log.info("开始计算{}级文件夹{}", i + 1, this.config.getDir());
-            loadFileInfoList();
-            printFileInfoList();
+            log.info("开始计算{}级文件夹{}", i + 1, config.getDir());
+            loadFileInfoList(config);
+            printFileInfoList(config);
         }
     }
 
-    private void initConfig() {
+    private void initConfig(CmdPrintFileSizeConfig config) {
         if (StringUtils.isBlank(config.getDir())) {
             config.setDir(cmdExecConfig.getDir());
         }
@@ -65,7 +64,7 @@ public class CmdPrintFileSizeServiceImpl extends AbstractCmdService<CmdPrintFile
                 config.getDepth(): 1;
     }
 
-    private void printFileInfoList() {
+    private void printFileInfoList(CmdPrintFileSizeConfig config) {
         for (FileInfoBO fileInfo : fileInfoList) {
             log.info("{}：{} 大小：{}", fileInfo.getIsFile()? "单文件":"文件夹", fileInfo.getFileName(), getFileSizeDesc(fileInfo.getSize()));
         }
@@ -80,7 +79,7 @@ public class CmdPrintFileSizeServiceImpl extends AbstractCmdService<CmdPrintFile
         return fileSizeHandler.handle(size);
     }
 
-    private void loadFileInfoList() throws InterruptedException {
+    private void loadFileInfoList(CmdPrintFileSizeConfig config) throws InterruptedException {
         File file = new File(config.getDir());
         if(!file.exists()){
             throw new RuntimeException("文件路径不存在，" + config.getDir());
@@ -108,7 +107,7 @@ public class CmdPrintFileSizeServiceImpl extends AbstractCmdService<CmdPrintFile
 
     private void calculateFileSize(File[] files) throws InterruptedException {
         // 多线程计算文件大小
-        AsyncTaskGroup taskGroup = new VirtualThreadTaskGroup();
+        AsyncTaskGroup taskGroup = TaskGroupFactory.newAsyncTaskGroup();
         for (File file : files) {
             taskGroup.execAsync(() -> {
                 long fileSize = file.isFile() ? file.length() : FileUtils.sizeOfDirectory(file);

@@ -1,5 +1,6 @@
 package com.zhangyj.oneclick.component.service.impl;
 
+import com.zhangyj.oneclick.component.common.config.CmdReplaceConfig;
 import com.zhangyj.oneclick.component.common.config.CmdReplacePropertiesConfig;
 import com.zhangyj.oneclick.component.service.AbstractCmdReplaceServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ import java.util.Map;
 public class CmdReplacePropertiesServiceImpl extends AbstractCmdReplaceServiceImpl<CmdReplacePropertiesConfig> {
 
     @Override
-    protected void writePropertyFile(String filePath) throws IOException {
+    protected void writePropertyFile(CmdReplaceConfig config, String filePath) throws IOException {
         Path path = Paths.get(filePath);
 
         List<String> lines = Files.readAllLines(path);

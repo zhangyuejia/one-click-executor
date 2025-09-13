@@ -7,15 +7,14 @@
 
 ##------------------------------更新代码-------------------------------
 ###  更新代码
-component;pull-code --currentRefId=wms2.0_dev --enablePullAsync=true;;async
-component;pull-code --currentRefId=wms2.0_test --enablePullAsync=true;;async
+component;pull-code --currentRefId=wms2.0_dev;;async
+#component;pull-code --currentRefId=wms2.0_test;;async
 ##  更新代码-master
-#param;set --jd= && component;pull-code --currentRefId=wms2.0_master --enablePullAsync=true;;async
+#param;set --jd= && component;pull-code --currentRefId=wms2.0_master;;async
 ##  更新代码-生产基地
-#param;set --jd=_ss && component;pull-code --currentRefId=wms2.0_prod --enablePullAsync=true;;async
+#param;set --jd=_ss && component;pull-code --currentRefId=wms2.0_prod;;async
 
 #component;dir-to-text --directionMode=from --textPath=ram
-
 
 ##------------------------------3.0-dev-------------------------------
 ## 配置替换
@@ -24,7 +23,7 @@ component;pull-code --currentRefId=wms2.0_test --enablePullAsync=true;;async
 
 ##------------------------------3.0-test-------------------------------
 ###  更新代码
-#component;pull-code --currentRefId=wms3.0_dev --enablePullAsync=true;#{[classpath]}component\config\pull-code-wms3.yml;async
-#component;pull-code --currentRefId=wms3.0_test --enablePullAsync=true;#{[classpath]}component\config\pull-code-wms3.yml;async
-#component;pull-code --currentRefId=wms3.0_prod --enablePullAsync=true;#{[classpath]}component\config\pull-code-wms3.yml;async
+#component;pull-code --currentRefId=wms3.0_dev;#{[classpath]}component\config\pull-code-wms3.yml;async
+#component;pull-code --currentRefId=wms3.0_test;#{[classpath]}component\config\pull-code-wms3.yml;async
+#component;pull-code --currentRefId=wms3.0_prod;#{[classpath]}component\config\pull-code-wms3.yml;async
 

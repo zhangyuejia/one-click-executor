@@ -25,13 +25,13 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
     private final List<XyDecryptProcessor> xyDecryptProcessors;
 
     @Override
-    public void exec() throws Exception {
-        if (checkParam()){
+    public void exec(CmdXyDecryptConfig config) throws Exception {
+        if (checkParam(config)){
             return;
         }
         printInfo();
         mkTempDir();
-        processFiles(new File(config.getPath()));
+        processFiles(config, new File(config.getPath()));
     }
 
     private void printInfo() {
@@ -41,15 +41,15 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
         log.info("支持的文件类型：{}", String.join(",", fileExtensions));
     }
 
-    private void processFiles(File dirFile) {
+    private void processFiles(CmdXyDecryptConfig config, File dirFile) {
         if (dirFile.isDirectory()) {
-            processDir(dirFile);
+            processDir(config, dirFile);
         }else {
-            processFile(dirFile);
+            processFile(config, dirFile);
         }
     }
 
-    private void processFile(File dirFile) {
+    private void processFile(CmdXyDecryptConfig config, File dirFile) {
         for (XyDecryptProcessor xyDecryptProcessor : xyDecryptProcessors) {
             if (xyDecryptProcessor.isMatch(dirFile)) {
                 log.info("匹配到文件处理器：{}", dirFile.getPath());
@@ -59,13 +59,13 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
         }
     }
 
-    private void processDir(File dirFile) {
+    private void processDir(CmdXyDecryptConfig config, File dirFile) {
         File[] files = dirFile.listFiles();
         if(files == null){
             return;
         }
         for (File file : files) {
-            processFiles(file);
+            processFiles(config, file);
         }
     }
 
@@ -77,7 +77,7 @@ public class CmdXyDecryptServiceImpl extends AbstractCmdService<CmdXyDecryptConf
         FileUtil.mkdir(tempDir);
     }
 
-    private boolean checkParam() {
+    private boolean checkParam(CmdXyDecryptConfig config) {
         if (StringUtils.isBlank(config.getPath()) || !FileUtil.exist(config.getPath())) {
             return true;
         }

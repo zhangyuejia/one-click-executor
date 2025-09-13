@@ -1,6 +1,7 @@
 package com.zhangyj.oneclick.core.common.runner;
 
 import com.zhangyj.oneclick.core.common.config.CmdExecConfig;
+import com.zhangyj.oneclick.core.common.factory.TaskGroupFactory;
 import com.zhangyj.oneclick.core.common.task.AsyncTaskGroup;
 import com.zhangyj.oneclick.core.common.task.VirtualThreadTaskGroup;
 import com.zhangyj.oneclick.core.common.util.FileUtils;
@@ -25,7 +26,7 @@ public class CmdExecRunner implements CommandLineRunner {
 
     private final CmdExecConfig cmdExecConfig;
 
-    public static final AsyncTaskGroup asyncTaskGroup = new VirtualThreadTaskGroup();
+    public static final AsyncTaskGroup asyncTaskGroup = TaskGroupFactory.newAsyncTaskGroup();
 
     @Override
     public void run(String... args) throws Exception {
@@ -36,8 +37,7 @@ public class CmdExecRunner implements CommandLineRunner {
         stopWatch.start();
 
         cmdExecConfig.setShellPath(FileUtils.getResourcePath("cmd.sh"));
-        cmdExecService.setConfig(cmdExecConfig);
-        cmdExecService.exec();
+        cmdExecService.exec(cmdExecConfig);
 
         asyncTaskGroup.join();
         stopWatch.stop();

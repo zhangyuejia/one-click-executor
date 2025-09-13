@@ -1,5 +1,6 @@
 package com.zhangyj.oneclick.component.service.impl;
 
+import com.zhangyj.oneclick.component.common.config.CmdReplaceConfig;
 import com.zhangyj.oneclick.component.common.config.CmdReplaceStrBackConfig;
 import com.zhangyj.oneclick.component.service.AbstractCmdReplaceServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ import java.util.Map;
 public class CmdReplaceStrBackServiceImpl extends AbstractCmdReplaceServiceImpl<CmdReplaceStrBackConfig> {
 
     @Override
-    protected void writePropertyFile(String filePath) throws IOException {
+    protected void writePropertyFile(CmdReplaceConfig config, String filePath) throws IOException {
         log.info("读取文件：{}", filePath);
         Path path = Paths.get(filePath);
 

@@ -34,30 +34,30 @@ public class CmdSpliceFileServiceImpl extends AbstractCmdService<CmdSpliceFileCo
     private Pattern[] blackPattern;
 
     @Override
-    public void exec() throws Exception {
+    public void exec(CmdSpliceFileConfig config) throws Exception {
         // 参数校验
-        checkParam();
+        checkParam(config);
         // 初始化
-        init();
+        init(config);
         // 删除上一次生成的文件
-        deleteGenFile();
+        deleteGenFile(config);
         // 拼接数据文件
-        spliceFile();
+        spliceFile(config);
     }
 
-    private void checkParam() {
+    private void checkParam(CmdSpliceFileConfig config) {
         if(config.getGenFileName() == null){
             throw new IllegalArgumentException("生成文件名不能为空！");
         }
     }
 
-    private void init() throws Exception {
+    private void init(CmdSpliceFileConfig config) throws Exception {
         this.whitePattern = getPatterns(config.getWhitePattern());
         this.blackPattern = getPatterns(config.getBlackPattern());
-        execCommand();
+        execCommand(config);
     }
 
-    private void execCommand() throws Exception {
+    private void execCommand(CmdSpliceFileConfig config) throws Exception {
         String command = config.getCommand();
         if(command == null){
             return;
@@ -66,7 +66,7 @@ public class CmdSpliceFileServiceImpl extends AbstractCmdService<CmdSpliceFileCo
         CommandUtils.execCommand(cmdExecConfig.getCharset(), command, config.getPath(), new CheckCmdOutputHandler(config));
     }
 
-    private void deleteGenFile() throws IOException {
+    private void deleteGenFile(CmdSpliceFileConfig config) throws IOException {
         String genMode = StringUtils.isNotEmpty(config.getGenMode())? config.getGenMode(): GenModeEnum.NEW.name();
         log.info("生成文件模式为：{}", genMode);
         if(GenModeEnum.APPEND.name().equalsIgnoreCase(genMode)){
@@ -84,7 +84,7 @@ public class CmdSpliceFileServiceImpl extends AbstractCmdService<CmdSpliceFileCo
         }
     }
 
-    private void spliceFile() throws IOException {
+    private void spliceFile(CmdSpliceFileConfig config) throws IOException {
         List<Path> readFilePaths = Files.list(Paths.get(config.getPath()))
                 .filter(this::filterReadFile).collect(Collectors.toList());
         // 获取输入输出流

@@ -19,7 +19,7 @@ import java.io.File;
 public class CmdCompressFileServiceImpl extends AbstractCmdService<CmdCompressFileConfig> {
 
     @Override
-    public void exec() throws Exception {
+    public void exec(CmdCompressFileConfig config) throws Exception {
         File file = new File(config.getCompressDir());
         compressFile(file, config.getCompressPassword());
     }

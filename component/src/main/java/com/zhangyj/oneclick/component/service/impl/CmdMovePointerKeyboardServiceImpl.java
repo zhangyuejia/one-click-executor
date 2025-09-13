@@ -20,7 +20,7 @@ import java.time.LocalTime;
 public class CmdMovePointerKeyboardServiceImpl extends AbstractCmdService<CmdMovePointerKeyboardConfig> {
 
     @Override
-    public void exec() throws Exception {
+    public void exec(CmdMovePointerKeyboardConfig config) throws Exception {
         // 停止时间 20:20
         LocalTime stopTime = LocalTime.of(Integer.parseInt(config.getStopTime().substring(0, 2)),
                 Integer.parseInt(config.getStopTime().substring(3, 5)),

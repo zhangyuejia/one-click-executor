@@ -41,7 +41,7 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
     private final Map<String, Object> paramMap = new HashMap<>();
 
     @Override
-    public void exec() throws Exception {
+    public void exec(CmdReadPdfConfig config) throws Exception {
         File pdfFile = new File(config.getPdfDir());
         if(!pdfFile.exists()){
             log.error("文件路径不存在{}", config.getPdfDir());
@@ -62,11 +62,11 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
                 }
             }
         }
-        generateWord(ListUtil.sortByProperty(data, "date"));
+        generateWord(config, ListUtil.sortByProperty(data, "date"));
     }
 
-    private void generateWord(List<ExpenseBO> list) throws Exception{
-        initParamMap(list);
+    private void generateWord(CmdReadPdfConfig config, List<ExpenseBO> list) throws Exception{
+        initParamMap(config, list);
 
         XWPFDocument document = new XWPFDocument(Files.newInputStream(Paths.get(FileUtils.getResourcePath() + "\\component\\file\\交通明细模板.docx")));
         XWPFTable table = document.getTables().get(0);
@@ -102,7 +102,7 @@ public class CmdReadPdfServiceImpl extends AbstractCmdService<CmdReadPdfConfig> 
         }
     }
 
-    private void initParamMap(List<ExpenseBO> list) {
+    private void initParamMap(CmdReadPdfConfig config, List<ExpenseBO> list) {
         // 合计
         BigDecimal sum = new BigDecimal("0");
         for (ExpenseBO bo : list) {

@@ -33,7 +33,7 @@ public class CmdTransferDirServiceImpl extends AbstractCmdService<CmdTransferDir
 	private final List<Pattern> ignorePatterns = new ArrayList<>();
 
 	@Override
-	public void exec() throws Exception {
+	public void exec(CmdTransferDirConfig config) throws Exception {
 		File baseDir = new File(config.getPath());
 		if (!baseDir.exists()) {
 			throw new RuntimeException("文件路径不存在：" + config.getPath());
@@ -43,18 +43,18 @@ public class CmdTransferDirServiceImpl extends AbstractCmdService<CmdTransferDir
 			ignorePatterns.add(Pattern.compile(ignoreRegex));
 		}
 		this.basePath = baseDir.getPath();
-		processFiles(baseDir);
+		processFiles(config, baseDir);
 	}
 
-	private void processFiles(File dirFile) throws Exception{
+	private void processFiles(CmdTransferDirConfig config, File dirFile) throws Exception{
 		if (dirFile.isDirectory()) {
-			processDir(dirFile);
+			processDir(config, dirFile);
 		}else {
-			processFile(dirFile);
+			processFile(config, dirFile);
 		}
 	}
 
-	private void processFile(File file) throws Exception{
+	private void processFile(CmdTransferDirConfig config, File file) throws Exception{
 		String relativePath = file.getPath().substring(this.basePath.length() + 1);
 		for (Pattern ignorePattern : ignorePatterns) {
 			if (ignorePattern.matcher(relativePath).find()) {
@@ -72,13 +72,13 @@ public class CmdTransferDirServiceImpl extends AbstractCmdService<CmdTransferDir
 		httpResponse.close();
 	}
 
-	private void processDir(File dirFile) throws Exception{
+	private void processDir(CmdTransferDirConfig config, File dirFile) throws Exception{
 		File[] files = dirFile.listFiles();
 		if(files == null){
 			return;
 		}
 		for (File file : files) {
-			processFiles(file);
+			processFiles(config, file);
 		}
 	}
 

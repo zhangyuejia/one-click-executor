@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class CmdFlushDnsServiceImpl extends AbstractCmdService<CmdFlushDnsConfig> {
 
     @Override
-    public void exec() throws Exception {
+    public void exec(CmdFlushDnsConfig config) throws Exception {
         List<HostsInfoBO> hosts = config.getHosts();
         if(CollectionUtils.isEmpty(hosts)){
             return;

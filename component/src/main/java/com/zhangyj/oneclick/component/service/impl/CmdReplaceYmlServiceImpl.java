@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.setting.yaml.YamlUtil;
+import com.zhangyj.oneclick.component.common.config.CmdReplaceConfig;
 import com.zhangyj.oneclick.component.common.config.CmdReplaceYmlConfig;
 import com.zhangyj.oneclick.component.service.AbstractCmdReplaceServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +28,12 @@ import java.util.Map;
 public class CmdReplaceYmlServiceImpl extends AbstractCmdReplaceServiceImpl<CmdReplaceYmlConfig> {
 
     @Override
-    protected void writePropertyFile(String filePath) throws IOException {
+    protected void writePropertyFile(CmdReplaceConfig config, String filePath) throws IOException {
+        CmdReplaceYmlConfig replaceYmlConfig = (CmdReplaceYmlConfig) config;
         log.info("读取yml文件：{}", filePath);
         Dict dict = YamlUtil.loadByPath(filePath);
         boolean isMatch = false;
-        boolean enableAddItemIfNotExists = BooleanUtil.isTrue(config.getEnableAddItemIfNotExists());
+        boolean enableAddItemIfNotExists = BooleanUtil.isTrue(replaceYmlConfig.getEnableAddItemIfNotExists());
         for (Map.Entry<String, Object> entry : this.currentPropertiesMap.entrySet()) {
             String key = entry.getKey();
             String pathValue = dict.getByPath(key, String.class);

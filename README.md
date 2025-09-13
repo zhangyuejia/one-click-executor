@@ -1,7 +1,7 @@
-# One Click Executor V5.0.0
+# One Click Executor V6.0.0
 + 一键执行器
 ## 运行环境
-+ JDK 1.8及以上
++ JDK 21及以上
 ## 功能说明
 + 文件拼接功能
 + 文件重命名功能

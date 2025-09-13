@@ -38,7 +38,7 @@ public class CmdDirToTextServiceImpl extends AbstractCmdService<CmdDirToTextConf
     private final SymmetricCrypto symmetricCrypto = SecureUtil.aes(ENCRYPT_KEY.getBytes(StandardCharsets.UTF_8));
 
     @Override
-    public void exec() throws Exception {
+    public void exec(CmdDirToTextConfig config) throws Exception {
         DirectionModeEnum modeEnum = EnumUtils.getByValue(DirectionModeEnum.class, config.getDirectionMode());
         switch (modeEnum) {
             case FROM:

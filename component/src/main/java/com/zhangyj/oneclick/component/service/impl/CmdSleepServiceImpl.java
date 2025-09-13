@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class CmdSleepServiceImpl extends AbstractCmdService<CmdSleepConfig> {
 
     @Override
-    public void exec() throws Exception {
+    public void exec(CmdSleepConfig config) throws Exception {
         Integer seconds = config.getT();
         log.info("睡眠时间{}秒", seconds);
         TimeUnit.SECONDS.sleep(seconds);

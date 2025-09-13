@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -80,9 +81,10 @@ public class CmdComponentHandler implements CmdHandler {
             log.info("更新全局变量[{}]：{}, 变量集合：{}", PARAM_DIR, value, JSONUtil.toJsonStr(CmdExecConfig.PARAM_MAP));
         }
         cmdConfig.setCmdLineBo(cmdLineBo);
-        ReflectUtil.invoke(cmdService, "setConfig", cmdConfig);
+
         log.info("开始执行组件[{}]，配置：{}", cmdLineBo.getCmdName().getValue(), JSONUtil.toJsonStr(cmdConfig));
-        CmdExecRunner.execTask(cmdLineBo.getIsAsync(), () -> ReflectUtil.invoke(cmdService, "exec"));
+        CmdExecRunner.execTask(cmdLineBo.getIsAsync(), () ->
+                ReflectUtil.invoke(cmdService, "exec", cmdConfig));
     }
 
     private Object getValueAsType(String value, Field field) {
@@ -98,7 +100,7 @@ public class CmdComponentHandler implements CmdHandler {
     private AbstractCmdConfig getCmdConfig(CmdLineBo cmdLineBo) {
         List<String> list = FileUtil.readLines(cmdLineBo.getDir(), Charset.defaultCharset());
         String cmdNameValue = cmdLineBo.getCmdName().getValue();
-        String tmpFilePath = FileUtils.getTempDir("tmpYml") + File.separator + cmdNameValue + "-" + System.currentTimeMillis() + ".yaml";
+        String tmpFilePath = FileUtils.getTempDir("tmpYml") + File.separator + cmdNameValue + "-" + IdUtil.getSnowflakeNextId() + ".yaml";
         FileUtil.writeLines(list.stream().map(v ->
                         StrUtils.parseTplContent(v, CmdExecConfig.PARAM_MAP)).collect(Collectors.toList()),
                 tmpFilePath, Charset.defaultCharset());

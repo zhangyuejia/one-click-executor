@@ -37,12 +37,12 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
     private final Map<CmdTypeEnum, CmdHandler> cmdTypeHandlerMap;
 
     @Override
-    public void exec() throws Exception {
+    public void exec(CmdExecConfig config) throws Exception {
         // 初始化
-        initConfig();
+        initConfig(config);
         // cmd变量
-        initParameter();
-        String filePath = getExecFilePath();
+        initParameter(config);
+        String filePath = getExecFilePath(config);
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())){
             String fileLine;
             while ((fileLine = reader.readLine()) != null){
@@ -65,7 +65,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         }
     }
 
-    private String getExecFilePath() {
+    private String getExecFilePath(CmdExecConfig config) {
         if(StringUtils.isBlank(config.getShellPath())) {
             throw new IllegalArgumentException("执行" + this.getDesc() + "报错，配置项[shellPath]不能为空");
         }
@@ -76,7 +76,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         }
     }
 
-    private void initConfig() {
+    private void initConfig(CmdExecConfig config) {
         if (StringUtils.isBlank(config.getDir())) {
             config.setDir(cmdExecConfig.getDir());
         }
@@ -97,7 +97,7 @@ public class CmdExecServiceImpl extends AbstractCmdService<CmdExecConfig> implem
         }
     }
 
-    private void initParameter() {
+    private void initParameter(CmdExecConfig config) {
         Map<String, Object> paramMap = CmdExecConfig.PARAM_MAP;
         paramMap.put("dir", config.getDir());
         paramMap.put("classpath", FileUtils.getResourcePath());
