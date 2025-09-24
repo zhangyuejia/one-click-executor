@@ -1,18 +1,18 @@
 ##------------------------------配置替换-------------------------------
 ## 配置替换
 #param;set --codeMode=dev2 --configMode=dev2 && component;replace-yml
-#param;set --codeMode=test2 -configMode=test2 && component;replace-yml
-#param;set --codeMode=prod2 -configMode=prod_cs && component;replace-yml
+#param;set --codeMode=test2 --configMode=test2 && component;replace-yml
+#param;set --codeMode=prod2 --configMode=prod_cs && component;replace-yml
 #param;set --codeMode=dev2 --configMode=dev2_xz_split && component;replace-yml
 
 ##------------------------------更新代码-------------------------------
-###  更新代码
+####  更新代码
 component;pull-code --currentRefId=wms2.0_dev;;async
-#component;pull-code --currentRefId=wms2.0_test;;async
+component;pull-code --currentRefId=wms2.0_test;;async
 ##  更新代码-master
 #param;set --jd= && component;pull-code --currentRefId=wms2.0_master;;async
 ##  更新代码-生产基地
-#param;set --jd=_ss && component;pull-code --currentRefId=wms2.0_prod;;async
+#param;set --jd=_xa && component;pull-code --currentRefId=wms2.0_prod;;async
 
 #component;dir-to-text --directionMode=from --textPath=ram
 
